@@ -502,13 +502,18 @@
     // Firebase backend URL detection
     const FIREBASE_URL = 'https://procces-3efd9-default-rtdb.firebaseio.com/backends/bestproxy.json';
     let PROXY_URL = null;
+    let initialized = false;
     
     // Detect if running locally or deployed
     const isDeployed = !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1');
     
+    // Base64 encode URL (like CroxyProxy)
+    function encodeUrl(url) {
+      return btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+    
     async function getBackendUrl() {
       if (!isDeployed) {
-        // Running locally
         return 'http://localhost:3003';
       }
       // Deployed - fetch tunnel URL from Firebase
@@ -523,8 +528,8 @@
         console.error('Failed to fetch backend URL:', err);
       }
       // Fallback to prompt
-      const url = prompt('Enter Nebula proxy backend URL:');
-      return url || 'http://localhost:3003';
+      const url = prompt('Enter Nebula proxy backend URL (e.g., https://your-tunnel.trycloudflare.com):');
+      return url || null;
     }
 
     // Check if beta modal was already shown this session
@@ -543,13 +548,19 @@
       const statusEl = document.getElementById('status');
       const goBtn = document.getElementById('goBtn');
 
+      if (!PROXY_URL) {
+        statusEl.className = 'status offline';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>No backend configured</span>';
+        goBtn.disabled = true;
+        return;
+      }
+
       try {
         const response = await fetch(PROXY_URL + '/', { 
           method: 'HEAD',
           mode: 'no-cors'
         });
         
-        // no-cors doesn't give us status, so if it doesn't throw, assume online
         statusEl.className = 'status online';
         statusEl.innerHTML = '<span class="status-dot"></span><span>Proxy online — Ready to browse</span>';
         goBtn.disabled = false;
@@ -563,15 +574,21 @@
       }
     }
 
-    // Navigate to proxy
+    // Navigate to proxy using CroxyProxy-style __cpo format
     function goToProxy(url) {
+      if (!PROXY_URL) {
+        alert('Backend not configured! Please set the tunnel URL.');
+        return;
+      }
+      
       // Ensure URL has protocol
       if (!url.startsWith('http://') && !url.startsWith('https://')) {
         url = 'https://' + url;
       }
       
-      const proxyUrl = PROXY_URL + '/go?url=' + encodeURIComponent(url);
-      window.location.href = proxyUrl;
+      // CroxyProxy-style: redirect to backend with __cpo parameter
+      const encoded = encodeUrl(url);
+      window.location.href = PROXY_URL + '/?__cpo=' + encoded;
     }
 
     // Form submit
@@ -589,9 +606,23 @@
       });
     });
 
-    // Initialize
-    checkProxy();
-    setInterval(checkProxy, 30000);
+    // Initialize - MUST wait for backend URL before enabling
+    (async function init() {
+      const statusEl = document.getElementById('status');
+      statusEl.className = 'status loading';
+      statusEl.innerHTML = '<span class="status-dot"></span><span>Connecting to backend...</span>';
+      
+      PROXY_URL = await getBackendUrl();
+      console.log('Backend URL:', PROXY_URL);
+      
+      if (PROXY_URL) {
+        checkProxy();
+        setInterval(checkProxy, 30000);
+      } else {
+        statusEl.className = 'status offline';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>Backend not configured</span>';
+      }
+    })();
   </script>
 </body>
 </html>
