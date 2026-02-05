@@ -3,379 +3,595 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Webtra — Coming Soon</title>
+  <title>Nebula — Web Proxy</title>
+  
+  <!-- Favicon - Planet SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z M103.889,246.179c-9.3,0-16.8-7.5-16.8-16.8c0-38.2,14.9-74.2,41.9-101.2c6.6-6.6,17.2-6.6,23.8,0c6.6,6.6,6.6,17.2,0,23.8c-20.7,20.7-32.1,48.2-32.1,77.4C120.789,238.679,113.189,246.179,103.889,246.179z'/%3E%3Cpath d='M310.189,310.179c-35,35-70.6,67-104.3,94.1c52.6,7,107.9-9.7,148.3-50.1c40.5-40.5,57.2-95.7,50.1-148.3C377.189,239.579,345.189,275.179,310.189,310.179z'/%3E%3C/svg%3E">
 
   <style>
     :root{
-      --bg1:#020c1f;
-      --bg2:#0b3c91;
-      --blue:#2aa9ff;
-      --blue2:#7fd0ff;
-      --text:#eaf4ff;
-      --muted:#b9d9ff;
-      --glass: rgba(255,255,255,0.08);
-      --glass2: rgba(0,0,0,0.35);
-      --border: rgba(42,169,255,0.35);
-      --shadow: rgba(0,0,0,0.55);
+      --bg1:#05010d;
+      --bg2:#1a0a2e;
+      --bg3:#16082a;
+      --purple:#9333ea;
+      --purple2:#a855f7;
+      --purple3:#c084fc;
+      --violet:#7c3aed;
+      --magenta:#d946ef;
+      --text:#f3e8ff;
+      --muted:#c4b5fd;
+      --glass: rgba(147,51,234,0.08);
+      --glass2: rgba(0,0,0,0.5);
+      --border: rgba(147,51,234,0.3);
+      --shadow: rgba(0,0,0,0.7);
+      --glow: rgba(147,51,234,0.4);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
     }
 
-    *{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:'Inter', system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
 
     body{
-      height:100vh;
+      min-height:100vh;
       color:var(--text);
-      overflow:hidden;
-      background:
-        radial-gradient(1000px 600px at 20% 10%, rgba(42,169,255,0.22), transparent 60%),
-        radial-gradient(900px 700px at 85% 30%, rgba(127,208,255,0.14), transparent 65%),
-        radial-gradient(circle at top, var(--bg2), var(--bg1));
+      overflow-x:hidden;
+      background: var(--bg1);
+      background-image:
+        radial-gradient(ellipse 1200px 800px at 15% 0%, rgba(147,51,234,0.15), transparent 50%),
+        radial-gradient(ellipse 1000px 600px at 85% 20%, rgba(124,58,237,0.12), transparent 50%),
+        radial-gradient(ellipse 800px 800px at 50% 100%, rgba(217,70,239,0.08), transparent 50%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 40%, #000 100%);
       display:flex;
       align-items:center;
       justify-content:center;
+      padding: 20px;
     }
 
-    /* Animated “grid” */
-    .grid{
-      position:absolute; inset:-40%;
-      background-image:
-        linear-gradient(rgba(42,169,255,0.10) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(42,169,255,0.08) 1px, transparent 1px);
-      background-size: 48px 48px;
-      transform: rotate(12deg);
-      animation: drift 18s linear infinite;
-      filter: blur(0.2px);
-      opacity:0.55;
+    /* Star field */
+    .stars{
+      position:fixed;
+      inset:0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 200px 50px, rgba(200,180,255,0.3), transparent),
+        radial-gradient(1px 1px at 250px 160px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.2), transparent);
+      background-size: 350px 200px;
+      animation: twinkle 8s ease-in-out infinite;
+      opacity: 0.6;
     }
-    @keyframes drift{
-      0%{ transform: translate3d(0,0,0) rotate(12deg); }
-      100%{ transform: translate3d(140px, -120px, 0) rotate(12deg); }
+    @keyframes twinkle{
+      0%,100%{ opacity: 0.6; }
+      50%{ opacity: 0.4; }
     }
 
-    /* Floating glows */
-    .glow{
-      position:absolute;
-      width:750px; height:750px;
-      background: rgba(42,169,255,0.20);
-      filter: blur(160px);
+    /* Nebula clouds */
+    .nebula{
+      position:fixed;
+      width:900px; height:900px;
+      background: radial-gradient(circle, var(--glow), transparent 60%);
+      filter: blur(120px);
       border-radius: 999px;
-      animation: float 9s ease-in-out infinite;
+      animation: drift 25s ease-in-out infinite;
+      pointer-events:none;
     }
-    .glow.g2{
-      width:620px; height:620px;
-      background: rgba(127,208,255,0.14);
-      animation-duration: 11s;
-      animation-delay: -2s;
-      left: 55%;
-      top: 10%;
-    }
-    @keyframes float{
-      0%{ transform: translateY(0) translateX(0); }
-      50%{ transform: translateY(-55px) translateX(25px); }
-      100%{ transform: translateY(0) translateX(0); }
+    .nebula.n1{ left:-20%; top:-10%; background: radial-gradient(circle, rgba(147,51,234,0.25), transparent 60%); }
+    .nebula.n2{ right:-15%; top:20%; width:700px; height:700px; background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 60%); animation-delay: -8s; animation-duration: 30s; }
+    .nebula.n3{ left:30%; bottom:-20%; width:600px; height:600px; background: radial-gradient(circle, rgba(217,70,239,0.15), transparent 60%); animation-delay: -15s; }
+    @keyframes drift{
+      0%,100%{ transform: translate(0,0) scale(1); }
+      33%{ transform: translate(30px,-40px) scale(1.05); }
+      66%{ transform: translate(-20px,30px) scale(0.95); }
     }
 
-    /* Subtle “data streaks” */
-    .streaks{
-      position:absolute; inset:0;
-      pointer-events:none;
-      background:
-        repeating-linear-gradient(
-          115deg,
-          rgba(42,169,255,0.00) 0px,
-          rgba(42,169,255,0.00) 140px,
-          rgba(42,169,255,0.06) 160px,
-          rgba(42,169,255,0.00) 190px
-        );
-      animation: streakmove 7s linear infinite;
-      opacity:0.6;
-    }
-    @keyframes streakmove{
-      0%{ background-position: 0 0; }
-      100%{ background-position: 420px 0; }
-    }
+    /* Orbital rings */
+    .rings{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+    .ring{ position:absolute; border: 1px solid rgba(147,51,234,0.1); border-radius: 50%; animation: orbit 60s linear infinite; }
+    .ring:nth-child(1){ width:150vmax; height:150vmax; left:50%; top:50%; transform: translate(-50%,-50%); }
+    .ring:nth-child(2){ width:120vmax; height:120vmax; left:50%; top:50%; transform: translate(-50%,-50%); animation-duration: 80s; animation-direction: reverse; border-color: rgba(124,58,237,0.08); }
+    .ring:nth-child(3){ width:90vmax; height:90vmax; left:50%; top:50%; transform: translate(-50%,-50%); animation-duration: 100s; border-color: rgba(217,70,239,0.06); }
+    @keyframes orbit{ from{ transform: translate(-50%,-50%) rotate(0deg); } to{ transform: translate(-50%,-50%) rotate(360deg); } }
 
     .wrap{
       position:relative;
       z-index:2;
-      width:min(720px, calc(100% - 24px));
-      padding:48px 46px;
-      border-radius: 22px;
-      background: var(--glass);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 40px 90px var(--shadow);
-      animation: pop 900ms ease;
+      width:min(800px, calc(100% - 24px));
+      padding:50px 50px 40px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(26,10,46,0.9), rgba(5,1,13,0.95));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(147,51,234,0.2);
+      box-shadow: 
+        0 0 0 1px rgba(147,51,234,0.1),
+        0 50px 100px -20px rgba(0,0,0,0.8),
+        0 0 80px -30px rgba(147,51,234,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: emerge 1s cubic-bezier(0.16, 1, 0.3, 1);
       text-align:center;
     }
-    @keyframes pop{
-      from{ opacity:0; transform: translateY(18px) scale(0.98); }
-      to{ opacity:1; transform: translateY(0) scale(1); }
+    @keyframes emerge{ from{ opacity:0; transform: translateY(30px) scale(0.96); } to{ opacity:1; transform: translateY(0) scale(1); } }
+
+    /* Scan lines */
+    .wrap::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      border-radius: 28px;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(147,51,234,0.03) 2px, rgba(147,51,234,0.03) 4px);
+      pointer-events:none;
+      opacity: 0.5;
     }
 
+    /* Logo */
+    .logo{ width: 70px; height: 70px; margin: 0 auto 16px; filter: drop-shadow(0 0 20px rgba(147,51,234,0.5)); animation: float 6s ease-in-out infinite; }
+    .logo svg{ width: 100%; height: 100%; }
+    @keyframes float{ 0%,100%{ transform: translateY(0) rotate(0deg); } 50%{ transform: translateY(-8px) rotate(3deg); } }
+
     .title{
-      font-size: 3.4rem;
+      font-size: 3.5rem;
       font-weight: 900;
-      letter-spacing: 0.8px;
-      line-height:1.05;
-      background: linear-gradient(90deg, #dff3ff, #9ad9ff, #2aa9ff);
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #f3e8ff 0%, #c084fc 40%, #9333ea 70%, #7c3aed 100%);
       -webkit-background-clip:text;
       background-clip:text;
       color: transparent;
-      text-shadow: 0 0 22px rgba(42,169,255,0.18);
+      text-transform: uppercase;
     }
 
-    .tagline{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
+    .tagline{ margin-top: 8px; color: var(--muted); font-size: 1rem; }
 
+    /* Badge with orb */
     .badge{
       display:inline-flex;
       gap:10px;
       align-items:center;
-      margin: 22px auto 10px;
-      padding: 10px 16px;
+      margin: 24px auto 20px;
+      padding: 12px 20px;
       border-radius: 999px;
-      background: rgba(42,169,255,0.18);
-      border: 1px solid rgba(42,169,255,0.35);
-      color: #d8f0ff;
-      font-size: 0.92rem;
+      background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(124,58,237,0.15));
+      border: 1px solid rgba(147,51,234,0.3);
+      color: var(--purple3);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
     }
-    .dot{
+    .orb{
       width:10px; height:10px; border-radius:999px;
-      background: var(--blue);
-      box-shadow: 0 0 18px rgba(42,169,255,0.8);
-      animation: pulse 1.25s ease-in-out infinite;
+      background: linear-gradient(135deg, var(--purple2), var(--magenta));
+      box-shadow: 0 0 20px var(--purple), 0 0 40px rgba(147,51,234,0.5);
+      animation: orbPulse 2s ease-in-out infinite;
     }
-    @keyframes pulse{
-      0%,100%{ transform: scale(1); opacity: 0.9; }
-      50%{ transform: scale(1.35); opacity: 1; }
-    }
-
-    .desc{
-      margin: 16px auto 28px;
-      max-width: 58ch;
-      color: #eaf4ff;
-      font-size: 1.02rem;
-      line-height: 1.65;
-      opacity: 0.95;
+    @keyframes orbPulse{
+      0%,100%{ transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px var(--purple); }
+      50%{ transform: scale(1.3); opacity: 1; box-shadow: 0 0 30px var(--purple), 0 0 60px rgba(147,51,234,0.4); }
     }
 
-    .countdown{
+    /* Search */
+    .search-box{
+      margin: 32px 0 24px;
       display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
       gap: 12px;
-      margin-top: 6px;
     }
-
-    .box{
-      background: var(--glass2);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 14px;
-      padding: 14px 16px;
-      min-width: 110px;
-      box-shadow: inset 0 0 0 1px rgba(42,169,255,0.08);
+    .search-input{
+      flex:1;
+      padding: 18px 24px;
+      font-size: 1rem;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(147,51,234,0.3);
+      border-radius: 16px;
+      color: var(--text);
+      outline: none;
+      transition: all 0.3s;
     }
-
-    .num{
-      font-weight: 900;
-      font-size: 1.6rem;
-      letter-spacing: 0.5px;
-      color: #eaf6ff;
-      text-shadow: 0 0 16px rgba(42,169,255,0.18);
-      font-variant-numeric: tabular-nums;
+    .search-input::placeholder{ color: var(--muted); opacity: 0.6; }
+    .search-input:focus{
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(147,51,234,0.2), 0 0 30px -10px var(--purple);
     }
-
-    .lbl{
-      margin-top: 4px;
-      font-size: 0.72rem;
-      color: #9fc5ff;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      opacity: 0.95;
+    .search-btn{
+      padding: 18px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--purple), var(--violet));
+      border: none;
+      border-radius: 16px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      display:flex;
+      align-items:center;
+      gap: 8px;
     }
+    .search-btn:hover:not(:disabled){
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px -10px var(--purple);
+    }
+    .search-btn:disabled{ opacity: 0.5; cursor: not-allowed; }
 
+    /* Status */
     .status{
-      margin-top: 18px;
-      font-size: 0.92rem;
-      color: #bfe2ff;
-      opacity: 0.9;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+    .status.loading{ background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+    .status.online{ background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
+    .status.offline{ background: rgba(239,68,68,0.15); color: var(--error); border: 1px solid rgba(239,68,68,0.3); }
+    .status-dot{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
+
+    /* Quick links */
+    .quick-title{ color: var(--muted); font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; opacity: 0.7; }
+    .quick-links{ display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .quick-link{
+      padding: 12px 18px;
+      background: rgba(147,51,234,0.1);
+      border: 1px solid rgba(147,51,234,0.2);
+      border-radius: 12px;
+      color: var(--purple3);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-link:hover{
+      background: var(--purple);
+      border-color: var(--purple);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -10px rgba(147,51,234,0.5);
     }
 
-    .soon{
-      margin-top: 10px;
-      font-size: 1.2rem;
+    footer{ margin-top: 28px; color: rgba(196,181,253,0.4); font-size: 0.8rem; }
+
+    /* Beta Modal */
+    .modal-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-overlay.hidden{ display: none; }
+    @keyframes fadeIn{ from{ opacity: 0; } to{ opacity: 1; } }
+
+    .modal{
+      background: linear-gradient(135deg, rgba(26,10,46,0.98), rgba(5,1,13,0.99));
+      border: 1px solid rgba(147,51,234,0.3);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9), 0 0 100px -30px var(--purple);
+      animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalPop{ from{ opacity: 0; transform: scale(0.9) translateY(20px); } to{ opacity: 1; transform: scale(1) translateY(0); } }
+
+    .modal-icon{ 
+      margin-bottom: 20px; 
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat{
+      0%,100%{ transform: translateY(0) rotate(0deg); }
+      50%{ transform: translateY(-6px) rotate(5deg); }
+    }
+    .modal h2{
+      font-size: 1.8rem;
       font-weight: 800;
-      color: var(--blue2);
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #f3e8ff, var(--purple3), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+    }
+    .modal-desc{ color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 12px; }
+    .modal-desc strong{ color: var(--purple3); font-weight: 600; }
+    .modal .issues{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 24px 0;
+    }
+    .modal .issue{
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(147,51,234,0.15), rgba(124,58,237,0.1));
+      border: 1px solid rgba(147,51,234,0.25);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .modal .issue:hover{
+      border-color: rgba(147,51,234,0.4);
+      transform: translateY(-1px);
+    }
+    .modal-note{
+      font-size: 0.9rem;
+      color: rgba(34,197,94,0.85);
+      margin-top: 16px;
+      padding: 12px 20px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 10px;
+    }
+    .modal-btn{
+      margin-top: 28px;
+      padding: 16px 48px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--purple), var(--violet));
+      border: none;
+      border-radius: 14px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px -4px rgba(147,51,234,0.5);
+    }
+    .modal-btn:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px -10px var(--purple);
     }
 
-    footer{
-      margin-top: 18px;
-      color:#aac7ff;
-      font-size: 0.82rem;
-      opacity: 0.85;
-    }
-
-    @media (max-width: 520px){
-      .wrap{ padding: 38px 22px; }
-      .title{ font-size: 2.7rem; }
-      .box{ min-width: 98px; }
+    @media (max-width: 600px){
+      .wrap{ padding: 32px 20px; }
+      .title{ font-size: 2.4rem; }
+      .search-box{ flex-direction: column; }
+      .modal{ padding: 28px 20px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="grid"></div>
-  <div class="glow" style="left:-10%; top:30%;"></div>
-  <div class="glow g2"></div>
-  <div class="streaks"></div>
+  <div class="stars"></div>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+
+  <!-- Early Access Modal -->
+  <div class="modal-overlay" id="betaModal">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L12.9 4.8C13.5 6.5 14.9 7.9 16.6 8.5L19.4 9.4L16.6 10.3C14.9 10.9 13.5 12.3 12.9 14L12 16.8L11.1 14C10.5 12.3 9.1 10.9 7.4 10.3L4.6 9.4L7.4 8.5C9.1 7.9 10.5 6.5 11.1 4.8L12 2Z" fill="url(#starGrad)" stroke="url(#starGrad)" stroke-width="1"/>
+          <path d="M5.5 15L6 16.5C6.3 17.4 7 18.1 7.9 18.4L9.4 18.9L7.9 19.4C7 19.7 6.3 20.4 6 21.3L5.5 22.8L5 21.3C4.7 20.4 4 19.7 3.1 19.4L1.6 18.9L3.1 18.4C4 18.1 4.7 17.4 5 16.5L5.5 15Z" fill="#c084fc" opacity="0.8"/>
+          <path d="M18.5 13L18.8 14C19 14.5 19.4 14.9 19.9 15.1L20.9 15.4L19.9 15.7C19.4 15.9 19 16.3 18.8 16.8L18.5 17.8L18.2 16.8C18 16.3 17.6 15.9 17.1 15.7L16.1 15.4L17.1 15.1C17.6 14.9 18 14.5 18.2 14L18.5 13Z" fill="#a855f7" opacity="0.6"/>
+          <defs>
+            <linearGradient id="starGrad" x1="4" y1="2" x2="20" y2="18">
+              <stop offset="0%" stop-color="#f59e0b"/>
+              <stop offset="50%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2>Early Access Preview</h2>
+      <p class="modal-desc">
+        Welcome to <strong>Nebula</strong> — still in active development! 
+        Most sites work great, but some complex platforms have limited support.
+      </p>
+      <div class="issues">
+        <span class="issue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+          TikTok
+        </span>
+        <span class="issue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.9 2.9L8.6 13.5h3.9v7.6l4.3-10.6h-3.9V2.9z"/></svg>
+          Roblox
+        </span>
+        <span class="issue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Discord
+        </span>
+        <span class="issue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0l3.017 8.506H24L12.915 0z"/></svg>
+          Netflix
+        </span>
+        <span class="issue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+          Gmail
+        </span>
+      </div>
+      <p class="modal-note">
+        Search engines, Wikipedia, YouTube, and news sites should work perfectly!
+      </p>
+      <button class="modal-btn" onclick="closeBetaModal()">
+        <span>Launch Nebula</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <main class="wrap">
-    <div class="title">Webtra</div>
-    <div class="tagline">The future of private web access</div>
+    <!-- Planet Logo -->
+    <div class="logo">
+      <svg fill="#9333ea" viewBox="0 0 458.758 458.758" xmlns="http://www.w3.org/2000/svg">
+        <path d="M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z M103.889,246.179c-9.3,0-16.8-7.5-16.8-16.8c0-38.2,14.9-74.2,41.9-101.2c6.6-6.6,17.2-6.6,23.8,0c6.6,6.6,6.6,17.2,0,23.8c-20.7,20.7-32.1,48.2-32.1,77.4C120.789,238.679,113.189,246.179,103.889,246.179z"/>
+        <path d="M310.189,310.179c-35,35-70.6,67-104.3,94.1c52.6,7,107.9-9.7,148.3-50.1c40.5-40.5,57.2-95.7,50.1-148.3C377.189,239.579,345.189,275.179,310.189,310.179z"/>
+      </svg>
+    </div>
+    
+    <div class="title">Nebula</div>
+    <div class="tagline">Journey beyond the boundaries of the web</div>
 
     <div class="badge">
-      <span class="dot"></span>
-      End-to-End Encrypted Proxy • leading edge privacy
+      <span class="orb"></span>
+      Encrypted Proxy • Anonymous Browsing • Zero Limits
     </div>
 
-    <p class="desc">
-      Webtra is a secure proxy platform built for privacy-first browsing and a clean, simple experience.
-      We’re preparing the launch now.
-    </p>
+    <div class="status loading" id="status">
+      <span class="status-dot"></span>
+      <span>Connecting to proxy...</span>
+    </div>
 
-    <section class="countdown" aria-label="Launch countdown">
-      <div class="box"><div class="num" id="days">--</div><div class="lbl">Days</div></div>
-      <div class="box"><div class="num" id="hours">--</div><div class="lbl">Hours</div></div>
-      <div class="box"><div class="num" id="minutes">--</div><div class="lbl">Minutes</div></div>
-      <div class="box"><div class="num" id="seconds">--</div><div class="lbl">Seconds</div></div>
-      <div class="box"><div class="num" id="ms">---</div><div class="lbl">Milliseconds</div></div>
-    </section>
+    <form class="search-box" id="proxyForm">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="urlInput" 
+        placeholder="Enter any URL — google.com, youtube.com..." 
+        required 
+        autofocus
+      >
+      <button type="submit" class="search-btn" id="goBtn" disabled>
+        <span>Browse</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </form>
 
-    <div class="soon">Coming Soon</div>
-    <div class="status" id="status">Using configured launch time…</div>
-    <footer>© 2025 Webtra</footer>
+    <div class="quick-title">Quick Access</div>
+    <div class="quick-links">
+      <div class="quick-link" data-url="https://www.google.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google
+      </div>
+      <div class="quick-link" data-url="https://www.youtube.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube
+      </div>
+      <div class="quick-link" data-url="https://www.wikipedia.org">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.09 13.119c-.936 1.932-2.217 4.548-2.853 5.728-.616 1.074-1.127.931-1.532.029-1.406-3.321-4.293-9.144-5.651-12.409-.251-.601-.441-.987-.619-1.139-.181-.15-.554-.24-1.122-.271C.103 5.033 0 4.982 0 4.898v-.455l.052-.045c.924-.005 5.401 0 5.401 0l.051.045v.434c0 .119-.075.176-.225.176l-.564.031c-.485.029-.727.164-.727.436 0 .135.053.33.166.601 1.082 2.646 4.818 10.521 4.818 10.521l.136.046 2.411-4.81-.482-1.067-1.658-3.264s-.318-.654-.428-.872c-.728-1.443-.712-1.518-1.447-1.617-.207-.023-.313-.05-.313-.149v-.468l.06-.045h4.292l.113.037v.451c0 .105-.076.15-.227.15l-.308.047c-.792.061-.661.381-.136 1.422l1.582 3.252 1.758-3.504c.293-.64.233-.801-.3-.852l-.36-.029c-.106-.007-.16-.056-.16-.165v-.468l.06-.045h3.982l.06.045v.434c0 .135-.093.195-.195.195-.631.053-1.216.373-1.576.97-.094.135-.227.335-.381.601-.263.435-1.324 2.491-2.249 4.275l-.519 1.04 2.819 5.942c.053.12.161.178.161.178l.238-.045c.569-.045.87-.406.87-.406s2.134-4.355 2.886-5.914c.753-1.559 1.542-3.24 1.542-3.24.127-.254.239-.488.315-.645.274-.57.285-.645-.28-.705l-.423-.037c-.135-.007-.189-.075-.189-.183V4.87l.05-.046h4.002l.06.045v.434c0 .105-.075.165-.225.165-.96.06-1.327.585-1.723 1.369l-4.245 8.384-.022.074h-.012z"/></svg>
+        Wikipedia
+      </div>
+      <div class="quick-link" data-url="https://www.reddit.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+        Reddit
+      </div>
+      <div class="quick-link" data-url="https://duckduckgo.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.182a9.818 9.818 0 1 1 0 19.636 9.818 9.818 0 0 1 0-19.636zm-.545 4.909c-.322 0-.6.14-.807.393l-.24.29c-.132.16-.322.26-.51.26H9.27c-.2 0-.364.164-.364.364v1.99c0 .2.164.364.364.364h.628l-.265.92c-.1.35-.04.713.167.999.208.285.539.46.898.472l2.074.07c.31.01.61-.087.85-.276l1.17-.92c.15-.12.34-.18.535-.17l.82.04c.4.02.79-.13 1.07-.41.28-.28.44-.66.44-1.06V8.81c0-.42-.2-.82-.54-1.07l-.94-.69c-.21-.15-.42-.29-.64-.42-.22-.13-.45-.24-.68-.33-.23-.09-.47-.16-.71-.21-.24-.05-.49-.08-.74-.08h-.89c-.16 0-.32.02-.48.05-.16.03-.31.08-.46.15l-.2.09-.11-.13c-.18-.21-.42-.37-.68-.46-.26-.09-.54-.12-.81-.08zM10.09 9c.5 0 .91.41.91.91 0 .36-.21.67-.51.82l-.15.06-.1-.01c-.14-.02-.27-.07-.38-.16-.11-.09-.2-.2-.26-.33-.06-.13-.08-.27-.07-.41.01-.14.06-.27.14-.39.12-.18.29-.31.49-.38.08-.03.17-.05.26-.06h.09c-.08 0-.16.01-.24.03-.08.02-.15.06-.22.1-.07.04-.13.1-.18.16-.05.06-.09.14-.11.22-.02.08-.03.16-.02.24 0 .08.03.16.07.23.04.07.09.14.16.19.07.05.14.09.22.11.08.02.16.03.24.02.08-.01.16-.04.23-.08.07-.04.13-.1.18-.17.05-.07.08-.15.1-.23.02-.08.02-.17 0-.25-.01-.05-.03-.1-.05-.14z"/></svg>
+        DuckDuckGo
+      </div>
+    </div>
+
+    <footer>© 2026 Nebula</footer>
   </main>
 
-  <script type="module">
-    // Firebase (v12 module) + GLOBAL countdown
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-    import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyANCArKh0Hpi3GgVsE-FPl-iEpQ0lhyaI8",
-      authDomain: "webtra-1a9ee.firebaseapp.com",
-      databaseURL: "https://webtra-1a9ee-default-rtdb.firebaseio.com",
-      projectId: "webtra-1a9ee",
-      storageBucket: "webtra-1a9ee.firebasestorage.app",
-      messagingSenderId: "756369134810",
-      appId: "1:756369134810:web:8e126dd058052d9da6c1e3",
-      measurementId: "G-LMGB9VB57S"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    try { getAnalytics(app); } catch (e) { /* ok */ }
-    const db = getDatabase(app);
-
-    const elDays = document.getElementById("days");
-    const elHours = document.getElementById("hours");
-    const elMinutes = document.getElementById("minutes");
-    const elSeconds = document.getElementById("seconds");
-    const elMs = document.getElementById("ms");
-    const elStatus = document.getElementById("status");
-
-    const LAUNCH_PATH = "webtra/launchTime";
-
-    // ✅ Your fixed global timestamp (ms)
-    const FALLBACK_LAUNCH_MS = 1768196285526;
-
-    let launchTimeMs = null;
-    let rafId = null;
-
-    function pad2(n){ return String(n).padStart(2, "0"); }
-    function pad3(n){ return String(n).padStart(3, "0"); }
-
-    function stopLoop(){
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-
-    function renderDone(){
-      elDays.textContent = "00";
-      elHours.textContent = "00";
-      elMinutes.textContent = "00";
-      elSeconds.textContent = "00";
-      elMs.textContent = "000";
-      elStatus.textContent = "Launched.";
-    }
-
-    function loop(){
-      const diff = launchTimeMs - Date.now();
-
-      if (diff <= 0){
-        renderDone();
-        stopLoop();
-        return;
+  <script>
+    // Firebase backend URL detection
+    const FIREBASE_URL = 'https://procces-3efd9-default-rtdb.firebaseio.com/backends/bestproxy.json';
+    let PROXY_URL = null;
+    
+    // Detect if running locally or deployed
+    const isDeployed = !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1');
+    
+    async function getBackendUrl() {
+      if (!isDeployed) {
+        // Running locally
+        return 'http://localhost:3003';
       }
-
-      const days = Math.floor(diff / 86400000);
-      const hours = Math.floor((diff / 3600000) % 24);
-      const minutes = Math.floor((diff / 60000) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      const ms = diff % 1000;
-
-      elDays.textContent = pad2(days);
-      elHours.textContent = pad2(hours);
-      elMinutes.textContent = pad2(minutes);
-      elSeconds.textContent = pad2(seconds);
-      elMs.textContent = pad3(ms);
-
-      rafId = requestAnimationFrame(loop);
-    }
-
-    async function ensureLaunchTimeExists(){
-      // If rules block writes, this will fail silently and we just use the fallback.
-      try{
-        const snap = await get(ref(db, LAUNCH_PATH));
-        const v = snap.val();
-
-        if (typeof v === "number") return; // already set
-
-        // Try to set it once (only works if your rules allow write)
-        await set(ref(db, LAUNCH_PATH), FALLBACK_LAUNCH_MS);
-      } catch (e) {
-        // Can't write (most likely because rules are read-only). That's fine.
-      }
-    }
-
-    // Try to create the node (only if rules allow), then always listen for updates
-    ensureLaunchTimeExists().finally(() => {
-      onValue(ref(db, LAUNCH_PATH), (snap) => {
-        const v = snap.val();
-
-        if (typeof v !== "number"){
-          // Use fallback so the page still works even if Firebase isn't set
-          launchTimeMs = FALLBACK_LAUNCH_MS;
-          elStatus.textContent = "Using fallback launch time (set Firebase for global sync).";
-        } else {
-          launchTimeMs = v;
-          elStatus.textContent = "";
+      // Deployed - fetch tunnel URL from Firebase
+      try {
+        const response = await fetch(FIREBASE_URL);
+        const data = await response.json();
+        if (data?.url) {
+          console.log('🔥 Using Firebase backend:', data.url);
+          return data.url;
         }
+      } catch (err) {
+        console.error('Failed to fetch backend URL:', err);
+      }
+      // Fallback to prompt
+      const url = prompt('Enter Nebula proxy backend URL:');
+      return url || 'http://localhost:3003';
+    }
 
-        stopLoop();
-        loop();
-      }, (err) => {
-        // If Firebase errors, fallback still works
-        launchTimeMs = FALLBACK_LAUNCH_MS;
-        elStatus.textContent = "Firebase error — using fallback launch time.";
-        stopLoop();
-        loop();
+    // Check if beta modal was already shown this session
+    function closeBetaModal() {
+      document.getElementById('betaModal').classList.add('hidden');
+      sessionStorage.setItem('betaAcknowledged', 'true');
+    }
+
+    // Show modal only if not acknowledged
+    if (sessionStorage.getItem('betaAcknowledged')) {
+      document.getElementById('betaModal').classList.add('hidden');
+    }
+
+    // Check proxy status
+    async function checkProxy() {
+      const statusEl = document.getElementById('status');
+      const goBtn = document.getElementById('goBtn');
+
+      try {
+        const response = await fetch(PROXY_URL + '/', { 
+          method: 'HEAD',
+          mode: 'no-cors'
+        });
+        
+        // no-cors doesn't give us status, so if it doesn't throw, assume online
+        statusEl.className = 'status online';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>Proxy online — Ready to browse</span>';
+        goBtn.disabled = false;
+
+      } catch (error) {
+        console.error('Proxy check failed:', error);
+        statusEl.className = 'status offline';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>Proxy offline — Retrying...</span>';
+        goBtn.disabled = true;
+        setTimeout(checkProxy, 5000);
+      }
+    }
+
+    // Navigate to proxy
+    function goToProxy(url) {
+      // Ensure URL has protocol
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+      
+      const proxyUrl = PROXY_URL + '/go?url=' + encodeURIComponent(url);
+      window.location.href = proxyUrl;
+    }
+
+    // Form submit
+    document.getElementById('proxyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const url = document.getElementById('urlInput').value.trim();
+      if (url) goToProxy(url);
+    });
+
+    // Quick links
+    document.querySelectorAll('.quick-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const url = this.getAttribute('data-url');
+        if (url) goToProxy(url);
       });
     });
+
+    // Initialize
+    checkProxy();
+    setInterval(checkProxy, 30000);
   </script>
 </body>
 </html>
