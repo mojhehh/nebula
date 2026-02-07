@@ -831,6 +831,42 @@
   <!-- Error Toast -->
   <div class="error-toast" id="errorToast"></div>
 
+  <!-- Existing Session Banner (shown when user already has a browser) -->
+  <div id="existingSessionBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,rgba(147,51,234,0.95),rgba(124,58,237,0.95));backdrop-filter:blur(20px);padding:16px 24px;text-align:center;box-shadow:0 4px 30px rgba(0,0,0,0.4);animation:slideDown 0.5s ease;">
+    <p style="color:#fff;font-size:1rem;margin:0 0 10px;">
+      <strong>You already have a browser session open.</strong>
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button id="goToExistingBtn" onclick="goToExistingSession()" style="padding:8px 24px;background:#fff;color:#7c3aed;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">Go to My Browser</button>
+      <button id="releaseSessionBtn" onclick="releaseAndGetNew()" style="padding:8px 24px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">End Session &amp; Get New</button>
+    </div>
+  </div>
+
+  <!-- All Browsers Busy Modal -->
+  <div id="busyModal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(5,1,13,0.85);backdrop-filter:blur(10px);display:none;justify-content:center;align-items:center;">
+    <div style="background:linear-gradient(135deg,#0d0620,#1a0a3e);border:1px solid rgba(147,51,234,0.3);border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+      <div style="font-size:48px;margin-bottom:16px;">🚦</div>
+      <h2 style="color:#f3e8ff;font-size:1.4rem;margin:0 0 12px;">All Browsers Are Busy</h2>
+      <p style="color:#a78bfa;font-size:0.95rem;line-height:1.6;margin:0 0 8px;">
+        All <span id="busyTotal">10</span> browser sessions are currently in use by other users.
+      </p>
+      <p style="color:#c084fc;font-size:0.9rem;margin:0 0 20px;">
+        Sessions auto-expire after 5 minutes of inactivity. We'll keep trying automatically.
+      </p>
+      <div style="background:rgba(147,51,234,0.15);border-radius:12px;padding:14px;margin-bottom:20px;">
+        <p style="color:#a78bfa;font-size:0.85rem;margin:0;" id="busyRetryText">Retrying in <strong id="busyCountdown">30</strong> seconds...</p>
+        <div style="background:rgba(255,255,255,0.1);border-radius:6px;height:6px;margin-top:10px;overflow:hidden;">
+          <div id="busyProgress" style="background:linear-gradient(90deg,#9333ea,#d946ef);height:100%;width:100%;border-radius:6px;transition:width 1s linear;"></div>
+        </div>
+      </div>
+      <button onclick="closeBusyModal()" style="padding:10px 28px;background:transparent;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);border-radius:10px;font-size:0.9rem;cursor:pointer;">Dismiss</button>
+    </div>
+  </div>
+
+  <style>
+    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+  </style>
+
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -860,10 +896,26 @@
     // Track page view
     logEvent(analytics, 'page_view', { page_title: 'Nebula Home' });
 
+    // === Client ID: unique per device, persists across sessions ===
+    function getOrCreateClientId() {
+      let clientId = localStorage.getItem('nebulaClientId');
+      if (!clientId || clientId.length < 20) {
+        // Generate a crypto-quality random ID
+        const arr = new Uint8Array(16);
+        crypto.getRandomValues(arr);
+        clientId = 'nc_' + Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+        localStorage.setItem('nebulaClientId', clientId);
+      }
+      return clientId;
+    }
+    const CLIENT_ID = getOrCreateClientId();
+
     // State
     let backendUrl = null;
     let serverOnline = false;
     let isLoading = false;
+    let existingBrowserUrl = null;
+    let busyRetryTimer = null;
 
     // DOM elements
     const statusPill = document.getElementById('statusPill');
@@ -875,6 +927,54 @@
     const errorToast = document.getElementById('errorToast');
     const availableCount = document.getElementById('availableCount');
     const totalCount = document.getElementById('totalCount');
+    const existingSessionBanner = document.getElementById('existingSessionBanner');
+    const busyModal = document.getElementById('busyModal');
+
+    // === Check if user already has a session ===
+    async function checkExistingSession() {
+      if (!backendUrl) return;
+      try {
+        const res = await fetch(`${backendUrl}/api/check-session?clientId=${encodeURIComponent(CLIENT_ID)}`, { mode: 'cors' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.hasSession && data.browserUrl) {
+          existingBrowserUrl = data.browserUrl;
+          existingSessionBanner.style.display = 'block';
+          console.log('[Session] Active session found:', data.browserUrl);
+        } else {
+          existingBrowserUrl = null;
+          existingSessionBanner.style.display = 'none';
+        }
+      } catch (err) {
+        console.warn('[Session] Check failed:', err.message);
+      }
+    }
+
+    // Go to existing browser session
+    window.goToExistingSession = function() {
+      if (existingBrowserUrl) {
+        window.location.href = existingBrowserUrl;
+      }
+    };
+
+    // Release current session and get a new one
+    window.releaseAndGetNew = async function() {
+      if (!backendUrl) return;
+      try {
+        await fetch(`${backendUrl}/api/release`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clientId: CLIENT_ID }),
+        });
+        existingSessionBanner.style.display = 'none';
+        existingBrowserUrl = null;
+        localStorage.removeItem('nebulaSessionId');
+        // Now request a new one
+        window.requestBrowser();
+      } catch (err) {
+        showError('Failed to release session. Try again.');
+      }
+    };
 
     // Get backend URL from procces Firebase (tunnel updater writes here)
     async function fetchBackendUrl() {
@@ -882,17 +982,22 @@
         const res = await fetch(`${PROCCES_DB}/backends/nebula-browser.json`);
         const data = await res.json();
         if (data && data.url) {
+          const wasNull = !backendUrl;
           backendUrl = data.url;
           serverOnline = data.status === 'online';
           console.log('[Tunnel] Backend URL:', backendUrl);
-          if (serverOnline) checkBackendStatus();
+          if (serverOnline) {
+            checkBackendStatus();
+            // Check for existing session when we first get the URL
+            if (wasNull) checkExistingSession();
+          }
         }
       } catch (err) {
         console.warn('[Tunnel] Failed to fetch backend URL:', err.message);
       }
     }
 
-    // Fetch immediately, then poll every 5 min (tunnel URL changes rarely)
+    // Fetch immediately, then poll every 5 min
     fetchBackendUrl();
     setInterval(fetchBackendUrl, 5 * 60 * 1000);
 
@@ -910,7 +1015,6 @@
     // Check backend is alive
     async function checkBackendStatus() {
       if (!backendUrl) return;
-      
       try {
         const res = await fetch(`${backendUrl}/api/status`, { mode: 'cors' });
         if (res.ok) {
@@ -940,7 +1044,8 @@
       } else {
         statusPill.classList.add('offline');
         statusText.textContent = 'All in use';
-        launchBtn.disabled = true;
+        // Don't disable - let them try, we'll show the busy modal
+        launchBtn.disabled = false;
       }
     }
 
@@ -951,6 +1056,44 @@
       setTimeout(() => errorToast.classList.remove('show'), 5000);
     }
 
+    // === All Browsers Busy Modal ===
+    function showBusyModal(data) {
+      if (data.total) document.getElementById('busyTotal').textContent = data.total;
+      busyModal.style.display = 'flex';
+      
+      // Auto-retry countdown
+      let countdown = data.retryAfterSeconds || 30;
+      const countdownEl = document.getElementById('busyCountdown');
+      const progressEl = document.getElementById('busyProgress');
+      
+      if (busyRetryTimer) clearInterval(busyRetryTimer);
+      
+      countdownEl.textContent = countdown;
+      progressEl.style.width = '100%';
+      
+      busyRetryTimer = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = Math.max(0, countdown);
+        progressEl.style.width = ((countdown / (data.retryAfterSeconds || 30)) * 100) + '%';
+        
+        if (countdown <= 0) {
+          clearInterval(busyRetryTimer);
+          document.getElementById('busyRetryText').innerHTML = '<strong>Retrying now...</strong>';
+          // Auto-retry
+          closeBusyModal();
+          window.requestBrowser();
+        }
+      }, 1000);
+    }
+    
+    window.closeBusyModal = function() {
+      busyModal.style.display = 'none';
+      if (busyRetryTimer) {
+        clearInterval(busyRetryTimer);
+        busyRetryTimer = null;
+      }
+    };
+
     // Loading animation steps
     const loadingSteps = [
       { text: 'Initializing secure connection...', progress: 15 },
@@ -960,7 +1103,7 @@
       { text: 'Almost ready...', progress: 90 },
     ];
 
-    // Request browser
+    // === Request browser (with clientId for dedup) ===
     window.requestBrowser = async function() {
       if (isLoading || !backendUrl) return;
       
@@ -968,10 +1111,8 @@
       loadingOverlay.classList.add('active');
       progressFill.style.width = '0%';
       
-      // Track analytics
       logEvent(analytics, 'browser_request_start');
 
-      // Animate loading steps
       let stepIndex = 0;
       const stepInterval = setInterval(() => {
         if (stepIndex < loadingSteps.length) {
@@ -985,15 +1126,20 @@
         const res = await fetch(`${backendUrl}/api/request-browser`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clientId: CLIENT_ID }),
         });
         const data = await res.json();
 
         clearInterval(stepInterval);
 
         if (data.success) {
-          logEvent(analytics, 'browser_request_success');
+          logEvent(analytics, 'browser_request_success', { existing: data.existing });
           
-          loadingStatus.textContent = 'Browser ready! Redirecting...';
+          if (data.existing) {
+            loadingStatus.textContent = 'Reconnecting to your existing browser...';
+          } else {
+            loadingStatus.textContent = 'Browser ready! Redirecting...';
+          }
           progressFill.style.width = '100%';
           
           localStorage.setItem('nebulaSessionId', data.sessionId);
@@ -1002,22 +1148,38 @@
             window.location.href = data.browserUrl;
           }, 800);
         } else {
-          throw new Error(data.error || 'Failed to get browser');
+          // All browsers are busy
+          loadingOverlay.classList.remove('active');
+          isLoading = false;
+          
+          if (data.error === 'all_browsers_in_use') {
+            logEvent(analytics, 'all_browsers_busy');
+            showBusyModal(data);
+          } else {
+            showError(data.message || data.error || 'Failed to get browser');
+          }
         }
       } catch (err) {
         clearInterval(stepInterval);
         logEvent(analytics, 'browser_request_error', { error: err.message });
         
         loadingOverlay.classList.remove('active');
-        showError(err.message || 'Connection failed. Please try again.');
+        showError('Connection failed. Please check your internet and try again.');
         isLoading = false;
       }
     };
 
-    // Fallback: check status via API every 30s
+    // Fallback: check status via API every 15s
     setInterval(() => {
       if (backendUrl && !isLoading) {
         checkBackendStatus();
+      }
+    }, 15000);
+
+    // Also re-check for existing session every 30s
+    setInterval(() => {
+      if (backendUrl && !isLoading && !existingBrowserUrl) {
+        checkExistingSession();
       }
     }, 30000);
 
