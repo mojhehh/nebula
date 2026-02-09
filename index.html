@@ -41,8 +41,8 @@
   </div>
   <div class="footer">February 10, 2026</div>
   <script>
-    // Launch: Feb 10, 2026 00:00:00 UTC
-    var launch = new Date('2026-02-10T00:00:00Z').getTime();
+    // Launch: Feb 10, 2026 7:00 AM local time
+    var launch = new Date(2026, 1, 10, 7, 0, 0).getTime();
     function update() {
       var now = Date.now();
       var diff = launch - now;
