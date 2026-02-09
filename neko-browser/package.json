@@ -1,0 +1,17 @@
+{
+  "name": "nebula-neko-proxy",
+  "version": "1.0.0",
+  "description": "Nebula Browser Session Manager — Reverse Proxy for Neko WebRTC Containers",
+  "main": "neko-proxy.js",
+  "scripts": {
+    "start": "node neko-proxy.js",
+    "dev": "node neko-proxy.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "http-proxy": "^1.18.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  neko:
+    image: "ghcr.io/m1k1o/neko/google-chrome:latest"
+    restart: unless-stopped
+    shm_size: "2gb"
+    network_mode: "host"
+    environment:
+      NEKO_SCREEN: 1280x720@30
+      NEKO_PASSWORD: neko
+      NEKO_PASSWORD_ADMIN: admin
+      NEKO_BIND: :8085
+      NEKO_EPR: 59000-59100
+      NEKO_ICELITE: "true"
