@@ -763,7 +763,7 @@
       <div class="feature-card">
         <div class="feature-icon">🔄</div>
         <h3 class="feature-title">Auto Cleanup</h3>
-        <p class="feature-desc">Sessions automatically end after 30 minutes of inactivity. All data is wiped clean.</p>
+        <p class="feature-desc">Sessions automatically end after 5 minutes of inactivity. All data is wiped clean.</p>
       </div>
       
       <div class="feature-card">
@@ -786,8 +786,8 @@
         <p>Total Capacity</p>
       </div>
       <div class="stat-item">
-        <h3>30m</h3>
-        <p>Session Duration</p>
+        <h3>5m</h3>
+        <p>Idle Timeout</p>
       </div>
       <div class="stat-item">
         <h3>100%</h3>
@@ -938,6 +938,7 @@
         if (!res.ok) return;
         const data = await res.json();
         if (data.hasSession && data.browserUrl) {
+          // Server already includes ?token= in browserUrl - use as-is
           existingBrowserUrl = data.browserUrl;
           existingSessionBanner.style.display = 'block';
           console.log('[Session] Active session found:', data.browserUrl);
@@ -979,7 +980,7 @@
     // Get backend URL from procces Firebase (tunnel updater writes here)
     async function fetchBackendUrl() {
       try {
-        const res = await fetch(`${PROCCES_DB}/backends/nebula-browser.json`);
+        const res = await fetch(`${PROCCES_DB}/backends/nebula.json`);
         const data = await res.json();
         if (data && data.url) {
           const wasNull = !backendUrl;
@@ -1107,6 +1108,12 @@
     window.requestBrowser = async function() {
       if (isLoading || !backendUrl) return;
       
+      // If we already know about an existing session, just go there directly
+      if (existingBrowserUrl) {
+        window.location.href = existingBrowserUrl;
+        return;
+      }
+      
       isLoading = true;
       loadingOverlay.classList.add('active');
       progressFill.style.width = '0%';
@@ -1144,6 +1151,7 @@
           
           localStorage.setItem('nebulaSessionId', data.sessionId);
           
+          // Server already includes ?token= in browserUrl for access control
           setTimeout(() => {
             window.location.href = data.browserUrl;
           }, 800);
