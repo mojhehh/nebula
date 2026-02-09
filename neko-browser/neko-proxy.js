@@ -82,10 +82,22 @@ proxy.on('proxyReq', (proxyReq, req) => {
   }
 });
 
+// Inject CORS headers into proxied responses so browser doesn't block them
+proxy.on('proxyRes', (proxyRes) => {
+  proxyRes.headers['access-control-allow-origin'] = '*';
+  proxyRes.headers['access-control-allow-methods'] = 'GET, POST, OPTIONS';
+  proxyRes.headers['access-control-allow-headers'] = 'Content-Type';
+});
+
 proxy.on('error', (err, req, res) => {
   console.error('[Proxy Error]', err.message);
   if (res && res.writeHead) {
-    res.writeHead(502, { 'Content-Type': 'text/html' });
+    res.writeHead(502, {
+      'Content-Type': 'text/html',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    });
     res.end(`
       <html><head><title>Connecting...</title></head>
       <body style="background:#0d0620;color:#fff;font-family:Inter,system-ui,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;">
@@ -442,7 +454,12 @@ function serveFile(res, filePath, contentType) {
       res.end('Not Found');
       return;
     }
-    res.writeHead(200, { 'Content-Type': contentType });
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    });
     res.end(data);
   });
 }
