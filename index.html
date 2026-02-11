@@ -3,1202 +3,371 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nebula — Private Cloud Browser</title>
-  <meta name="description" content="Browse anonymously with your own private cloud browser. No traces, no tracking, complete privacy.">
+  <title>Nebula — Under Maintenance</title>
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z'/%3E%3C/svg%3E">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Favicon - Planet SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z M103.889,246.179c-9.3,0-16.8-7.5-16.8-16.8c0-38.2,14.9-74.2,41.9-101.2c6.6-6.6,17.2-6.6,23.8,0c6.6,6.6,6.6,17.2,0,23.8c-20.7,20.7-32.1,48.2-32.1,77.4C120.789,238.679,113.189,246.179,103.889,246.179z'/%3E%3Cpath d='M310.189,310.179c-35,35-70.6,67-104.3,94.1c52.6,7,107.9-9.7,148.3-50.1c40.5-40.5,57.2-95.7,50.1-148.3C377.189,239.579,345.189,275.179,310.189,310.179z'/%3E%3C/svg%3E">
 
   <style>
-    :root {
-      --bg1: #05010d;
-      --bg2: #0d0620;
-      --purple: #9333ea;
-      --purple2: #a855f7;
-      --purple3: #c084fc;
-      --violet: #7c3aed;
-      --magenta: #d946ef;
-      --cyan: #06b6d4;
-      --text: #f3e8ff;
-      --muted: #a78bfa;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --error: #ef4444;
+    :root{
+      --bg1:#05010d;
+      --bg2:#1a0a2e;
+      --bg3:#16082a;
+      --purple:#9333ea;
+      --purple2:#a855f7;
+      --purple3:#c084fc;
+      --violet:#7c3aed;
+      --magenta:#d946ef;
+      --text:#f3e8ff;
+      --muted:#c4b5fd;
+      --glass: rgba(147,51,234,0.08);
+      --glass2: rgba(0,0,0,0.5);
+      --border: rgba(147,51,234,0.3);
+      --shadow: rgba(0,0,0,0.7);
+      --glow: rgba(147,51,234,0.4);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    html { scroll-behavior: smooth; }
-    
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:'Inter', system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+
+    body{
+      min-height:100vh;
+      color:var(--text);
+      overflow-x:hidden;
       background: var(--bg1);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 1200px 800px at 15% 0%, rgba(147,51,234,0.15), transparent 50%),
+        radial-gradient(ellipse 1000px 600px at 85% 20%, rgba(124,58,237,0.12), transparent 50%),
+        radial-gradient(ellipse 800px 800px at 50% 100%, rgba(217,70,239,0.08), transparent 50%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 40%, #000 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
     }
 
-    /* === COSMIC BACKGROUND === */
-    .cosmos {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-    
-    .stars {
-      position: absolute;
-      inset: 0;
+    /* Star field */
+    .stars{
+      position:fixed;
+      inset:0;
       background-image: 
-        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
         radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.3), transparent),
-        radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(2px 2px at 200px 50px, rgba(200,180,255,0.4), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 200px 50px, rgba(200,180,255,0.3), transparent),
         radial-gradient(1px 1px at 250px 160px, rgba(255,255,255,0.3), transparent),
-        radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1px 1px at 350px 140px, rgba(147,51,234,0.5), transparent);
-      background-size: 400px 200px;
-      animation: twinkle 6s ease-in-out infinite;
+        radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.2), transparent);
+      background-size: 350px 200px;
+      animation: twinkle 8s ease-in-out infinite;
+      opacity: 0.6;
     }
-    
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 0.4; }
-    }
-    
-    .nebula-cloud {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      animation: float 20s ease-in-out infinite;
-    }
-    .nebula-cloud.n1 { width: 800px; height: 800px; left: -20%; top: -10%; background: radial-gradient(circle, rgba(147,51,234,0.3), transparent 60%); }
-    .nebula-cloud.n2 { width: 600px; height: 600px; right: -10%; top: 30%; background: radial-gradient(circle, rgba(124,58,237,0.25), transparent 60%); animation-delay: -7s; }
-    .nebula-cloud.n3 { width: 700px; height: 700px; left: 20%; bottom: -20%; background: radial-gradient(circle, rgba(217,70,239,0.2), transparent 60%); animation-delay: -14s; }
-    .nebula-cloud.n4 { width: 500px; height: 500px; right: 30%; top: 10%; background: radial-gradient(circle, rgba(6,182,212,0.15), transparent 60%); animation-delay: -3s; }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -20px) scale(1.05); }
-      66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-    
-    .grid-overlay {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(147,51,234,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(147,51,234,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
+    @keyframes twinkle{
+      0%,100%{ opacity: 0.6; }
+      50%{ opacity: 0.4; }
     }
 
-    /* === HEADER === */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      backdrop-filter: blur(20px);
-      background: rgba(5,1,13,0.7);
-      border-bottom: 1px solid rgba(147,51,234,0.1);
-    }
-    
-    .logo-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { filter: drop-shadow(0 0 10px rgba(147,51,234,0.5)); }
-      50% { filter: drop-shadow(0 0 25px rgba(147,51,234,0.8)); }
-    }
-    
-    .logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--text), var(--purple3));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 32px;
-    }
-    
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    
-    .nav-links a:hover {
-      color: var(--text);
-    }
-    
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+    /* Nebula clouds */
+    .nebula{
+      position:fixed;
+      width:900px; height:900px;
+      background: radial-gradient(circle, var(--glow), transparent 60%);
+      filter: blur(120px);
       border-radius: 999px;
-      background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.3);
-      font-size: 0.85rem;
-      color: var(--success);
+      animation: drift 25s ease-in-out infinite;
+      pointer-events:none;
     }
-    
-    .status-pill.loading { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: var(--warning); }
-    .status-pill.offline { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: var(--error); }
-    
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: currentColor;
-      box-shadow: 0 0 10px currentColor;
-      animation: dot-pulse 2s ease-in-out infinite;
+    .nebula.n1{
+      left:-20%; top:-10%;
+      background: radial-gradient(circle, rgba(147,51,234,0.25), transparent 60%);
     }
-    
-    @keyframes dot-pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.7; }
+    .nebula.n2{
+      right:-15%; top:20%;
+      width:700px; height:700px;
+      background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 60%);
+      animation-delay: -8s;
+      animation-duration: 30s;
+    }
+    .nebula.n3{
+      left:30%; bottom:-20%;
+      width:600px; height:600px;
+      background: radial-gradient(circle, rgba(217,70,239,0.15), transparent 60%);
+      animation-delay: -15s;
+    }
+    @keyframes drift{
+      0%,100%{ transform: translate(0,0) scale(1); }
+      33%{ transform: translate(30px,-40px) scale(1.05); }
+      66%{ transform: translate(-20px,30px) scale(0.95); }
     }
 
-    /* === HERO SECTION === */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 100px 20px 60px;
-      text-align: center;
-      position: relative;
+    /* Orbital rings */
+    .rings{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
     }
-    
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 20px;
-      border-radius: 999px;
-      background: rgba(147,51,234,0.1);
-      border: 1px solid rgba(147,51,234,0.3);
-      color: var(--purple3);
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 24px;
-      animation: fade-in 1s ease-out;
+    .ring{
+      position:absolute;
+      border: 1px solid rgba(147,51,234,0.1);
+      border-radius: 50%;
+      animation: orbit 60s linear infinite;
     }
-    
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      animation: fade-in 1s ease-out 0.2s both;
+    .ring:nth-child(1){
+      width:150vmax; height:150vmax;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
     }
-    
-    .hero-title .gradient {
-      background: linear-gradient(135deg, var(--purple3) 0%, var(--purple) 50%, var(--magenta) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: gradient-shift 8s ease-in-out infinite;
-      background-size: 200% 200%;
+    .ring:nth-child(2){
+      width:120vmax; height:120vmax;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
+      animation-duration: 80s;
+      animation-direction: reverse;
+      border-color: rgba(124,58,237,0.08);
     }
-    
-    @keyframes gradient-shift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    .ring:nth-child(3){
+      width:90vmax; height:90vmax;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
+      animation-duration: 100s;
+      border-color: rgba(217,70,239,0.06);
     }
-    
-    .hero-description {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 36px;
-      animation: fade-in 1s ease-out 0.4s both;
-      line-height: 1.7;
+    @keyframes orbit{
+      from{ transform: translate(-50%,-50%) rotate(0deg); }
+      to{ transform: translate(-50%,-50%) rotate(360deg); }
     }
-    
-    @keyframes fade-in {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* === LAUNCH BUTTON === */
-    .launch-container {
-      position: relative;
-      animation: fade-in 1s ease-out 0.6s both;
-    }
-    
-    .launch-btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 40px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--purple), var(--violet));
-      color: white;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 
-        0 0 0 1px rgba(147,51,234,0.3),
-        0 10px 40px -10px rgba(147,51,234,0.5),
-        0 0 80px -20px rgba(147,51,234,0.4);
-    }
-    
-    .launch-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.6s;
-    }
-    
-    .launch-btn:hover::before {
-      transform: translateX(100%);
-    }
-    
-    .launch-btn:hover:not(:disabled) {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 
-        0 0 0 1px rgba(147,51,234,0.5),
-        0 20px 60px -10px rgba(147,51,234,0.6),
-        0 0 100px -20px rgba(147,51,234,0.5);
-    }
-    
-    .launch-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .launch-btn svg {
-      transition: transform 0.3s;
-    }
-    
-    .launch-btn:hover:not(:disabled) svg {
-      transform: translateX(4px);
-    }
-    
-    .btn-text { position: relative; z-index: 1; }
-    
-    /* === LOADING OVERLAY === */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(5,1,13,0.95);
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      width:min(780px, calc(100% - 24px));
+      padding:50px 50px 40px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(26,10,46,0.9), rgba(5,1,13,0.95));
       backdrop-filter: blur(20px);
+      border: 1px solid rgba(147,51,234,0.2);
+      box-shadow: 
+        0 0 0 1px rgba(147,51,234,0.1),
+        0 50px 100px -20px rgba(0,0,0,0.8),
+        0 0 80px -30px rgba(147,51,234,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: emerge 1s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align:center;
     }
-    
-    .loading-overlay.active {
-      display: flex;
-      animation: overlay-in 0.5s ease-out;
+    @keyframes emerge{
+      from{ opacity:0; transform: translateY(30px) scale(0.96); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
     }
-    
-    @keyframes overlay-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .loading-content {
-      text-align: center;
-      position: relative;
-    }
-    
-    /* === STUNNING LOADING ANIMATION === */
-    .loader-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 40px;
-    }
-    
-    .planet {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+
+    /* Logo */
+    .logo{
       width: 80px;
       height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--purple), var(--violet), var(--magenta));
-      box-shadow: 
-        inset -20px -20px 40px rgba(0,0,0,0.5),
-        0 0 60px rgba(147,51,234,0.6),
-        0 0 100px rgba(147,51,234,0.3);
-      animation: planet-glow 2s ease-in-out infinite;
+      margin: 0 auto 20px;
+      filter: drop-shadow(0 0 20px rgba(147,51,234,0.5));
+      animation: float 6s ease-in-out infinite;
     }
-    
-    @keyframes planet-glow {
-      0%, 100% { box-shadow: inset -20px -20px 40px rgba(0,0,0,0.5), 0 0 60px rgba(147,51,234,0.6), 0 0 100px rgba(147,51,234,0.3); }
-      50% { box-shadow: inset -20px -20px 40px rgba(0,0,0,0.5), 0 0 80px rgba(147,51,234,0.8), 0 0 120px rgba(147,51,234,0.5); }
-    }
-    
-    .orbit {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      border: 2px solid transparent;
-      border-radius: 50%;
-      animation: orbit-spin 3s linear infinite;
-    }
-    
-    .orbit::before {
-      content: '';
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--purple3);
-      box-shadow: 0 0 20px var(--purple), 0 0 40px var(--purple);
-    }
-    
-    .orbit.o1 {
-      width: 120px;
-      height: 120px;
-      margin: -60px 0 0 -60px;
-      border-color: rgba(147,51,234,0.3);
-    }
-    .orbit.o1::before { top: -6px; left: 50%; margin-left: -6px; }
-    
-    .orbit.o2 {
-      width: 160px;
-      height: 160px;
-      margin: -80px 0 0 -80px;
-      border-color: rgba(124,58,237,0.2);
-      animation-duration: 5s;
-      animation-direction: reverse;
-    }
-    .orbit.o2::before { top: 50%; right: -6px; margin-top: -6px; background: var(--magenta); box-shadow: 0 0 20px var(--magenta); }
-    
-    .orbit.o3 {
-      width: 200px;
-      height: 200px;
-      margin: -100px 0 0 -100px;
-      border-color: rgba(217,70,239,0.15);
-      animation-duration: 7s;
-    }
-    .orbit.o3::before { bottom: -6px; left: 50%; margin-left: -6px; width: 8px; height: 8px; background: var(--cyan); box-shadow: 0 0 20px var(--cyan); }
-    
-    @keyframes orbit-spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    /* Particle burst effect */
-    .particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--purple3);
-      box-shadow: 0 0 10px currentColor;
-      animation: particle-float 3s ease-in-out infinite;
-    }
-    
-    .particle:nth-child(1) { left: 20%; top: 30%; animation-delay: 0s; color: var(--purple); }
-    .particle:nth-child(2) { left: 80%; top: 25%; animation-delay: 0.5s; color: var(--magenta); }
-    .particle:nth-child(3) { left: 15%; top: 70%; animation-delay: 1s; color: var(--violet); }
-    .particle:nth-child(4) { left: 85%; top: 65%; animation-delay: 1.5s; color: var(--cyan); }
-    .particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 2s; color: var(--purple3); }
-    .particle:nth-child(6) { left: 45%; top: 90%; animation-delay: 2.5s; color: var(--purple); }
-    
-    @keyframes particle-float {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
-      50% { transform: translate(10px, -15px) scale(1.5); opacity: 1; }
-    }
-    
-    .loading-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, var(--text), var(--purple3));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    
-    .loading-status {
-      color: var(--muted);
-      font-size: 1rem;
-      margin-bottom: 32px;
-    }
-    
-    .progress-bar {
-      width: 280px;
-      height: 6px;
-      background: rgba(147,51,234,0.2);
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 0 auto;
-    }
-    
-    .progress-fill {
+    .logo svg{
+      width: 100%;
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--purple), var(--magenta), var(--purple));
-      background-size: 200% 100%;
-      border-radius: 999px;
-      animation: progress-shimmer 2s linear infinite;
-      transition: width 0.3s ease-out;
     }
-    
-    @keyframes progress-shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    @keyframes float{
+      0%,100%{ transform: translateY(0) rotate(0deg); }
+      50%{ transform: translateY(-8px) rotate(3deg); }
     }
 
-    /* === FEATURES SECTION === */
-    .features {
-      padding: 60px 20px 80px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    
-    .section-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    
-    .section-label {
-      display: inline-block;
-      padding: 6px 16px;
-      border-radius: 999px;
-      background: rgba(147,51,234,0.1);
-      border: 1px solid rgba(147,51,234,0.2);
-      color: var(--purple3);
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-    
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    
-    .section-desc {
-      color: var(--muted);
-      font-size: 1.1rem;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    
-    .feature-card {
-      padding: 24px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(147,51,234,0.08), rgba(124,58,237,0.04));
-      border: 1px solid rgba(147,51,234,0.15);
-      transition: all 0.4s ease;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(147,51,234,0.3);
-      box-shadow: 0 20px 60px -20px rgba(147,51,234,0.3);
-    }
-    
-    .feature-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--purple), var(--violet));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-    }
-    
-    .feature-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    
-    .feature-desc {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    /* === STATS SECTION === */
-    .stats {
-      padding: 80px 20px;
-      background: linear-gradient(180deg, transparent, rgba(147,51,234,0.05), transparent);
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    
-    .stat-item h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--purple3), var(--magenta));
-      -webkit-background-clip: text;
-      background-clip: text;
+    .title{
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height:1;
+      background: linear-gradient(135deg, #f3e8ff 0%, #c084fc 40%, #9333ea 70%, #7c3aed 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
       color: transparent;
-      margin-bottom: 8px;
+      text-shadow: 0 0 60px rgba(147,51,234,0.4);
+      text-transform: uppercase;
     }
-    
-    .stat-item p {
+
+    .tagline{
+      margin-top: 12px;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
     }
 
-    /* === FOOTER === */
-    footer {
-      padding: 40px 20px;
-      text-align: center;
-      border-top: 1px solid rgba(147,51,234,0.1);
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      margin: 28px auto 12px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(124,58,237,0.15));
+      border: 1px solid rgba(147,51,234,0.3);
+      color: var(--purple3);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
     }
-    
-    footer p {
-      color: rgba(167,139,250,0.5);
-      font-size: 0.85rem;
+    .orb{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--purple2), var(--magenta));
+      box-shadow: 0 0 20px var(--purple), 0 0 40px rgba(147,51,234,0.5);
+      animation: pulse 2s ease-in-out infinite;
     }
-
-    /* === ERROR TOAST === */
-    .error-toast {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      padding: 16px 24px;
-      border-radius: 12px;
-      background: rgba(239,68,68,0.15);
-      border: 1px solid rgba(239,68,68,0.3);
-      color: #fca5a5;
-      font-size: 0.95rem;
-      z-index: 1001;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
-    .error-toast.show {
-      transform: translateX(-50%) translateY(0);
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px var(--purple); }
+      50%{ transform: scale(1.3); opacity: 1; box-shadow: 0 0 30px var(--purple), 0 0 60px rgba(147,51,234,0.4); }
     }
 
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-      header {
-        padding: 16px 20px;
-      }
-      .nav-links {
-        display: none;
-      }
-      .hero {
-        padding: 100px 20px 60px;
-      }
-      .hero-description {
-        font-size: 0.95rem;
-      }
-      .launch-btn {
-        padding: 14px 32px;
-        font-size: 1rem;
-      }
-      .section-title {
-        font-size: 1.5rem;
-      }
+    .desc{
+      margin: 20px auto 32px;
+      max-width: 56ch;
+      color: rgba(243,232,255,0.85);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .countdown{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .box{
+      background: linear-gradient(180deg, rgba(147,51,234,0.12), rgba(0,0,0,0.4));
+      border: 1px solid rgba(147,51,234,0.2);
+      border-radius: 16px;
+      padding: 16px 18px;
+      min-width: 105px;
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 10px 40px -10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+    .box:hover{
+      border-color: rgba(147,51,234,0.4);
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 10px 40px -10px rgba(0,0,0,0.5),
+        0 0 30px -10px rgba(147,51,234,0.3);
+      transform: translateY(-2px);
+    }
+
+    .num{
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      background: linear-gradient(180deg, #fff, var(--purple3));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .lbl{
+      margin-top: 6px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .status{
+      margin-top: 22px;
+      font-size: 0.9rem;
+      color: rgba(196,181,253,0.7);
+    }
+
+    .soon{
+      margin-top: 14px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--purple2), var(--magenta));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    footer{
+      margin-top: 24px;
+      color: rgba(196,181,253,0.5);
+      font-size: 0.8rem;
+    }
+
+    /* Subtle scan line effect */
+    .wrap::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      border-radius: 28px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(147,51,234,0.03) 2px,
+        rgba(147,51,234,0.03) 4px
+      );
+      pointer-events:none;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 600px){
+      .wrap{ padding: 40px 24px 32px; }
+      .title{ font-size: 2.8rem; }
+      .logo{ width: 60px; height: 60px; }
+      .box{ min-width: 90px; padding: 12px 14px; }
+      .num{ font-size: 1.5rem; }
+      .desc{ font-size: 0.95rem; }
     }
   </style>
 </head>
 
 <body>
-  <!-- Cosmic Background -->
-  <div class="cosmos">
-    <div class="stars"></div>
-    <div class="nebula-cloud n1"></div>
-    <div class="nebula-cloud n2"></div>
-    <div class="nebula-cloud n3"></div>
-    <div class="nebula-cloud n4"></div>
-    <div class="grid-overlay"></div>
+  <div class="stars"></div>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
   </div>
 
-  <!-- Header -->
-  <header>
-    <div class="logo-group">
-      <svg class="logo-icon" fill="#9333ea" viewBox="0 0 458.758 458.758">
-        <path d="M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z"/>
+  <main class="wrap">
+    <!-- Planet Logo -->
+    <div class="logo">
+      <svg fill="#9333ea" viewBox="0 0 458.758 458.758" xmlns="http://www.w3.org/2000/svg">
+        <path d="M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z M103.889,246.179c-9.3,0-16.8-7.5-16.8-16.8c0-38.2,14.9-74.2,41.9-101.2c6.6-6.6,17.2-6.6,23.8,0c6.6,6.6,6.6,17.2,0,23.8c-20.7,20.7-32.1,48.2-32.1,77.4C120.789,238.679,113.189,246.179,103.889,246.179z"/>
+        <path d="M310.189,310.179c-35,35-70.6,67-104.3,94.1c52.6,7,107.9-9.7,148.3-50.1c40.5-40.5,57.2-95.7,50.1-148.3C377.189,239.579,345.189,275.179,310.189,310.179z"/>
       </svg>
-      <span class="logo-text">Nebula</span>
     </div>
     
-    <nav class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how-it-works">How it Works</a>
-      <a href="https://github.com/mojhehh/nebula" target="_blank">GitHub</a>
-    </nav>
-    
-    <div class="status-pill loading" id="statusPill">
-      <span class="status-dot"></span>
-      <span id="statusText">Connecting...</span>
-    </div>
-  </header>
+    <div class="title">Nebula</div>
+    <div class="tagline">Journey beyond the boundaries of the web</div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-badge">
-      <span>🚀</span>
-      <span>Private Cloud Browsers</span>
+    <div class="badge">
+      <span class="orb"></span>
+      Encrypted Proxy • Anonymous Browsing • Zero Limits
     </div>
-    
-    <h1 class="hero-title">
-      Browse <span class="gradient">Anonymously</span><br>
-      in the Cloud
-    </h1>
-    
-    <p class="hero-description">
-      Get your own private browser session in seconds. Each user gets a completely isolated 
-      browser — browse anything without leaving traces on your device.
+
+    <p class="desc">
+      We're really sorry for yet another delay. We know it's frustrating, and we appreciate 
+      your patience more than you know. Our team is working hard behind the scenes to make 
+      Nebula as fast and reliable as possible — we want to get it right for you.
     </p>
-    
-    <div class="launch-container">
-      <button class="launch-btn" id="launchBtn" disabled onclick="requestBrowser()">
-        <span class="btn-text">Launch Browser</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </button>
-      <p style="margin-top:16px;color:var(--muted);font-size:0.85rem;opacity:0.7;">Free — no download, no signup</p>
-    </div>
-  </section>
 
-  <!-- Features Section -->
-  <section class="features" id="features">
-    <div class="section-header">
-      <span class="section-label">Features</span>
-      <h2 class="section-title">Why Choose Nebula?</h2>
-      <p class="section-desc">Experience true privacy with our cloud-based browser technology.</p>
-    </div>
-    
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🔒</div>
-        <h3 class="feature-title">Complete Privacy</h3>
-        <p class="feature-desc">Your browsing happens in an isolated cloud container. No cookies, history, or data stays on your device.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3 class="feature-title">Instant Access</h3>
-        <p class="feature-desc">Get your private browser in seconds. No downloads, no installations — just click and browse.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🌐</div>
-        <h3 class="feature-title">Full Browser</h3>
-        <p class="feature-desc">Real Chrome browser with full capabilities. Audio, video, and all modern web features supported.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
-        <h3 class="feature-title">Isolated Sessions</h3>
-        <p class="feature-desc">Each user gets their own container. Your session is completely isolated from others.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h3 class="feature-title">Auto Cleanup</h3>
-        <p class="feature-desc">Sessions automatically end after 5 minutes of inactivity. All data is wiped clean.</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🌍</div>
-        <h3 class="feature-title">Access Anything</h3>
-        <p class="feature-desc">Bypass restrictions and access content from anywhere. Your traffic appears from our servers.</p>
-      </div>
-    </div>
-  </section>
+    <div class="soon">Under Maintenance</div>
+    <footer>© 2026 Nebula</footer>
+  </main>
 
-  <!-- Stats Section -->
-  <section class="stats" id="how-it-works">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <h3 id="availableCount">-</h3>
-        <p>Browsers Available</p>
-      </div>
-      <div class="stat-item">
-        <h3 id="totalCount">10</h3>
-        <p>Total Capacity</p>
-      </div>
-      <div class="stat-item">
-        <h3>5m</h3>
-        <p>Idle Timeout</p>
-      </div>
-      <div class="stat-item">
-        <h3>100%</h3>
-        <p>Private & Secure</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2026 Nebula — Private Cloud Browsers. All rights reserved.</p>
-  </footer>
-
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-content">
-      <div class="loader-container">
-        <div class="particles">
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-        </div>
-        <div class="orbit o1"></div>
-        <div class="orbit o2"></div>
-        <div class="orbit o3"></div>
-        <div class="planet"></div>
-      </div>
-      
-      <h2 class="loading-title">Launching Your Browser</h2>
-      <p class="loading-status" id="loadingStatus">Initializing secure connection...</p>
-      
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Error Toast -->
-  <div class="error-toast" id="errorToast"></div>
-
-  <!-- Existing Session Banner (shown when user already has a browser) -->
-  <div id="existingSessionBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,rgba(147,51,234,0.95),rgba(124,58,237,0.95));backdrop-filter:blur(20px);padding:16px 24px;text-align:center;box-shadow:0 4px 30px rgba(0,0,0,0.4);animation:slideDown 0.5s ease;">
-    <p style="color:#fff;font-size:1rem;margin:0 0 10px;">
-      <strong>You already have a browser session open.</strong>
-    </p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <button id="goToExistingBtn" onclick="goToExistingSession()" style="padding:8px 24px;background:#fff;color:#7c3aed;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">Go to My Browser</button>
-      <button id="releaseSessionBtn" onclick="releaseAndGetNew()" style="padding:8px 24px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">End Session &amp; Get New</button>
-    </div>
-  </div>
-
-  <!-- All Browsers Busy Modal -->
-  <div id="busyModal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(5,1,13,0.85);backdrop-filter:blur(10px);display:none;justify-content:center;align-items:center;">
-    <div style="background:linear-gradient(135deg,#0d0620,#1a0a3e);border:1px solid rgba(147,51,234,0.3);border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-      <div style="font-size:48px;margin-bottom:16px;">🚦</div>
-      <h2 style="color:#f3e8ff;font-size:1.4rem;margin:0 0 12px;">All Browsers Are Busy</h2>
-      <p style="color:#a78bfa;font-size:0.95rem;line-height:1.6;margin:0 0 8px;">
-        All <span id="busyTotal">10</span> browser sessions are currently in use by other users.
-      </p>
-      <p style="color:#c084fc;font-size:0.9rem;margin:0 0 20px;">
-        Sessions auto-expire after 5 minutes of inactivity. We'll keep trying automatically.
-      </p>
-      <div style="background:rgba(147,51,234,0.15);border-radius:12px;padding:14px;margin-bottom:20px;">
-        <p style="color:#a78bfa;font-size:0.85rem;margin:0;" id="busyRetryText">Retrying in <strong id="busyCountdown">30</strong> seconds...</p>
-        <div style="background:rgba(255,255,255,0.1);border-radius:6px;height:6px;margin-top:10px;overflow:hidden;">
-          <div id="busyProgress" style="background:linear-gradient(90deg,#9333ea,#d946ef);height:100%;width:100%;border-radius:6px;transition:width 1s linear;"></div>
-        </div>
-      </div>
-      <button onclick="closeBusyModal()" style="padding:10px 28px;background:transparent;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);border-radius:10px;font-size:0.9rem;cursor:pointer;">Dismiss</button>
-    </div>
-  </div>
-
-  <style>
-    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-  </style>
-
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-
-    // Nebula Firebase (analytics + browser status)
-    const nebulaConfig = {
-      apiKey: "AIzaSyCukh2waXzCiV5nce1RCj9dD7QEwsZx-J8",
-      authDomain: "nebula-60629.firebaseapp.com",
-      databaseURL: "https://nebula-60629-default-rtdb.firebaseio.com",
-      projectId: "nebula-60629",
-      storageBucket: "nebula-60629.firebasestorage.app",
-      messagingSenderId: "630056389780",
-      appId: "1:630056389780:web:8d6f185c4109f2b549b881",
-      measurementId: "G-WJ3N50CD1H"
-    };
-
-    // Procces Firebase (tunnel URLs) - read-only via REST
-    const PROCCES_DB = 'https://procces-3efd9-default-rtdb.firebaseio.com';
-
-    // Initialize Nebula Firebase
-    const nebulaApp = initializeApp(nebulaConfig);
-    const nebulaDb = getDatabase(nebulaApp);
-    const analytics = getAnalytics(nebulaApp);
-
-    // Track page view
-    logEvent(analytics, 'page_view', { page_title: 'Nebula Home' });
-
-    // === Client ID: unique per device, persists across sessions ===
-    function getOrCreateClientId() {
-      let clientId = localStorage.getItem('nebulaClientId');
-      if (!clientId || clientId.length < 20) {
-        // Generate a crypto-quality random ID
-        const arr = new Uint8Array(16);
-        crypto.getRandomValues(arr);
-        clientId = 'nc_' + Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
-        localStorage.setItem('nebulaClientId', clientId);
-      }
-      return clientId;
-    }
-    const CLIENT_ID = getOrCreateClientId();
-
-    // State
-    let backendUrl = null;
-    let serverOnline = false;
-    let isLoading = false;
-    let existingBrowserUrl = null;
-    let busyRetryTimer = null;
-
-    // DOM elements
-    const statusPill = document.getElementById('statusPill');
-    const statusText = document.getElementById('statusText');
-    const launchBtn = document.getElementById('launchBtn');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const loadingStatus = document.getElementById('loadingStatus');
-    const progressFill = document.getElementById('progressFill');
-    const errorToast = document.getElementById('errorToast');
-    const availableCount = document.getElementById('availableCount');
-    const totalCount = document.getElementById('totalCount');
-    const existingSessionBanner = document.getElementById('existingSessionBanner');
-    const busyModal = document.getElementById('busyModal');
-
-    // === Check if user already has a session ===
-    async function checkExistingSession() {
-      if (!backendUrl) return;
-      try {
-        const res = await fetch(`${backendUrl}/api/check-session?clientId=${encodeURIComponent(CLIENT_ID)}`, { mode: 'cors' });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.hasSession && data.browserUrl) {
-          // Server already includes ?token= in browserUrl - use as-is
-          existingBrowserUrl = data.browserUrl;
-          existingSessionBanner.style.display = 'block';
-          console.log('[Session] Active session found:', data.browserUrl);
-        } else {
-          existingBrowserUrl = null;
-          existingSessionBanner.style.display = 'none';
-        }
-      } catch (err) {
-        console.warn('[Session] Check failed:', err.message);
-      }
-    }
-
-    // Go to existing browser session
-    window.goToExistingSession = function() {
-      if (existingBrowserUrl) {
-        window.location.href = existingBrowserUrl;
-      }
-    };
-
-    // Release current session and get a new one
-    window.releaseAndGetNew = async function() {
-      if (!backendUrl) return;
-      try {
-        await fetch(`${backendUrl}/api/release`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ clientId: CLIENT_ID }),
-        });
-        existingSessionBanner.style.display = 'none';
-        existingBrowserUrl = null;
-        localStorage.removeItem('nebulaSessionId');
-        // Now request a new one
-        window.requestBrowser();
-      } catch (err) {
-        showError('Failed to release session. Try again.');
-      }
-    };
-
-    // Get backend URL from procces Firebase (tunnel updater writes here)
-    async function fetchBackendUrl() {
-      try {
-        const res = await fetch(`${PROCCES_DB}/backends/nebula.json`);
-        const data = await res.json();
-        if (data && data.url) {
-          const wasNull = !backendUrl;
-          backendUrl = data.url;
-          serverOnline = data.status === 'online';
-          console.log('[Tunnel] Backend URL:', backendUrl);
-          if (serverOnline) {
-            checkBackendStatus();
-            // Check for existing session when we first get the URL
-            if (wasNull) checkExistingSession();
-          }
-        }
-      } catch (err) {
-        console.warn('[Tunnel] Failed to fetch backend URL:', err.message);
-      }
-    }
-
-    // Fetch immediately, then poll every 5 min
-    fetchBackendUrl();
-    setInterval(fetchBackendUrl, 5 * 60 * 1000);
-
-    // Listen to real-time browser status from nebula Firebase
-    const summaryRef = ref(nebulaDb, 'nebula/browsers/summary');
-    onValue(summaryRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        updateStats(data);
-        serverOnline = true;
-        updateStatusUI(data.available, data.total);
-      }
-    });
-
-    // Check backend is alive
-    async function checkBackendStatus() {
-      if (!backendUrl) return;
-      try {
-        const res = await fetch(`${backendUrl}/api/status`, { mode: 'cors' });
-        if (res.ok) {
-          const data = await res.json();
-          serverOnline = true;
-          updateStats(data);
-          updateStatusUI(data.available, data.total);
-        }
-      } catch (err) {
-        console.warn('Backend check failed, using Firebase data');
-      }
-    }
-
-    // Update stats display
-    function updateStats(data) {
-      availableCount.textContent = data.available;
-      totalCount.textContent = data.total;
-    }
-
-    // Update header status
-    function updateStatusUI(available, total) {
-      statusPill.className = 'status-pill';
-      
-      if (available > 0) {
-        statusText.textContent = `${available}/${total} available`;
-        launchBtn.disabled = false;
-      } else {
-        statusPill.classList.add('offline');
-        statusText.textContent = 'All in use';
-        // Don't disable - let them try, we'll show the busy modal
-        launchBtn.disabled = false;
-      }
-    }
-
-    // Show error
-    function showError(msg) {
-      errorToast.textContent = msg;
-      errorToast.classList.add('show');
-      setTimeout(() => errorToast.classList.remove('show'), 5000);
-    }
-
-    // === All Browsers Busy Modal ===
-    function showBusyModal(data) {
-      if (data.total) document.getElementById('busyTotal').textContent = data.total;
-      busyModal.style.display = 'flex';
-      
-      // Auto-retry countdown
-      let countdown = data.retryAfterSeconds || 30;
-      const countdownEl = document.getElementById('busyCountdown');
-      const progressEl = document.getElementById('busyProgress');
-      
-      if (busyRetryTimer) clearInterval(busyRetryTimer);
-      
-      countdownEl.textContent = countdown;
-      progressEl.style.width = '100%';
-      
-      busyRetryTimer = setInterval(() => {
-        countdown--;
-        countdownEl.textContent = Math.max(0, countdown);
-        progressEl.style.width = ((countdown / (data.retryAfterSeconds || 30)) * 100) + '%';
-        
-        if (countdown <= 0) {
-          clearInterval(busyRetryTimer);
-          document.getElementById('busyRetryText').innerHTML = '<strong>Retrying now...</strong>';
-          // Auto-retry
-          closeBusyModal();
-          window.requestBrowser();
-        }
-      }, 1000);
-    }
-    
-    window.closeBusyModal = function() {
-      busyModal.style.display = 'none';
-      if (busyRetryTimer) {
-        clearInterval(busyRetryTimer);
-        busyRetryTimer = null;
-      }
-    };
-
-    // Loading animation steps
-    const loadingSteps = [
-      { text: 'Initializing secure connection...', progress: 15 },
-      { text: 'Allocating browser instance...', progress: 35 },
-      { text: 'Starting Chrome container...', progress: 55 },
-      { text: 'Configuring privacy settings...', progress: 75 },
-      { text: 'Almost ready...', progress: 90 },
-    ];
-
-    // === Request browser (with clientId for dedup) ===
-    window.requestBrowser = async function() {
-      if (isLoading || !backendUrl) return;
-      
-      // If we already know about an existing session, just go there directly
-      if (existingBrowserUrl) {
-        window.location.href = existingBrowserUrl;
-        return;
-      }
-      
-      isLoading = true;
-      loadingOverlay.classList.add('active');
-      progressFill.style.width = '0%';
-      
-      logEvent(analytics, 'browser_request_start');
-
-      let stepIndex = 0;
-      const stepInterval = setInterval(() => {
-        if (stepIndex < loadingSteps.length) {
-          loadingStatus.textContent = loadingSteps[stepIndex].text;
-          progressFill.style.width = loadingSteps[stepIndex].progress + '%';
-          stepIndex++;
-        }
-      }, 600);
-
-      try {
-        const res = await fetch(`${backendUrl}/api/request-browser`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ clientId: CLIENT_ID }),
-        });
-        const data = await res.json();
-
-        clearInterval(stepInterval);
-
-        if (data.success) {
-          logEvent(analytics, 'browser_request_success', { existing: data.existing });
-          
-          if (data.existing) {
-            loadingStatus.textContent = 'Reconnecting to your existing browser...';
-          } else {
-            loadingStatus.textContent = 'Browser ready! Redirecting...';
-          }
-          progressFill.style.width = '100%';
-          
-          localStorage.setItem('nebulaSessionId', data.sessionId);
-          
-          // Server already includes ?token= in browserUrl for access control
-          setTimeout(() => {
-            window.location.href = data.browserUrl;
-          }, 800);
-        } else {
-          // All browsers are busy
-          loadingOverlay.classList.remove('active');
-          isLoading = false;
-          
-          if (data.error === 'all_browsers_in_use') {
-            logEvent(analytics, 'all_browsers_busy');
-            showBusyModal(data);
-          } else {
-            showError(data.message || data.error || 'Failed to get browser');
-          }
-        }
-      } catch (err) {
-        clearInterval(stepInterval);
-        logEvent(analytics, 'browser_request_error', { error: err.message });
-        
-        loadingOverlay.classList.remove('active');
-        showError('Connection failed. Please check your internet and try again.');
-        isLoading = false;
-      }
-    };
-
-    // Fallback: check status via API every 15s
-    setInterval(() => {
-      if (backendUrl && !isLoading) {
-        checkBackendStatus();
-      }
-    }, 15000);
-
-    // Also re-check for existing session every 30s
-    setInterval(() => {
-      if (backendUrl && !isLoading && !existingBrowserUrl) {
-        checkExistingSession();
-      }
-    }, 30000);
-
-    // Initial status
-    setTimeout(() => {
-      if (!serverOnline) {
-        statusPill.classList.remove('loading');
-        statusPill.classList.add('offline');
-        statusText.textContent = 'Connecting...';
-      }
-    }, 3000);
-  </script>
 </body>
 </html>
