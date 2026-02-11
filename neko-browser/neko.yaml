@@ -1,10 +1,10 @@
 desktop:
-  screen: "1920x1080@60"
+  screen: "1280x720@60"
 
 capture:
   video:
     codec: h264
-    pipeline: "ximagesrc display-name={display} show-pointer=true use-damage=false ! video/x-raw,framerate=60/1 ! videoconvert ! queue ! video/x-raw,format=NV12 ! x264enc threads=4 bitrate=2500 key-int-max=30 vbv-buf-capacity=40 byte-stream=true tune=zerolatency speed-preset=ultrafast ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline ! appsink name=appsink"
+    pipeline: "ximagesrc display-name={display} show-pointer=true use-damage=false ! video/x-raw,framerate=60/1 ! videoconvert ! queue ! video/x-raw,format=NV12 ! x264enc threads=4 bitrate=1500 key-int-max=15 vbv-buf-capacity=20 byte-stream=true tune=zerolatency speed-preset=ultrafast ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline ! appsink name=appsink"
   audio:
     codec: opus
     pipeline: "pulsesrc device=audio_output.monitor ! audio/x-raw,channels=2 ! audioresample ! audioconvert ! queue ! opusenc inband-fec=true bitrate=128000 ! appsink name=appsink"
@@ -14,7 +14,7 @@ webrtc:
   icetrickle: true
   iceservers:
     frontend: '[{"urls":"turn:standard.relay.metered.ca:80","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"},{"urls":"turn:standard.relay.metered.ca:80?transport=tcp","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"},{"urls":"turn:standard.relay.metered.ca:443","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"},{"urls":"turns:standard.relay.metered.ca:443?transport=tcp","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"}]'
-    backend: '[{"urls":"turns:standard.relay.metered.ca:443?transport=tcp","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"},{"urls":"turn:standard.relay.metered.ca:443","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"},{"urls":"turn:standard.relay.metered.ca:80?transport=tcp","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"}]'
+    backend: '[{"urls":"turns:standard.relay.metered.ca:443?transport=tcp","username":"957fd68b2c1f9dc481d2e997","credential":"J7SWaY1EidMhatF+"}]'
 
 member:
   provider: "multiuser"
