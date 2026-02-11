@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Proxy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .container { text-align: center; padding: 40px; }
+    h1 { color: #fff; font-size: 48px; margin-bottom: 10px; }
+    .subtitle { color: rgba(255,255,255,0.7); margin-bottom: 40px; font-size: 16px; }
+    form { display: flex; gap: 10px; max-width: 600px; margin: 0 auto 30px; }
+    input[type="url"] {
+      flex: 1; padding: 16px 20px; border: none; border-radius: 12px;
+      font-size: 16px; background: rgba(255,255,255,0.1); color: #fff;
+      outline: none; transition: all 0.3s;
+    }
+    input[type="url"]::placeholder { color: rgba(255,255,255,0.5); }
+    input[type="url"]:focus { background: rgba(255,255,255,0.15); box-shadow: 0 0 0 2px #6366f1; }
+    button {
+      padding: 16px 32px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border: none; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .quick-links { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+    .quick-link {
+      padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 20px;
+      color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px; transition: all 0.3s;
+      cursor: pointer;
+    }
+    .quick-link:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .info { color: rgba(255,255,255,0.5); text-align: center; margin-top: 30px; font-size: 13px; line-height: 1.6; }
+    .info strong { color: #10b981; }
+    .badge { background: #10b981; color: #000; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .status { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 20px; }
+    .status.online { color: #10b981; }
+    .status.offline { color: #f87171; }
+    .status.loading { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌐 Nebula Proxy</h1>
+    <p class="subtitle">Powered by <span class="badge">Playwright + CroxyProxy</span></p>
+    
+    <form id="proxyForm">
+      <input type="url" id="urlInput" name="url" placeholder="https://www.reddit.com" required autofocus>
+      <button type="submit" id="goBtn">Browse</button>
+    </form>
+    
+    <div class="quick-links">
+      <span class="quick-link" data-url="https://www.youtube.com">📺 YouTube</span>
+      <span class="quick-link" data-url="https://www.google.com">🔍 Google</span>
+      <span class="quick-link" data-url="https://www.twitter.com">🐦 Twitter</span>
+      <span class="quick-link" data-url="https://www.reddit.com">🔶 Reddit</span>
+    </div>
+    
+    <p class="info">
+      <strong>✓ Works with many sites</strong><br>
+      Reddit, Google, and more work great!<br>
+      <span style="color: #fbbf24;">⚠️ Some sites like YouTube, TikTok, Instagram, and Discord won't work fully due to their anti-proxy protections.</span>
+    </p>
+    
+    <p id="status" class="status loading">⏳ Connecting to backend...</p>
+  </div>
+
+  <script>
+    // Backend URL config - fetches from GitHub
+    const BACKEND_JSON_URL = 'https://raw.githubusercontent.com/mojhehh/backend3/main/backend.json';
+    
+    let backendUrl = null;
+
+    // Fetch backend URL from GitHub
+    async function fetchBackendUrl() {
+      const statusEl = document.getElementById('status');
+      const goBtn = document.getElementById('goBtn');
+      
+      try {
+        statusEl.className = 'status loading';
+        statusEl.textContent = '⏳ Connecting to backend...';
+        goBtn.disabled = true;
+        
+        const response = await fetch(BACKEND_JSON_URL + '?t=' + Date.now()); // Cache bust
+        if (!response.ok) throw new Error('Failed to fetch backend config');
+        
+        const config = await response.json();
+        backendUrl = config.url;
+        
+        // Test if backend is alive
+        const testResponse = await fetch(backendUrl, { method: 'HEAD', mode: 'no-cors' });
+        
+        statusEl.className = 'status online';
+        statusEl.textContent = `✅ Connected to backend (updated: ${new Date(config.updated).toLocaleString()})`;
+        goBtn.disabled = false;
+        
+        console.log('Backend URL:', backendUrl);
+        
+      } catch (error) {
+        console.error('Backend fetch error:', error);
+        statusEl.className = 'status offline';
+        statusEl.textContent = '❌ Backend offline - try again later';
+        goBtn.disabled = true;
+        
+        // Retry in 10 seconds
+        setTimeout(fetchBackendUrl, 10000);
+      }
+    }
+
+    // Navigate to proxy
+    function goToProxy(url) {
+      if (!backendUrl) {
+        alert('Backend not connected yet. Please wait...');
+        return;
+      }
+      
+      const proxyUrl = backendUrl + '/go?url=' + encodeURIComponent(url);
+      window.location.href = proxyUrl;
+    }
+
+    // Form submit
+    document.getElementById('proxyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const url = document.getElementById('urlInput').value;
+      if (url) goToProxy(url);
+    });
+
+    // Quick links
+    document.querySelectorAll('.quick-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const url = this.getAttribute('data-url');
+        goToProxy(url);
+      });
+    });
+
+    // Initialize
+    fetchBackendUrl();
+    
+    // Refresh backend URL every 5 minutes
+    setInterval(fetchBackendUrl, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

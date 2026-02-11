@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TikTok Proxy - noVNC</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background: #1a1a1a;
+      padding: 15px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+    .url-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #2a2a2a;
+      color: white;
+      font-size: 14px;
+    }
+    .url-input:focus {
+      outline: 2px solid #fe2c55;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    .btn-primary {
+      background: #fe2c55;
+      color: white;
+    }
+    .btn-secondary {
+      background: #333;
+      color: white;
+    }
+    .viewer-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .vnc-frame {
+      width: 100%;
+      max-width: 1300px;
+      height: 740px;
+      border: none;
+      border-radius: 12px;
+      background: #1a1a1a;
+      touch-action: none; /* Allow noVNC to handle all touch events */
+    }
+    @media (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        padding: 10px;
+      }
+      .url-input {
+        width: 100%;
+        order: 1;
+        margin-bottom: 10px;
+      }
+      .btn {
+        flex: 1;
+        padding: 12px 10px;
+      }
+      .viewer-container {
+        padding: 5px;
+      }
+      .vnc-frame {
+        height: calc(100vh - 140px);
+        border-radius: 8px;
+      }
+    }
+    .status {
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: #333;
+    }
+    .status.connected {
+      background: #25d366;
+      color: black;
+    }
+    .status.disconnected {
+      background: #666;
+    }
+    .instructions {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+    .instructions h2 {
+      margin-bottom: 20px;
+      color: white;
+    }
+    .instructions p {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <input type="text" class="url-input" id="urlInput" placeholder="Enter TikTok URL (e.g., https://www.tiktok.com/@username)" value="https://www.tiktok.com">
+    <button class="btn btn-primary" id="goBtn">Go</button>
+    <button class="btn btn-secondary" id="connectBtn">Connect</button>
+    <span class="status disconnected" id="status">Disconnected</span>
+  </div>
+  
+  <div class="viewer-container">
+    <div class="instructions" id="instructions">
+      <h2>TikTok Browser Proxy</h2>
+      <p>1. Click "Connect" to start a browser session</p>
+      <p>2. Enter a TikTok URL and click "Go"</p>
+      <p>3. Watch the browser stream below!</p>
+      <p style="margin-top: 20px; color: #fe2c55;">This uses a real browser - everything works including videos, comments, and profiles!</p>
+    </div>
+    <iframe class="vnc-frame" id="vncFrame" style="display: none;" src=""></iframe>
+  </div>
+
+  <script>
+    let sessionId = null;
+    const urlInput = document.getElementById('urlInput');
+    const goBtn = document.getElementById('goBtn');
+    const connectBtn = document.getElementById('connectBtn');
+    const status = document.getElementById('status');
+    const vncFrame = document.getElementById('vncFrame');
+    const instructions = document.getElementById('instructions');
+
+    // Connect button - create session and show VNC
+    connectBtn.addEventListener('click', async () => {
+      if (sessionId) {
+        // Disconnect
+        await fetch(`/api/session/${sessionId}/close`, { method: 'POST' });
+        sessionId = null;
+        status.textContent = 'Disconnected';
+        status.className = 'status disconnected';
+        vncFrame.style.display = 'none';
+        instructions.style.display = 'block';
+        connectBtn.textContent = 'Connect';
+        return;
+      }
+
+      connectBtn.textContent = 'Starting...';
+      connectBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/session/create', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.success) {
+          sessionId = data.sessionId;
+          status.textContent = 'Connected';
+          status.className = 'status connected';
+          
+          // Show VNC viewer (noVNC runs on port 6080)
+          // Enable touch mode and scaling for mobile
+          vncFrame.src = '/vnc.html?autoconnect=true&resize=scale&view_only=false&show_dot=true&bell=false';
+          vncFrame.style.display = 'block';
+          instructions.style.display = 'none';
+          connectBtn.textContent = 'Disconnect';
+        }
+      } catch (err) {
+        alert('Failed to connect: ' + err.message);
+        connectBtn.textContent = 'Connect';
+      }
+      
+      connectBtn.disabled = false;
+    });
+
+    // Go button - navigate to URL
+    goBtn.addEventListener('click', async () => {
+      if (!sessionId) {
+        alert('Please connect first!');
+        return;
+      }
+
+      const url = urlInput.value.trim();
+      if (!url) return;
+
+      goBtn.textContent = 'Loading...';
+      goBtn.disabled = true;
+
+      try {
+        await fetch(`/api/session/${sessionId}/navigate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+      } catch (err) {
+        console.error('Navigation error:', err);
+      }
+
+      goBtn.textContent = 'Go';
+      goBtn.disabled = false;
+    });
+
+    // Enter key to navigate
+    urlInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') goBtn.click();
+    });
+  </script>
+</body>
+</html>

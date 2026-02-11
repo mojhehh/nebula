@@ -1,0 +1,16 @@
+{
+  "name": "tiktok-proxy",
+  "version": "1.0.0",
+  "description": "TikTok-specific client-side proxy using Service Workers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

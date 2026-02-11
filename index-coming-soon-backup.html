@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webtra — Coming Soon</title>
+
+  <style>
+    :root{
+      --bg1:#020c1f;
+      --bg2:#0b3c91;
+      --blue:#2aa9ff;
+      --blue2:#7fd0ff;
+      --text:#eaf4ff;
+      --muted:#b9d9ff;
+      --glass: rgba(255,255,255,0.08);
+      --glass2: rgba(0,0,0,0.35);
+      --border: rgba(42,169,255,0.35);
+      --shadow: rgba(0,0,0,0.55);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+
+    body{
+      height:100vh;
+      color:var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(1000px 600px at 20% 10%, rgba(42,169,255,0.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 30%, rgba(127,208,255,0.14), transparent 65%),
+        radial-gradient(circle at top, var(--bg2), var(--bg1));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Animated “grid” */
+    .grid{
+      position:absolute; inset:-40%;
+      background-image:
+        linear-gradient(rgba(42,169,255,0.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,169,255,0.08) 1px, transparent 1px);
+      background-size: 48px 48px;
+      transform: rotate(12deg);
+      animation: drift 18s linear infinite;
+      filter: blur(0.2px);
+      opacity:0.55;
+    }
+    @keyframes drift{
+      0%{ transform: translate3d(0,0,0) rotate(12deg); }
+      100%{ transform: translate3d(140px, -120px, 0) rotate(12deg); }
+    }
+
+    /* Floating glows */
+    .glow{
+      position:absolute;
+      width:750px; height:750px;
+      background: rgba(42,169,255,0.20);
+      filter: blur(160px);
+      border-radius: 999px;
+      animation: float 9s ease-in-out infinite;
+    }
+    .glow.g2{
+      width:620px; height:620px;
+      background: rgba(127,208,255,0.14);
+      animation-duration: 11s;
+      animation-delay: -2s;
+      left: 55%;
+      top: 10%;
+    }
+    @keyframes float{
+      0%{ transform: translateY(0) translateX(0); }
+      50%{ transform: translateY(-55px) translateX(25px); }
+      100%{ transform: translateY(0) translateX(0); }
+    }
+
+    /* Subtle “data streaks” */
+    .streaks{
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          115deg,
+          rgba(42,169,255,0.00) 0px,
+          rgba(42,169,255,0.00) 140px,
+          rgba(42,169,255,0.06) 160px,
+          rgba(42,169,255,0.00) 190px
+        );
+      animation: streakmove 7s linear infinite;
+      opacity:0.6;
+    }
+    @keyframes streakmove{
+      0%{ background-position: 0 0; }
+      100%{ background-position: 420px 0; }
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      width:min(720px, calc(100% - 24px));
+      padding:48px 46px;
+      border-radius: 22px;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 40px 90px var(--shadow);
+      animation: pop 900ms ease;
+      text-align:center;
+    }
+    @keyframes pop{
+      from{ opacity:0; transform: translateY(18px) scale(0.98); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .title{
+      font-size: 3.4rem;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      line-height:1.05;
+      background: linear-gradient(90deg, #dff3ff, #9ad9ff, #2aa9ff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      text-shadow: 0 0 22px rgba(42,169,255,0.18);
+    }
+
+    .tagline{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      margin: 22px auto 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(42,169,255,0.18);
+      border: 1px solid rgba(42,169,255,0.35);
+      color: #d8f0ff;
+      font-size: 0.92rem;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--blue);
+      box-shadow: 0 0 18px rgba(42,169,255,0.8);
+      animation: pulse 1.25s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity: 0.9; }
+      50%{ transform: scale(1.35); opacity: 1; }
+    }
+
+    .desc{
+      margin: 16px auto 28px;
+      max-width: 58ch;
+      color: #eaf4ff;
+      font-size: 1.02rem;
+      line-height: 1.65;
+      opacity: 0.95;
+    }
+
+    .countdown{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .box{
+      background: var(--glass2);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 14px 16px;
+      min-width: 110px;
+      box-shadow: inset 0 0 0 1px rgba(42,169,255,0.08);
+    }
+
+    .num{
+      font-weight: 900;
+      font-size: 1.6rem;
+      letter-spacing: 0.5px;
+      color: #eaf6ff;
+      text-shadow: 0 0 16px rgba(42,169,255,0.18);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .lbl{
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: #9fc5ff;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      opacity: 0.95;
+    }
+
+    .status{
+      margin-top: 18px;
+      font-size: 0.92rem;
+      color: #bfe2ff;
+      opacity: 0.9;
+    }
+
+    .soon{
+      margin-top: 10px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--blue2);
+      letter-spacing: 0.6px;
+    }
+
+    footer{
+      margin-top: 18px;
+      color:#aac7ff;
+      font-size: 0.82rem;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 520px){
+      .wrap{ padding: 38px 22px; }
+      .title{ font-size: 2.7rem; }
+      .box{ min-width: 98px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid"></div>
+  <div class="glow" style="left:-10%; top:30%;"></div>
+  <div class="glow g2"></div>
+  <div class="streaks"></div>
+
+  <main class="wrap">
+    <div class="title">Webtra</div>
+    <div class="tagline">The future of private web access</div>
+
+    <div class="badge">
+      <span class="dot"></span>
+      End-to-End Encrypted Proxy • leading edge privacy
+    </div>
+
+    <p class="desc">
+      Webtra is a secure proxy platform built for privacy-first browsing and a clean, simple experience.
+      We’re preparing the launch now.
+    </p>
+
+    <section class="countdown" aria-label="Launch countdown">
+      <div class="box"><div class="num" id="days">--</div><div class="lbl">Days</div></div>
+      <div class="box"><div class="num" id="hours">--</div><div class="lbl">Hours</div></div>
+      <div class="box"><div class="num" id="minutes">--</div><div class="lbl">Minutes</div></div>
+      <div class="box"><div class="num" id="seconds">--</div><div class="lbl">Seconds</div></div>
+      <div class="box"><div class="num" id="ms">---</div><div class="lbl">Milliseconds</div></div>
+    </section>
+
+    <div class="soon">Coming Soon</div>
+    <div class="status" id="status">Using configured launch time…</div>
+    <footer>© 2025 Webtra</footer>
+  </main>
+
+  <script type="module">
+    // Firebase (v12 module) + GLOBAL countdown
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+    import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyANCArKh0Hpi3GgVsE-FPl-iEpQ0lhyaI8",
+      authDomain: "webtra-1a9ee.firebaseapp.com",
+      databaseURL: "https://webtra-1a9ee-default-rtdb.firebaseio.com",
+      projectId: "webtra-1a9ee",
+      storageBucket: "webtra-1a9ee.firebasestorage.app",
+      messagingSenderId: "756369134810",
+      appId: "1:756369134810:web:8e126dd058052d9da6c1e3",
+      measurementId: "G-LMGB9VB57S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (e) { /* ok */ }
+    const db = getDatabase(app);
+
+    const elDays = document.getElementById("days");
+    const elHours = document.getElementById("hours");
+    const elMinutes = document.getElementById("minutes");
+    const elSeconds = document.getElementById("seconds");
+    const elMs = document.getElementById("ms");
+    const elStatus = document.getElementById("status");
+
+    const LAUNCH_PATH = "webtra/launchTime";
+
+    // ✅ Your fixed global timestamp (ms)
+    const FALLBACK_LAUNCH_MS = 1768196285526;
+
+    let launchTimeMs = null;
+    let rafId = null;
+
+    function pad2(n){ return String(n).padStart(2, "0"); }
+    function pad3(n){ return String(n).padStart(3, "0"); }
+
+    function stopLoop(){
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    function renderDone(){
+      elDays.textContent = "00";
+      elHours.textContent = "00";
+      elMinutes.textContent = "00";
+      elSeconds.textContent = "00";
+      elMs.textContent = "000";
+      elStatus.textContent = "Launched.";
+    }
+
+    function loop(){
+      const diff = launchTimeMs - Date.now();
+
+      if (diff <= 0){
+        renderDone();
+        stopLoop();
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff / 3600000) % 24);
+      const minutes = Math.floor((diff / 60000) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      const ms = diff % 1000;
+
+      elDays.textContent = pad2(days);
+      elHours.textContent = pad2(hours);
+      elMinutes.textContent = pad2(minutes);
+      elSeconds.textContent = pad2(seconds);
+      elMs.textContent = pad3(ms);
+
+      rafId = requestAnimationFrame(loop);
+    }
+
+    async function ensureLaunchTimeExists(){
+      // If rules block writes, this will fail silently and we just use the fallback.
+      try{
+        const snap = await get(ref(db, LAUNCH_PATH));
+        const v = snap.val();
+
+        if (typeof v === "number") return; // already set
+
+        // Try to set it once (only works if your rules allow write)
+        await set(ref(db, LAUNCH_PATH), FALLBACK_LAUNCH_MS);
+      } catch (e) {
+        // Can't write (most likely because rules are read-only). That's fine.
+      }
+    }
+
+    // Try to create the node (only if rules allow), then always listen for updates
+    ensureLaunchTimeExists().finally(() => {
+      onValue(ref(db, LAUNCH_PATH), (snap) => {
+        const v = snap.val();
+
+        if (typeof v !== "number"){
+          // Use fallback so the page still works even if Firebase isn't set
+          launchTimeMs = FALLBACK_LAUNCH_MS;
+          elStatus.textContent = "Using fallback launch time (set Firebase for global sync).";
+        } else {
+          launchTimeMs = v;
+          elStatus.textContent = "";
+        }
+
+        stopLoop();
+        loop();
+      }, (err) => {
+        // If Firebase errors, fallback still works
+        launchTimeMs = FALLBACK_LAUNCH_MS;
+        elStatus.textContent = "Firebase error — using fallback launch time.";
+        stopLoop();
+        loop();
+      });
+    });
+  </script>
+</body>
+</html>

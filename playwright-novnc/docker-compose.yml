@@ -1,0 +1,10 @@
+services:
+  playwright-novnc:
+    build: .
+    ports:
+      - "3005:3000"   # Express API (mapped to 3005 externally)
+      - "6080:6080"   # noVNC web interface
+    environment:
+      - DISPLAY=:99
+    shm_size: '2gb'   # Needed for Chromium
+    restart: unless-stopped

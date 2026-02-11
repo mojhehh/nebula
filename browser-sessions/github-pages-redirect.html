@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nebula Browser — Connecting...</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --bg1: #05010d;
+      --bg2: #1a0a2e;
+      --purple: #9333ea;
+      --purple2: #a855f7;
+      --text: #f3e8ff;
+      --muted: #c4b5fd;
+      --error: #ef4444;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg1);
+      background-image:
+        radial-gradient(ellipse 1200px 800px at 15% 0%, rgba(147,51,234,0.15), transparent 50%),
+        radial-gradient(ellipse 1000px 600px at 85% 20%, rgba(124,58,237,0.12), transparent 50%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 40%, #000 100%);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      padding: 20px;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 400px;
+    }
+    
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--purple2), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .status {
+      color: var(--muted);
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(147,51,234,0.2);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 12px;
+      padding: 16px;
+      color: #fca5a5;
+      display: none;
+    }
+    
+    .error.show {
+      display: block;
+    }
+    
+    .retry-btn {
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--purple), var(--purple2));
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .retry-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🪐</div>
+    <h1>Nebula Browser</h1>
+    <p class="status" id="status">Connecting to server...</p>
+    <div class="spinner" id="spinner"></div>
+    <div class="error" id="error">
+      <p id="errorMsg">Server is offline. Please try again later.</p>
+      <button class="retry-btn" onclick="connect()">Retry</button>
+    </div>
+  </div>
+
+  <script>
+    // Firebase REST API - no SDK needed
+    const FIREBASE_URL = 'https://procces-3efd9-default-rtdb.firebaseio.com/backends/nebula-browser.json';
+    
+    async function connect() {
+      const status = document.getElementById('status');
+      const spinner = document.getElementById('spinner');
+      const error = document.getElementById('error');
+      
+      // Reset UI
+      status.textContent = 'Connecting to server...';
+      spinner.style.display = 'block';
+      error.classList.remove('show');
+      
+      try {
+        const response = await fetch(FIREBASE_URL);
+        const data = await response.json();
+        
+        if (data && data.url && data.status === 'online') {
+          status.textContent = 'Connected! Redirecting...';
+          
+          // Redirect to the tunnel URL
+          setTimeout(() => {
+            window.location.href = data.url;
+          }, 500);
+        } else {
+          throw new Error('Server is offline or unavailable');
+        }
+      } catch (err) {
+        console.error('Connection error:', err);
+        spinner.style.display = 'none';
+        status.textContent = '';
+        document.getElementById('errorMsg').textContent = 
+          err.message || 'Failed to connect. Server may be offline.';
+        error.classList.add('show');
+      }
+    }
+    
+    // Start connection on load
+    connect();
+  </script>
+</body>
+</html>

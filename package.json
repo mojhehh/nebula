@@ -1,0 +1,34 @@
+{
+  "name": "browser-streaming-proxy",
+  "version": "5.0.0",
+  "description": "Real browser proxy - streams actual Chromium to users. Works with EVERYTHING.",
+  "main": "src/browser-proxy.js",
+  "scripts": {
+    "start": "node src/browser-proxy.js",
+    "dev": "node src/browser-proxy.js",
+    "install-browser": "npx playwright install chromium",
+    "ultimate": "node src/ultimate-proxy.js",
+    "basic": "node src/true-proxy-server.js"
+  },
+  "dependencies": {
+    "@roamhq/wrtc": "^0.9.1",
+    "mediasoup": "^3.19.16",
+    "mediasoup-client": "^3.18.6",
+    "playwright": "^1.40.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sharp": "^0.34.5",
+    "ws": "^8.19.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "proxy",
+    "browser-proxy",
+    "tiktok",
+    "roblox",
+    "now-gg",
+    "streaming"
+  ]
+}

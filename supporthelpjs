@@ -1,0 +1,4850 @@
+// ============================================
+// GEMTRA GAMES - Professional Gaming Platform
+// ============================================
+
+// ============================================
+// PROXY CONFIGURATION
+// ============================================
+const PROXY_URL = 'https://gemtra-proxy.modmojheh.workers.dev';
+
+// Domains that need to be proxied (blocked by schools)
+const BLOCKED_DOMAINS = [
+    'fngames.io',
+    'newunblockedgames.gitlab.io',
+    'classroomgame.github.io',
+    'geodash.org',
+    'static.8games.net',
+    '8games.net',
+    'quickimagetools.com',
+    'orteil.dashnet.org',
+    'dashnet.org'
+];
+
+// Helper to check if URL needs proxying
+function needsProxy(url) {
+    try {
+        const urlObj = new URL(url);
+        return BLOCKED_DOMAINS.some(domain => urlObj.hostname.includes(domain));
+    } catch {
+        return false;
+    }
+}
+
+// Get proxied URL for games
+function getProxiedGameUrl(url) {
+    if (!needsProxy(url)) return url;
+    return `${PROXY_URL}/play/${encodeURIComponent(url)}`;
+}
+
+// Get proxied URL for images - ALWAYS try direct first, proxy on error
+function getProxiedImageUrl(url) {
+    // Return direct URL - handleImageError will try proxy if blocked
+    return url;
+}
+
+// ============================================
+// DEVICE DETECTION HELPERS
+// ============================================
+// Check if device is iPad (including newer iPads that report as MacIntel)
+function isIPad() {
+    return /iPad/.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+// Check if device is iOS
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+// Check if device is touch-only (no mouse)
+function isTouchDevice() {
+    return ('ontouchstart' in window) || 
+           (navigator.maxTouchPoints > 0) || 
+           (navigator.msMaxTouchPoints > 0);
+}
+
+// ============================================
+// GAMES DATABASE - VERIFIED WORKING GAMES ONLY
+// ============================================
+const GAMES = {
+    // === GEOMETRY DASH GAMES (VERIFIED) ===
+    'gd-main': {
+        name: 'Geometry Dash',
+        url: 'https://lolygames.github.io/gd-lit/',
+        description: 'The original rhythm-based platformer. Jump, fly and flip your way through dangerous passages.',
+        touchscreen: true,
+        image: 'https://geodash.org/images/geodash-game-image.webp',
+        category: 'rhythm',
+        featured: true,
+        plays: 125000
+    },
+    'gd-meltdown': {
+        name: 'Geometry Dash Meltdown',
+        url: 'https://lolygames.github.io/gd-melt/',
+        description: 'Fiery rhythm platformer with intense new levels and music.',
+        touchscreen: true,
+        image: 'https://geodash.org/images/geometry-dash-meltdown-og.jpg',
+        category: 'rhythm',
+        plays: 89000
+    },
+    'gd-subzero': {
+        name: 'Geometry Dash Subzero',
+        url: 'https://lolygames.github.io/gd-zubero/',
+        description: 'Frozen rhythm adventure with cool new mechanics.',
+        touchscreen: true,
+        image: 'https://geodash.org/images/geometry-dash-subzero-og.jpg',
+        category: 'rhythm',
+        plays: 76000
+    },
+    'gd-world': {
+        name: 'Geometry Dash World',
+        url: 'https://lolygames.github.io/gd-world/',
+        description: 'Explore new worlds in this rhythm-based spinoff.',
+        touchscreen: true,
+        image: 'https://geodash.org/images/geometry-dash-world-og.jpg',
+        category: 'rhythm',
+        plays: 67000
+    },
+    'gd-scratch': {
+        name: 'Geometry Dash Scratch',
+        url: 'https://lolygames.github.io/geometry-dash/',
+        description: 'Classic scratch remake of the beloved game.',
+        touchscreen: true,
+        image: 'https://geodash.org/images/geometry-dash-scratch-og.jpg',
+        category: 'rhythm',
+        plays: 45000
+    },
+    'wavedash': {
+        name: 'Wavedash',
+        url: 'https://mojhehh.github.io/wavedash/',
+        description: 'Fast-paced rhythm wave game with intense gameplay.',
+        touchscreen: true,
+        image: 'https://quickimagetools.com/uploads/image_696f140c4451c4.62263413.png',
+        category: 'rhythm',
+        featured: true,
+        wideImage: true,
+        plays: 42000
+    },
+    'space-waves': {
+        name: 'Space Waves',
+        url: 'https://marblerun-3d.github.io/game/spacewave/',
+        description: 'Rhythm wave space game with neon graphics.',
+        touchscreen: true,
+        image: 'https://geodash.org/games/thumbs/space-waves-small-thumb-1.webp',
+        category: 'rhythm',
+        plays: 34000
+    },
+
+    // === IO GAMES ===
+    'agar-io': {
+        name: 'Agar.io',
+        url: 'https://www.agar.io/#ffa',
+        description: 'Classic multiplayer cell eating game. Grow your cell and dominate the arena!',
+        touchscreen: true,
+        image: 'https://quickimagetools.com/uploads/image_6972836cb635f6.74980523.png',
+        category: 'arcade',
+        featured: true,
+        newTab: true,
+        plays: 150000
+    },
+
+    // === FNAF GAMES (VERIFIED - fngames.io) ===
+    'fnaf-1': {
+        name: 'Five Nights at Freddy\'s',
+        url: 'https://fngames.io/fnaf.embed',
+        description: 'The original horror classic. Survive five nights at Freddy Fazbear\'s Pizza.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-five-nights-at-freddys-m174x170.jpg',
+        category: 'horror',
+        featured: true,
+        plays: 156000
+    },
+    'fnaf-2': {
+        name: 'Five Nights at Freddy\'s 2',
+        url: 'https://run3.io/popgame/fnaf/fnaf2.html',
+        description: 'More animatronics, more terror. New and improved Freddy Fazbear\'s Pizza.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-2-m174x170.jpg',
+        category: 'horror',
+        featured: true,
+        plays: 134000
+    },
+    'fnaf-3': {
+        name: 'Five Nights at Freddy\'s 3',
+        url: 'https://run3.io/popgame/fnaf/fnaf3.html',
+        description: 'Springtrap awaits in Fazbear\'s Fright horror attraction.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-3-m174x170.jpg',
+        category: 'horror',
+        featured: true,
+        plays: 98000
+    },
+    'fnaf-4': {
+        name: 'Five Nights at Freddy\'s 4',
+        url: 'https://mojhehh.github.io/gemtra/fnaf/fnaf4.html',
+        description: 'The nightmare continues in this terrifying final chapter.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-4-m174x170.jpg',
+        category: 'horror',
+        featured: true,
+        plays: 87000
+    },
+    'fnaf-sister-location': {
+        name: 'FNAF Sister Location',
+        url: 'https://run3.io/popgame/fnaf/fnafsl.html',
+        description: 'Underground horror at Circus Baby\'s Entertainment and Rental.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-sister-location-m174x170.jpg',
+        category: 'horror',
+        plays: 76000
+    },
+    'fnaf-6': {
+        name: 'FNAF 6: Pizzeria Simulator',
+        url: 'https://fngames.io/fnaf-6.embed',
+        description: 'Build your pizzeria while surviving the night.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-6-five-nights-at-freddys-6-1-m174x170.jpg',
+        category: 'horror',
+        plays: 65000
+    },
+    'fnaf-ucn': {
+        name: 'FNAF Ultimate Custom Night',
+        url: 'https://fngames.io/fnaf-ultimate-custom-night.embed',
+        description: '50+ animatronics in the ultimate FNAF challenge.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-ultimate-custom-night-1-m174x170.jpg',
+        category: 'horror',
+        plays: 112000
+    },
+    'fnaf-world': {
+        name: 'FNAF World',
+        url: 'https://scratch.mit.edu/projects/embed/96095372/',
+        description: 'RPG adventure with your favorite FNAF characters.',
+        touchscreen: true,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-world-m174x170.jpg',
+        category: 'adventure',
+        plays: 54000
+    },
+    'fnaf-plus': {
+        name: 'FNAF Plus',
+        url: 'https://b.gamesdizi.com/ed/fnaf-plus/',
+        description: 'Enhanced remake with updated graphics and gameplay.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-plus-1-m174x170.jpg',
+        category: 'horror',
+        plays: 43000
+    },
+    'fnaf-free-roam': {
+        name: 'FNAF Free Roam',
+        url: 'https://gg.storytellergame.io/fnaf-free-roam-game/',
+        description: 'Explore the pizzeria in first person.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-free-roam-1-m174x170.jpg',
+        category: 'horror',
+        plays: 38000
+    },
+    'fnaf-shooter': {
+        name: 'FNAF Shooter',
+        url: 'https://html5.gamedistribution.com/eb8346d4739e40eda6e4196dfc9166b7/',
+        description: 'Shoot the animatronics before they get you!',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/fnaf-shooter-1-m174x170.jpg',
+        category: 'horror',
+        plays: 25000
+    },
+    'five-nights-at-candys': {
+        name: 'Five Nights at Candy\'s',
+        url: 'https://fngames.io/five-nights-at-candys.embed',
+        description: 'Popular FNAF fan game with new animatronics.',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/five-nights-at-candys-1-m174x170.jpg',
+        category: 'horror',
+        plays: 29000
+    },
+
+    // === MORE HORROR (VERIFIED - fngames.io) ===
+    'backrooms': {
+        name: 'Backrooms',
+        url: 'https://st.8games.net/7/igra-zakulise-1/',
+        description: 'Escape the endless rooms of the backrooms.',
+        touchscreen: false,
+        image: 'https://fngames.io/data/image/game/backrooms.png',
+        category: 'horror',
+        plays: 67000
+    },
+    'granny': {
+        name: 'Granny',
+        url: 'https://sz-games.github.io/Games8/GRANNY/',
+        description: 'Escape from Granny\'s house before she catches you.',
+        touchscreen: false,
+        image: 'https://fngames.io/data/image/game/granny.jpeg',
+        category: 'horror',
+        featured: true,
+        plays: 89000
+    },
+    'baldis-basics': {
+        name: 'Baldi\'s Basics',
+        url: 'https://en.gameslol.net/data/baldis-basics/index.html',
+        description: 'Horror education game. Collect notebooks and escape!',
+        touchscreen: false,
+        image: 'https://fngames.io/cache/data/image/game/baldis-basics-1-m174x170.jpg',
+        category: 'horror',
+        featured: true,
+        plays: 78000
+    },
+
+    // === OTHER VERIFIED GAMES ===
+    'g-switch-3': {
+        name: 'G-Switch 3',
+        url: 'https://lolygames.github.io/g-switch-3/',
+        description: 'Gravity-switching runner game.',
+        touchscreen: true,
+        image: 'https://geodash.org/games/thumbs/g-switch-3_2.webp',
+        category: 'arcade',
+        plays: 67000
+    },
+    'bullet-force': {
+        name: 'Bullet Force',
+        url: 'https://classroom8.github.io/bullet-force/',
+        description: 'Online multiplayer FPS with realistic graphics.',
+        touchscreen: false,
+        image: 'https://geodash.org/games/thumbs/bullet-force_2.webp',
+        category: 'action',
+        plays: 145000
+    },
+    'kour-io': {
+        name: 'Kour.io',
+        url: 'https://kour.io/',
+        description: 'Fast-paced parkour FPS multiplayer game.',
+        touchscreen: false,
+        image: 'https://geodash.org/games/thumbs/kour-io_2.webp',
+        category: 'action',
+        plays: 98000
+    },
+    'rivals': {
+        name: 'Rivals',
+        url: 'https://veck.io/',
+        description: 'Fast-paced multiplayer shooter battle game.',
+        touchscreen: true,
+        image: 'https://geodash.org/games/thumbs/veckio_2.webp',
+        category: 'action',
+        plays: 67000
+    },
+    'thumb-fighter': {
+        name: 'Thumb Fighter Halloween',
+        url: 'https://lolygames.github.io/thumb-fighter-halloween/',
+        description: 'Thumb wrestling battle game.',
+        touchscreen: true,
+        image: 'https://geodash.org/games/thumbs/thumb-fighter-halloween_2.webp',
+        category: 'fighting',
+        plays: 45000
+    },
+    'drunken-duel': {
+        name: 'Drunken Duel',
+        url: 'https://lolygames.github.io/drunken-duel/',
+        description: 'Physics fighting game with ragdolls.',
+        touchscreen: true,
+        image: 'https://geodash.org/games/thumbs/drunken-duel_2.webp',
+        category: 'fighting',
+        plays: 56000
+    },
+
+    // === 8GAMES.NET - ACTION & SHOOTERS ===
+    'fortzone-battle-royale': {
+        name: 'Fortzone: Battle Royale',
+        url: 'https://st.8games.net/10/8g/igra-fortzone-korolevskaya-bitva/',
+        description: 'Battle royale action inspired by Fortnite. Fight to be the last one standing!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-fortzone-korolevskaya-bitva.jpg',
+        category: 'action',
+        plays: 87000
+    },
+    '3d-tanks-battle-city': {
+        name: '3D Tanks 1990: Battle City',
+        url: 'https://st.8games.net/7/8g/igra-3d-tanki-1990-boevoj-gorod/',
+        description: 'Classic tank battles remade in 3D. Destroy enemies and defend your base!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-3d-tanki-1990-boevoj-gorod.jpg',
+        category: 'action',
+        plays: 72000
+    },
+    'range-master-sniper': {
+        name: 'Range Master: Sniper Academy',
+        url: 'https://st.8games.net/9/8g/igra-master-strelbishcha-snajperskaya-akademiya/',
+        description: 'Precision shooting simulator. Train your aim at the sniper academy!',
+        touchscreen: false,
+        image: 'https://static.8games.net/flash/all/1/igra-master-strelbishcha-snajperskaya-akademiya.jpg',
+        category: 'action',
+        plays: 45000
+    },
+    'gunner-master': {
+        name: 'Gunner Master',
+        url: 'https://st.8games.net/9/8g/igra-master-artillerist/',
+        description: 'Master artillery combat in this explosive action game!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-master-artillerist.jpg',
+        category: 'action',
+        plays: 38000
+    },
+    'sticky-slaughter': {
+        name: 'Sticky Slaughter',
+        url: 'https://st.8games.net/12/8g/igra-lipkaya-bojnya',
+        description: 'Intense shooting action with sticky mechanics. Eliminate all enemies!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-lipkaya-bojnya.jpg',
+        category: 'action',
+        plays: 34000
+    },
+    'jujutsu-battleground': {
+        name: 'JuJutsu Battleground',
+        url: 'https://st.8games.net/7/8g/igra-magicheskaya-bitva-plejgraund/',
+        description: 'Anime-style fighting arena. Battle with cursed techniques!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-magicheskaya-bitva-plejgraund.jpg',
+        category: 'fighting',
+        plays: 65000
+    },
+    'ragdoll-arena': {
+        name: 'Ragdoll Playground: Arena',
+        url: 'https://st.8games.net/12/8g/igra-regdol-plejgraund-arena-shou',
+        description: 'Physics-based ragdoll battles in arena combat!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-regdol-plejgraund-arena-shou.jpg',
+        category: 'fighting',
+        plays: 52000
+    },
+
+    // === 8GAMES.NET - RACING ===
+    'car-stunt-mega-ramps': {
+        name: 'Car Stunt Races: Mega Ramps',
+        url: 'https://st.8games.net/9/8g/igra-gonki-na-avto-s-tryukami-mega-trampliny/',
+        description: 'Insane car stunts on massive ramps. Pull off crazy tricks!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-gonki-na-avto-s-tryukami-mega-trampliny.jpg',
+        category: 'racing',
+        plays: 78000
+    },
+    'ace-moto-rider': {
+        name: 'Ace Moto Rider',
+        url: 'https://st.8games.net/9/8g/igra-luchshij-motogonshchik/',
+        description: 'High-speed motorcycle racing. Become the ace rider!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-luchshij-motogonshchik.jpg',
+        category: 'racing',
+        plays: 56000
+    },
+
+    // === 8GAMES.NET - HORROR ===
+    'granny-4': {
+        name: 'Granny 4',
+        url: 'https://st.8games.net/7/8g/igra-grenni-4/',
+        description: 'The terrifying Granny returns! Escape her house of horrors.',
+        touchscreen: false,
+        image: 'https://static.8games.net/flash/all/1/igra-grenni-4.jpg',
+        category: 'horror',
+        plays: 89000
+    },
+    'hawkins-rp': {
+        name: 'Hawkins RP',
+        url: 'https://st.8games.net/7/8g/igra-khokins-rp/',
+        description: 'Stranger Things inspired horror roleplay. Explore Hawkins mysteries!',
+        touchscreen: false,
+        image: 'https://static.8games.net/flash/all/1/igra-khokins-rp.jpg',
+        category: 'horror',
+        plays: 45000
+    },
+    'light-through-fog': {
+        name: 'Light Through Fog',
+        url: 'https://st.8games.net/7/8g/igra-svet-skvoz-tuman/',
+        description: 'Atmospheric horror adventure. Find your way through the fog.',
+        touchscreen: false,
+        image: 'https://static.8games.net/flash/all/1/igra-svet-skvoz-tuman.jpg',
+        category: 'horror',
+        plays: 38000
+    },
+    'shawarma-anomaly': {
+        name: 'Scary Shawarma: The Anomaly',
+        url: 'https://st.8games.net/7/8g/igra-zhutkij-shaverma-kiosk-anomaliya/',
+        description: 'Creepy anomaly horror at a shawarma kiosk. Find the anomalies!',
+        touchscreen: false,
+        image: 'https://static.8games.net/flash/all/1/igra-zhutkij-shaverma-kiosk-anomaliya.jpg',
+        category: 'horror',
+        plays: 42000
+    },
+
+    // === 8GAMES.NET - SURVIVAL & ADVENTURE ===
+    'survival-mini-craft': {
+        name: 'Survival: Mini Craft',
+        url: 'https://st.8games.net/12/8g/igra-vyzhivaniya-mini-kraft',
+        description: 'Minecraft-style survival game. Gather, craft, and survive!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-vyzhivaniya-mini-kraft.jpg',
+        category: 'adventure',
+        plays: 95000
+    },
+    'mine-techno-islands': {
+        name: 'Mine: Techno Islands 3D',
+        url: 'https://st.8games.net/14/igra-majn-tekhno-ostrova-3d/',
+        description: 'Explore futuristic tech islands in this Minecraft adventure!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-majn-tekhno-ostrova-3d.jpg',
+        category: 'adventure',
+        plays: 58000
+    },
+    'island-survival': {
+        name: 'Robbi: Island Survival',
+        url: 'https://st.8games.net/14/igra-robbi-vyzhivanie-na-ostrove/',
+        description: 'Roblox-style island survival. Gather resources and stay alive!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-robbi-vyzhivanie-na-ostrove.jpg',
+        category: 'adventure',
+        plays: 67000
+    },
+    'stranded-island-tycoon': {
+        name: 'Stranded Island Tycoon',
+        url: 'https://st.8games.net/14/igra-zastryavshij-na-ostrove-tajkun-kraft-i-vyzhivanie/',
+        description: 'Build your empire while surviving on a deserted island!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-zastryavshij-na-ostrove-tajkun-kraft-i-vyzhivanie.jpg',
+        category: 'adventure',
+        plays: 54000
+    },
+    'jurassic-simulator': {
+        name: 'Jurassic World Simulator',
+        url: 'https://st.8games.net/7/8g/igra-simulyator-yurskogo-mira/',
+        description: 'Become a dinosaur! Explore and survive in the Jurassic world.',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-simulyator-yurskogo-mira.jpg',
+        category: 'adventure',
+        plays: 76000
+    },
+    '99-nights-survival': {
+        name: '99 Nights Survival Sandbox',
+        url: 'https://st.8games.net/7/8g/igra-99-nochej-vyzhivaniya-pesochnitsa/',
+        description: 'Survive 99 nights in this intense survival sandbox!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-99-nochej-vyzhivaniya-pesochnitsa.jpg',
+        category: 'adventure',
+        plays: 48000
+    },
+    'runic-curse': {
+        name: 'Runic Curse',
+        url: 'https://st.8games.net/14/igra-runicheskoe-proklyatie/',
+        description: 'Dark fantasy RPG adventure. Break the runic curse!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-runicheskoe-proklyatie.jpg',
+        category: 'adventure',
+        plays: 43000
+    },
+
+    // === 8GAMES.NET - PUZZLE & ESCAPE ===
+    'escape-room-memories': {
+        name: 'Escape Room: Secret of Memories',
+        url: 'https://st.8games.net/7/8g/igra-pobeg-iz-komnaty-tajna-vospominanij/',
+        description: 'Solve puzzles and uncover the secret of memories!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-pobeg-iz-komnaty-tajna-vospominanij.jpg',
+        category: 'puzzle',
+        plays: 52000
+    },
+    'ice-castle-escape': {
+        name: 'Ice Castle Escape',
+        url: 'https://st.8games.net/7/8g/igra-pobeg-iz-ledyanogo-zamka/',
+        description: 'Escape from the frozen ice castle. Solve puzzles to survive!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-pobeg-iz-ledyanogo-zamka.jpg',
+        category: 'puzzle',
+        plays: 45000
+    },
+    'prison-master-escape': {
+        name: 'Prison Master: Escape Journey',
+        url: 'https://st.8games.net/9/8g/igra-tyuremnyj-nadziratel-puteshestvie-k-pobegu/',
+        description: 'Plan your prison break! Solve puzzles and escape!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-tyuremnyj-nadziratel-puteshestvie-k-pobegu.jpg',
+        category: 'puzzle',
+        plays: 48000
+    },
+    'legendary-plumber': {
+        name: 'The Legendary Plumber',
+        url: 'https://st.8games.net/12/8g/igra-legendarnyj-santekhnik',
+        description: 'Connect pipes in this classic plumber puzzle game!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-legendarnyj-santekhnik.jpg',
+        category: 'puzzle',
+        plays: 34000
+    },
+
+    // === 8GAMES.NET - ARCADE & CASUAL ===
+    'tetro-tower-3d': {
+        name: 'Tetro Tower 3D',
+        url: 'https://st.8games.net/12/8g/igra-tetro-bashnya-3d',
+        description: '3D Tetris tower building. Stack blocks strategically!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-tetro-bashnya-3d.jpg',
+        category: 'arcade',
+        plays: 65000
+    },
+    'tetricraft': {
+        name: 'Tetricraft',
+        url: 'https://st.8games.net/12/8g/igra-tetrikraft',
+        description: 'Minecraft meets Tetris! Creative block stacking fun.',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-tetrikraft.jpg',
+        category: 'arcade',
+        plays: 48000
+    },
+    '2048-ultimate': {
+        name: '2048 Ultimate',
+        url: 'https://st.8games.net/12/8g/igra-absolyutnyj-2048',
+        description: 'The ultimate 2048 experience. Merge tiles to 2048!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-absolyutnyj-2048.jpg',
+        category: 'puzzle',
+        plays: 72000
+    },
+    'mahjong-zodiac': {
+        name: 'Mahjong Zodiac',
+        url: 'https://st.8games.net/9/8g/igra-madzhong-zodiak/',
+        description: 'Beautiful zodiac-themed Mahjong matching game.',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-madzhong-zodiak.jpg',
+        category: 'casual',
+        plays: 54000
+    },
+    'chess-merge': {
+        name: 'Chess Merge',
+        url: 'https://st.8games.net/12/8g/igra-shakhmatnoe-sliyanie',
+        description: 'Unique chess-merging puzzle game. Combine pieces strategically!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-shakhmatnoe-sliyanie.jpg',
+        category: 'puzzle',
+        plays: 45000
+    },
+    'solitaire-holiday': {
+        name: 'Solitaire Holiday',
+        url: 'https://st.8games.net/9/8g/igra-prazdnichnyj-pasyans/',
+        description: 'Relaxing holiday solitaire card game.',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-prazdnichnyj-pasyans.jpg',
+        category: 'casual',
+        plays: 38000
+    },
+    'tic-tac-toe-evolution': {
+        name: 'Tic Tac Toe: Evolution',
+        url: 'https://st.8games.net/12/8g/igra-krestiki-noliki-evolyutsiya',
+        description: 'Classic Tic Tac Toe with evolution twist!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-krestiki-noliki-evolyutsiya.jpg',
+        category: 'casual',
+        plays: 32000
+    },
+    'billy-the-archer': {
+        name: 'Billy the Archer',
+        url: 'https://st.8games.net/12/8g/igra-billi-luchnik',
+        description: 'Aim and shoot targets as Billy the Archer!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-billi-luchnik.jpg',
+        category: 'arcade',
+        plays: 42000
+    },
+    'frost-defense': {
+        name: 'Frost Defense',
+        url: 'https://st.8games.net/12/8g/igra-moroznaya-zashchita',
+        description: 'Tower defense in a frozen winter setting!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-moroznaya-zashchita.jpg',
+        category: 'arcade',
+        plays: 38000
+    },
+    'snowballs-battle': {
+        name: 'Snowballs: Blue vs Red',
+        url: 'https://st.8games.net/7/8g/igra-snezhki-sinie-protiv-krasnykh/',
+        description: 'Epic snowball fight! Blue team vs Red team!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-snezhki-sinie-protiv-krasnykh.jpg',
+        category: 'multiplayer',
+        plays: 45000
+    },
+    'pocket-army-battle': {
+        name: 'Battle of the Pocket Army',
+        url: 'https://st.8games.net/12/8g/igra-bitva-karmannoj-armii',
+        description: 'Command your pocket-sized army in epic battles!',
+        touchscreen: true,
+        image: 'https://static.8games.net/flash/all/1/igra-bitva-karmannoj-armii.jpg',
+        category: 'action',
+        plays: 42000
+    },
+    // === POKIGAMEZ GAMES WITH REAL THUMBNAILS ===
+    'stickman-hook': {
+        name: 'Stickman Hook',
+        url: 'https://iframe.unblocked-76-games.org/stickman-hook-main/',
+        description: 'Swing through levels as a stickman!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/stickman-hook.png',
+        category: 'arcade',
+        plays: 89500
+    },
+    'jelly-truck': {
+        name: 'Jelly Truck',
+        url: 'https://iframe.unblocked-76-games.org/jelly-truck-main/',
+        description: 'Drive a wobbly jelly truck through obstacles!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/jelly-truck.png',
+        category: 'racing',
+        plays: 67200
+    },
+    'drift-boss': {
+        name: 'Drift Boss',
+        url: 'https://iframe.unblocked-76-games.org/drift-boss-main/',
+        description: 'Master the art of drifting!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/drift-boss.png',
+        category: 'racing',
+        plays: 78300
+    },
+    '8-ball-pool': {
+        name: '8 Ball Pool',
+        url: 'https://iframe.unblocked-76-games.org/8-ball-pool-main/',
+        description: 'Play pool against opponents online!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/8-ball-pool.png',
+        category: 'sports',
+        plays: 95000
+    },
+    '1v1-lol': {
+        name: '1v1 LOL',
+        url: 'https://iframe.unblocked-76-games.org/1v1-lol-main/',
+        description: 'Build and battle in this shooter!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/1v1-lol.png',
+        category: 'action',
+        plays: 125000
+    },
+    'stick-merge': {
+        name: 'Stick Merge',
+        url: 'https://iframe.unblocked-76-games.org/stick-merge-main/',
+        description: 'Merge stickmen to create powerful warriors!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/stick-merge.png',
+        category: 'arcade',
+        plays: 54200
+    },
+    'flappy-bird': {
+        name: 'Flappy Bird',
+        url: 'https://iframe.unblocked-76-games.org/flappy-bird-main/',
+        description: 'The classic tap-to-fly game!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/flappy-bird.png',
+        category: 'arcade',
+        plays: 112000
+    },
+    '3d-moto-simulator-2': {
+        name: '3D Moto Simulator 2',
+        url: 'https://iframe.unblocked-76-games.org/3d-moto-simulator-2-main/',
+        description: 'Ride motorcycles in a 3D open world!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/3d-moto-simulator-2.png',
+        category: 'racing',
+        plays: 73400
+    },
+    'level-devil': {
+        name: 'Level Devil',
+        url: 'https://iframe.unblocked-76-games.org/level-devil-main/',
+        description: 'Escape tricky levels with unexpected twists!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/level-devil.png',
+        category: 'puzzle',
+        plays: 86700
+    },
+    'monkey-mart': {
+        name: 'Monkey Mart',
+        url: 'https://iframe.unblocked-76-games.org/monkey-mart-main/',
+        description: 'Run your own supermarket as a monkey!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/monkey-mart.png',
+        category: 'arcade',
+        plays: 98000
+    },
+    'red-ball-4': {
+        name: 'Red Ball 4',
+        url: 'https://iframe.unblocked-76-games.org/red-ball-4-main/',
+        description: 'Roll and jump as a red ball hero!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/red-ball-4.png',
+        category: 'arcade',
+        plays: 79500
+    },
+    'masked-forces': {
+        name: 'Masked Forces',
+        url: 'https://iframe.unblocked-76-games.org/masked-forces-main/',
+        description: 'FPS multiplayer shooter action!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/masked-forces.png',
+        category: 'action',
+        plays: 65800
+    },
+    'basket-bros': {
+        name: 'Basket Bros',
+        url: 'https://iframe.unblocked-76-games.org/basket-bros-main/',
+        description: 'Fast-paced basketball action!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/basket-bros.png',
+        category: 'sports',
+        plays: 71200
+    },
+    'moto-x3m': {
+        name: 'Moto X3M',
+        url: 'https://iframe.unblocked-76-games.org/moto-x3m-main/',
+        description: 'Extreme motorcycle stunts and racing!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/moto-x3m.png',
+        category: 'racing',
+        plays: 105000
+    },
+    'temple-run-2': {
+        name: 'Temple Run 2',
+        url: 'https://iframe.unblocked-76-games.org/temple-run-2-main/',
+        description: 'Run, slide, and jump in this endless runner!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/temple-run-2.png',
+        category: 'arcade',
+        plays: 118000
+    },
+    'dreadhead-parkour': {
+        name: 'Dreadhead Parkour',
+        url: 'https://iframe.unblocked-76-games.org/dreadhead-parkour-main/',
+        description: 'Parkour through urban environments!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/dreadhead-parkour.png',
+        category: 'arcade',
+        plays: 82300
+    },
+    'hills-of-steel': {
+        name: 'Hills Of Steel',
+        url: 'https://iframe.unblocked-76-games.org/hills-of-steel-main/',
+        description: 'Tank battles on hilly terrain!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/hills-of-steel.png',
+        category: 'action',
+        plays: 68900
+    },
+    'ovo-game': {
+        name: 'OvO',
+        url: 'https://iframe.unblocked-76-games.org/ovo-main/',
+        description: 'Fast-paced platformer with smooth controls!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/ovo.png',
+        category: 'arcade',
+        plays: 91500
+    },
+    'bitlife': {
+        name: 'BitLife',
+        url: 'https://gameinclassroom.github.io/bitlife',
+        description: 'Life simulator game! Make choices and live your virtual life from birth to death.',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/bitlife.png',
+        category: 'casual',
+        featured: true,
+        plays: 245000
+    },
+    'bacon-may-die': {
+        name: 'Bacon May Die',
+        url: 'https://iframe.unblocked-76-games.org/bacon-may-die-main/',
+        description: 'Fight as a pig against endless enemies!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/bacon-may-die.png',
+        category: 'action',
+        plays: 59200
+    },
+    'super-mario-bros': {
+        name: 'Super Mario Bros',
+        url: 'https://iframe.unblocked-76-games.org/super-mario-bros-main/',
+        description: 'The classic platformer adventure!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/super-mario-bros.png',
+        category: 'arcade',
+        plays: 145000
+    },
+    'funny-shooter-2': {
+        name: 'Funny Shooter 2',
+        url: 'https://iframe.unblocked-76-games.org/funny-shooter-2-main/',
+        description: 'Hilarious FPS action!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/funny-shooter-2.png',
+        category: 'action',
+        plays: 72800
+    },
+    'awesome-tanks-2': {
+        name: 'Awesome Tanks 2',
+        url: 'https://iframe.unblocked-76-games.org/awesome-tanks-2-main/',
+        description: 'Upgrade your tank and destroy enemies!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/awesome-tanks-2.png',
+        category: 'action',
+        plays: 64500
+    },
+    'retro-bowl': {
+        name: 'Retro Bowl',
+        url: 'https://iframe.unblocked-76-games.org/retro-bowl-main/',
+        description: 'Retro-style American football!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/retro-bowl.png',
+        category: 'sports',
+        plays: 156000
+    },
+    '10-minutes-till-dawn': {
+        name: '10 Minutes Till Dawn',
+        url: 'https://iframe.unblocked-76-games.org/10-minutes-till-dawn-main/',
+        description: 'Survive waves of monsters for 10 minutes!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/10-minutes-till-dawn.png',
+        category: 'action',
+        plays: 78100
+    },
+    'slope-game': {
+        name: 'Slope',
+        url: 'https://iframe.unblocked-76-games.org/slope-main/',
+        description: 'Roll down an endless slope at high speed!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/slope.png',
+        category: 'arcade',
+        plays: 167000
+    },
+    'raft-wars': {
+        name: 'Raft Wars',
+        url: 'https://iframe.unblocked-76-games.org/raft-wars-main/',
+        description: 'Defend your treasure with a raft!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/raft-wars.png',
+        category: 'action',
+        plays: 83400
+    },
+    'bubble-shooter': {
+        name: 'Bubble Shooter',
+        url: 'https://iframe.unblocked-76-games.org/bubble-shooter-main/',
+        description: 'Classic bubble popping puzzle game!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/bubble-shooter.png',
+        category: 'puzzle',
+        plays: 94000
+    },
+    'master-chess': {
+        name: 'Master Chess',
+        url: 'https://iframe.unblocked-76-games.org/master-chess-main/',
+        description: 'Play chess against AI or friends!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/master-chess.png',
+        category: 'puzzle',
+        plays: 52300
+    },
+    'bloxorz-puzzle': {
+        name: 'Bloxorz',
+        url: 'https://iframe.unblocked-76-games.org/bloxorz-main/',
+        description: 'Roll the block into the hole!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/bloxorz.png',
+        category: 'puzzle',
+        plays: 71800
+    },
+    'big-shot-boxing': {
+        name: 'Big Shot Boxing',
+        url: 'https://iframe.unblocked-76-games.org/big-shot-boxing-main/',
+        description: 'Become a boxing champion!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/big-shot-boxing.png',
+        category: 'sports',
+        plays: 58700
+    },
+    'earn-to-die': {
+        name: 'Earn To Die',
+        url: 'https://iframe.unblocked-76-games.org/earn-to-die-main/',
+        description: 'Drive through zombies to escape!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/earn-to-die.png',
+        category: 'racing',
+        plays: 87200
+    },
+    'tunnel-rush': {
+        name: 'Tunnel Rush',
+        url: 'https://iframe.unblocked-76-games.org/tunnel-rush-main/',
+        description: 'Race through a colorful tunnel!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/tunnel-rush.png',
+        category: 'arcade',
+        plays: 123000
+    },
+    'drift-hunters': {
+        name: 'Drift Hunters',
+        url: 'https://iframe.unblocked-76-games.org/drift-hunters-main/',
+        description: '3D drifting with customizable cars!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/drift-hunters.png',
+        category: 'racing',
+        plays: 142000
+    },
+    // === MORE POKIGAMEZ GAMES ===
+    'cookie-clicker': {
+        name: 'Cookie Clicker',
+        url: 'https://iframe.unblocked-76-games.org/cookie-clicker-main',
+        description: 'Click cookies and build your empire!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/cookie-clicker.png',
+        category: 'idle',
+        featured: true,
+        plays: 325000
+    },
+    'among-us': {
+        name: 'Among Us',
+        url: 'https://iframe.unblocked-76-games.org/among-us-main',
+        description: 'Find the impostor among the crew!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/among-us.png',
+        category: 'multiplayer',
+        plays: 450000
+    },
+    'battle-wheels': {
+        name: 'Battle Wheels',
+        url: 'https://iframe.unblocked-76-games.org/battle-wheels-main/',
+        description: 'Vehicular combat action game!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/battle-wheels.png',
+        category: 'action',
+        plays: 76000
+    },
+    'flip-bros': {
+        name: 'Flip Bros',
+        url: 'https://iframe.unblocked-76-games.org/flip-bros-main/',
+        description: 'Flip and fight your way to victory!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/flip-bros.png',
+        category: 'action',
+        plays: 54000
+    },
+    '10-minutes-till-dawn': {
+        name: '10 Minutes Till Dawn',
+        url: 'https://iframe.unblocked-76-games.org/10-minutes-till-dawn-main/',
+        description: 'Survive waves of enemies until dawn!',
+        touchscreen: false,
+        image: 'https://pokigamez.github.io/images/10-minutes-till-dawn.png',
+        category: 'action',
+        plays: 89000
+    },
+    'kart-bros': {
+        name: 'Kart Bros',
+        url: 'https://iframe.unblocked-76-games.org/kart-bros-main/',
+        description: 'Race karts with your friends!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/kart-bros.png',
+        category: 'racing',
+        plays: 67000
+    },
+    '4th-and-goal-2022': {
+        name: '4th and Goal 2022',
+        url: 'https://iframe.unblocked-76-games.org/4th-and-goal-2022-main/',
+        description: 'American football action game!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/4th-and-goal-2022.png',
+        category: 'sports',
+        plays: 112000
+    },
+    'blumgi-castle': {
+        name: 'Blumgi Castle',
+        url: 'https://iframe.unblocked-76-games.org/blumgi-castle-main/',
+        description: 'Jump and bounce through castle levels!',
+        touchscreen: true,
+        image: 'https://pokigamez.github.io/images/blumgi-castle.png',
+        category: 'arcade',
+        plays: 45000
+    },
+    // === NEWUNBLOCKEDGAMES GAMES ===
+    'minecraft-188': {
+        name: 'Minecraft 1.8.8',
+        url: 'https://genizymath.github.io/iframe/181.html',
+        description: 'Classic Minecraft in your browser!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/minecraft-188.png',
+        category: 'adventure',
+        plays: 215000
+    },
+    'clash-royale': {
+        name: 'Clash Royale',
+        url: 'https://newunblockedgames.gitlab.io/assets/game/clash-royale.html',
+        description: 'Strategic card battle game!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/clash-royale.png',
+        category: 'action',
+        plays: 187000
+    },
+    'super-hot': {
+        name: 'Super Hot',
+        url: 'https://scrap-metal.github.io/s8/super-hot/',
+        description: 'Time moves only when you move!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/super-hot.png',
+        category: 'action',
+        plays: 134000
+    },
+    'granny-horror': {
+        name: 'Granny',
+        url: 'https://genizymath.github.io/iframe/90.html',
+        description: 'Escape from Granny\'s house!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/granny.png',
+        category: 'horror',
+        plays: 167000
+    },
+    'subway-surfers-sf': {
+        name: 'Subway Surfers San Francisco',
+        url: 'https://nb-ga.github.io/games-site/projects/subway-surfers-san-francisco/index.html',
+        description: 'Endless running through San Francisco!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/subway-surfers-san-francisco.png',
+        category: 'arcade',
+        plays: 198000
+    },
+    'basket-random': {
+        name: 'Basket Random',
+        url: 'https://tylerpalko.github.io/gamehub/basketrandom/',
+        description: 'Crazy basketball with random physics!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/basket-random.png',
+        category: 'sports',
+        plays: 89000
+    },
+    'google-snake': {
+        name: 'Google Snake',
+        url: 'https://googlesnake-online.github.io/file/',
+        description: 'The classic Google snake game!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/google-snake.png',
+        category: 'arcade',
+        plays: 145000
+    },
+    '2048-game': {
+        name: '2048',
+        url: 'https://tylerpalko.github.io/gamehub/2048/',
+        description: 'Combine tiles to reach 2048!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/2048.png',
+        category: 'puzzle',
+        plays: 134000
+    },
+    'electric-man-2': {
+        name: 'Electric Man 2',
+        url: 'https://ultimatemen.github.io/games/em2/index.html',
+        description: 'Stickman fighting action!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/electric-man-2.png',
+        category: 'fighting',
+        plays: 112000
+    },
+    'getaway-shootout': {
+        name: 'Getaway Shootout',
+        url: 'https://unblockedgames76.gitlab.io/getaway-shootout/',
+        description: 'Race and shoot your way to escape!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/getaway-shootout.png',
+        category: 'action',
+        plays: 98000
+    },
+    'half-life': {
+        name: 'Half Life',
+        url: 'https://genizymath.github.io/iframe/262.html',
+        description: 'Classic FPS adventure!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/half-life.png',
+        category: 'action',
+        plays: 156000
+    },
+    'shell-shockers': {
+        name: 'Shell Shockers',
+        url: 'https://gameinclassroom.github.io/shell-shockers/',
+        description: 'Egg-themed multiplayer shooter!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/shell-shockers.png',
+        category: 'multiplayer',
+        plays: 187000
+    },
+    'the-baby-in-yellow': {
+        name: 'The Baby in Yellow',
+        url: 'https://gnhustgames.github.io/babyinyellow/',
+        description: 'Spooky babysitting horror game!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/the-baby-in-yellow.png',
+        category: 'horror',
+        plays: 134000
+    },
+    'madalin-stunt-cars-3': {
+        name: 'Madalin Stunt Cars 3',
+        url: 'https://unblockedgames66.gitlab.io/madalin-stunt-cars-3/',
+        description: 'Epic car stunts and multiplayer racing!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/madalin-stunt-cars-3.png',
+        category: 'racing',
+        plays: 178000
+    },
+    'only-up': {
+        name: 'Only Up!',
+        url: 'https://sz-games.github.io/Games8/only-up/',
+        description: 'Climb higher and higher!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/only-up.png',
+        category: 'arcade',
+        plays: 145000
+    },
+    'moto-x3m-spooky': {
+        name: 'Moto X3M Spooky Land',
+        url: 'https://games-site.github.io/projects/moto-x3m-spooky-land/index.html',
+        description: 'Halloween-themed motorcycle stunts!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/moto-x3m-spooky-land.png',
+        category: 'racing',
+        plays: 123000
+    },
+    'grindcraft-remastered': {
+        name: 'Grindcraft Remastered',
+        url: 'https://hypackel.github.io/projects/grindcraft/index.html',
+        description: 'Minecraft-style crafting clicker!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/grindcraft-remastered.png',
+        category: 'arcade',
+        plays: 98000
+    },
+    'cluster-rush': {
+        name: 'Cluster Rush',
+        url: 'https://ubgwtf.gitlab.io/cluster-rush/',
+        description: 'Jump between moving trucks!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/cluster-rush.png',
+        category: 'arcade',
+        plays: 167000
+    },
+    'house-of-hazards': {
+        name: 'House of Hazards',
+        url: 'https://genizymath.github.io/iframe/339.html',
+        description: 'Multiplayer obstacle madness!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/house-of-hazards.png',
+        category: 'multiplayer',
+        plays: 112000
+    },
+    'pokemon-emerald': {
+        name: 'Pokemon Emerald',
+        url: 'https://bobzgames.github.io/GBA/launcher.html#pokemonemerald',
+        description: 'Classic Pokemon adventure!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/pokemon-emerald.png',
+        category: 'adventure',
+        plays: 234000
+    },
+    'thats-not-my-neighbor': {
+        name: 'That\'s Not My Neighbor',
+        url: 'https://genizymath.github.io/iframe/216.html',
+        description: 'Spot the doppelgangers!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/thats-not-my-neighbour.png',
+        category: 'horror',
+        plays: 156000
+    },
+    'tiny-fishing': {
+        name: 'Tiny Fishing',
+        url: 'https://unblocked-76-77.github.io/_games/tiny-fishing/',
+        description: 'Relaxing fishing idle game!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/tiny-fishing.png',
+        category: 'arcade',
+        plays: 134000
+    },
+    'hollow-knight': {
+        name: 'Hollow Knight',
+        url: 'https://gnhustgames.github.io/hollow-knight/',
+        description: 'Epic metroidvania adventure!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/hollow-knight.png',
+        category: 'adventure',
+        plays: 178000
+    },
+    'slither-io': {
+        name: 'Slither.io',
+        url: 'https://slither.io/',
+        description: 'Grow your snake and dominate!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/slitherio.png',
+        category: 'multiplayer',
+        plays: 198000
+    },
+    'street-fighter-2': {
+        name: 'Street Fighter 2',
+        url: 'https://unblockedgames200.github.io/games3/fighter2',
+        description: 'Classic arcade fighting!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/street-fighter-2.png',
+        category: 'fighting',
+        plays: 145000
+    },
+    'snow-rider-3d': {
+        name: 'Snow Rider 3D',
+        url: 'https://tylerpalko.github.io/gamehub/snowrider3d/',
+        description: 'Snowboard down endless slopes!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/snow-rider-3d.png',
+        category: 'racing',
+        plays: 134000
+    },
+    'smash-karts': {
+        name: 'Smash Karts',
+        url: 'https://smash-karts.gitlab.io/file/',
+        description: 'Battle kart racing mayhem!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/smash-karts.png',
+        category: 'racing',
+        plays: 189000
+    },
+    'paper-io-2': {
+        name: 'Paper.io 2',
+        url: 'https://paperio-2.github.io/a9/paper-io-2/',
+        description: 'Conquer territory!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/paperio-2.png',
+        category: 'multiplayer',
+        plays: 167000
+    },
+    'bad-time-simulator': {
+        name: 'Bad Time Simulator',
+        url: 'https://jcw87.github.io/c2-sans-fight/',
+        description: 'Fight Sans from Undertale!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/bad-time-simulator.png',
+        category: 'fighting',
+        plays: 178000
+    },
+    '12-minibattles': {
+        name: '12 MiniBattles',
+        url: 'https://rebemanae.github.io/12-minibattles/',
+        description: '12 fun minigames for 2 players!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/12-minibattles.png',
+        category: 'multiplayer',
+        plays: 98000
+    },
+    'rooftop-snipers': {
+        name: 'Rooftop Snipers',
+        url: 'https://jasongamesdev.github.io/rooftop-sniper/',
+        description: '2-player rooftop battles!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/rooftop-snipers.png',
+        category: 'action',
+        plays: 134000
+    },
+    
+    // === NEW GAMES FROM BLOCK-BLAST-PUZZLE ===
+    'bloxd-io': {
+        name: 'Bloxd.io',
+        url: 'https://block-blast-puzzle.github.io/bloxd-io.html',
+        description: 'Minecraft-style multiplayer with various game modes!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/bloxd-io.jpg',
+        category: 'multiplayer',
+        featured: true,
+        plays: 245000
+    },
+    'venge-io': {
+        name: 'Venge.io',
+        url: 'https://block-blast-puzzle.github.io/venge-io.html',
+        description: 'Fast-paced multiplayer FPS shooter!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/venge-io.jpg',
+        category: 'shooter',
+        featured: true,
+        plays: 198000
+    },
+    'krunker-io': {
+        name: 'Krunker.io',
+        url: 'https://block-blast-puzzle.github.io/krunker-io.html',
+        description: 'Pixel-style FPS with fast gameplay!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/krunker-io.jpg',
+        category: 'shooter',
+        featured: true,
+        plays: 312000
+    },
+    'zombs-royale': {
+        name: 'Zombs Royale',
+        url: 'https://block-blast-puzzle.github.io/zombs-royale.html',
+        description: '2D battle royale - last one standing wins!',
+        touchscreen: true,
+        image: 'https://block-blast-puzzle.github.io/images/icon/zombs-royale.jpg',
+        category: 'shooter',
+        plays: 178000
+    },
+    'ev-io': {
+        name: 'Ev.io',
+        url: 'https://block-blast-puzzle.github.io/ev-io.html',
+        description: 'Futuristic arena FPS shooter!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/ev-io.jpeg',
+        category: 'shooter',
+        plays: 156000
+    },
+    'hole-io': {
+        name: 'Hole.io',
+        url: 'https://block-blast-puzzle.github.io/hole-io.html',
+        description: 'Become a black hole and swallow everything!',
+        touchscreen: true,
+        image: 'https://block-blast-puzzle.github.io/images/icon/hole-io.jpg',
+        category: 'casual',
+        plays: 234000
+    },
+    'starblast': {
+        name: 'StarBlast',
+        url: 'https://block-blast-puzzle.github.io/star-blast.html',
+        description: 'Space shooter with upgradeable ships!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/star-blast.jpg',
+        category: 'shooter',
+        plays: 145000
+    },
+    'build-royale': {
+        name: 'Build Royale',
+        url: 'https://block-blast-puzzle.github.io/build-royale.html',
+        description: 'Battle royale with building mechanics!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/build-royale.png',
+        category: 'shooter',
+        plays: 167000
+    },
+    'battledudes-io': {
+        name: 'BattleDudes.io',
+        url: 'https://block-blast-puzzle.github.io/battle-dudes-io.html',
+        description: 'Top-down multiplayer shooter!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/battle-dudes-io.jpg',
+        category: 'shooter',
+        plays: 123000
+    },
+    'craftnite-io': {
+        name: 'Craftnite.io',
+        url: 'https://block-blast-puzzle.github.io/craftnite-io.html',
+        description: 'Fortnite-style battle royale!',
+        touchscreen: false,
+        image: 'https://block-blast-puzzle.github.io/images/icon/craftnite-io.jpg',
+        category: 'shooter',
+        plays: 134000
+    },
+    'little-big-snake': {
+        name: 'Little Big Snake',
+        url: 'https://block-blast-puzzle.github.io/little-big-snake.html',
+        description: 'Slither and grow in this multiplayer snake game!',
+        touchscreen: true,
+        image: 'https://block-blast-puzzle.github.io/images/icon/little-big-snake.jpg',
+        category: 'multiplayer',
+        plays: 189000
+    },
+    '2048-game': {
+        name: '2048',
+        url: 'https://block-blast-puzzle.github.io/2048.html',
+        description: 'Slide tiles and reach 2048!',
+        touchscreen: true,
+        image: 'https://block-blast-puzzle.github.io/images/icon/2048.jpg',
+        category: 'puzzle',
+        plays: 267000
+    },
+    'block-blast': {
+        name: 'Block Blast',
+        url: 'https://block-blast-puzzle.github.io/file',
+        description: 'Drag, match, and clear blocks to score points!',
+        touchscreen: true,
+        image: 'https://block-blast-puzzle.github.io/images/icon_game.png',
+        category: 'puzzle',
+        featured: true,
+        plays: 345000
+    },
+    
+    // === NEAL.FUN GAMES ===
+    'infinite-craft': {
+        name: 'Infinite Craft',
+        url: 'https://infinite-craft.modmojheh.workers.dev/infinite-craft/',
+        newTab: false,
+        description: 'Combine elements to create anything!',
+        touchscreen: true,
+        image: 'infinite-craft.svg',
+        category: 'puzzle',
+        featured: true,
+        plays: 890000
+    },
+    'password-game': {
+        name: 'The Password Game',
+        url: 'https://neal.fun/password-game/',
+        newTab: true,
+        description: 'Create a password that follows increasingly absurd rules!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/password-game.svg',
+        category: 'puzzle',
+        featured: true,
+        plays: 567000
+    },
+    'asteroid-launcher': {
+        name: 'Asteroid Launcher',
+        url: 'https://neal.fun/asteroid-launcher/',
+        newTab: true,
+        description: 'Launch asteroids at Earth and see the destruction!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/asteroid-launcher.svg',
+        category: 'simulation',
+        plays: 345000
+    },
+    'spend-bill-gates-money': {
+        name: 'Spend Bill Gates Money',
+        url: 'https://neal.fun/spend/',
+        newTab: true,
+        description: 'Try to spend $100 billion!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/spend.svg',
+        category: 'simulation',
+        plays: 423000
+    },
+    'absurd-trolley-problems': {
+        name: 'Absurd Trolley Problems',
+        url: 'https://neal.fun/absurd-trolley-problems/',
+        newTab: true,
+        description: 'Make impossible moral choices!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/absurd-trolley-problems.svg',
+        category: 'puzzle',
+        plays: 312000
+    },
+    'internet-roadtrip': {
+        name: 'Internet Roadtrip',
+        url: 'https://neal.fun/internet-roadtrip/',
+        newTab: true,
+        description: 'Endless road trip through Google Street View!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/internet-roadtrip.svg',
+        category: 'simulation',
+        plays: 234000
+    },
+    'deep-sea': {
+        name: 'Deep Sea',
+        url: 'https://neal.fun/deep-sea/',
+        newTab: true,
+        description: 'Explore the depths of the ocean!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/deep-sea.svg',
+        category: 'educational',
+        plays: 278000
+    },
+    'size-of-space': {
+        name: 'Size of Space',
+        url: 'https://neal.fun/size-of-space/',
+        newTab: true,
+        description: 'Scroll through the universe!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/size-of-space.svg',
+        category: 'educational',
+        plays: 256000
+    },
+    'perfect-circle': {
+        name: 'Perfect Circle',
+        url: 'https://neal.fun/perfect-circle/',
+        newTab: true,
+        description: 'Draw a perfect circle - harder than it sounds!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/perfect-circle.svg',
+        category: 'casual',
+        plays: 189000
+    },
+    'auction-game': {
+        name: 'Auction Game',
+        url: 'https://neal.fun/auction-game/',
+        newTab: true,
+        description: 'Guess the auction prices of famous items!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/auction-game.svg',
+        category: 'trivia',
+        plays: 167000
+    },
+    'stimulation-clicker': {
+        name: 'Stimulation Clicker',
+        url: 'https://neal.fun/stimulation-clicker/',
+        newTab: true,
+        description: 'Click for maximum dopamine!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/stimulation-clicker.svg',
+        category: 'clicker',
+        plays: 234000
+    },
+    'space-elevator': {
+        name: 'Space Elevator',
+        url: 'https://neal.fun/space-elevator/',
+        newTab: true,
+        description: 'Ride an elevator to space!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/space-elevator.svg',
+        category: 'educational',
+        plays: 198000
+    },
+    'printing-money': {
+        name: 'Printing Money',
+        url: 'https://neal.fun/printing-money/',
+        newTab: true,
+        description: 'Watch money being printed in real-time!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/printing-money.svg',
+        category: 'simulation',
+        plays: 145000
+    },
+    'design-the-next-iphone': {
+        name: 'Design the Next iPhone',
+        url: 'https://neal.fun/design-the-next-iphone/',
+        newTab: true,
+        description: 'Create your own iPhone design!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/design-the-next-iphone.svg',
+        category: 'creative',
+        plays: 178000
+    },
+    'sell-sell-sell': {
+        name: 'Sell Sell Sell',
+        url: 'https://neal.fun/sell-sell-sell/',
+        newTab: true,
+        description: 'Sell everything before time runs out!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/sell-sell-sell.svg',
+        category: 'casual',
+        plays: 134000
+    },
+    'dark-patterns': {
+        name: 'Dark Patterns',
+        url: 'https://neal.fun/dark-patterns/',
+        newTab: true,
+        description: 'Experience manipulative UI design!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/dark-patterns.svg',
+        category: 'educational',
+        plays: 156000
+    },
+    'earth-reviews': {
+        name: 'Earth Reviews',
+        url: 'https://neal.fun/earth-reviews/',
+        newTab: true,
+        description: 'Read alien reviews of Earth!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/earth-reviews.svg',
+        category: 'casual',
+        plays: 123000
+    },
+    'lets-settle-this': {
+        name: "Let's Settle This",
+        url: 'https://neal.fun/lets-settle-this/',
+        newTab: true,
+        description: 'Vote on controversial debates!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/lets-settle-this.svg',
+        category: 'trivia',
+        plays: 145000
+    },
+    'ambient-chaos': {
+        name: 'Ambient Chaos',
+        url: 'https://neal.fun/ambient-chaos/',
+        newTab: true,
+        description: 'Create your own chaotic soundscape!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/ambient-chaos.svg',
+        category: 'creative',
+        plays: 98000
+    },
+    'rocks': {
+        name: 'Rocks',
+        url: 'https://neal.fun/rocks/',
+        newTab: true,
+        description: 'Collect and identify rocks!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/rocks.svg',
+        category: 'educational',
+        plays: 87000
+    },
+    'universe-forecast': {
+        name: 'Universe Forecast',
+        url: 'https://neal.fun/universe-forecast/',
+        newTab: true,
+        description: 'Weather forecast for the universe!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/universe-forecast.svg',
+        category: 'educational',
+        plays: 112000
+    },
+    'life-stats': {
+        name: 'Life Stats',
+        url: 'https://neal.fun/life-stats/',
+        newTab: true,
+        description: 'See stats about your life!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/life-stats.svg',
+        category: 'simulation',
+        plays: 198000
+    },
+    'who-was-alive': {
+        name: 'Who Was Alive',
+        url: 'https://neal.fun/who-was-alive/',
+        newTab: true,
+        description: 'See who was alive in any year!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/who-was-alive.svg',
+        category: 'educational',
+        plays: 167000
+    },
+    'size-of-life': {
+        name: 'Size of Life',
+        url: 'https://neal.fun/size-of-life/',
+        newTab: true,
+        description: 'Compare the sizes of living things!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/size-of-life.svg',
+        category: 'educational',
+        plays: 145000
+    },
+    'not-a-robot': {
+        name: 'Not a Robot',
+        url: 'https://neal.fun/not-a-robot/',
+        newTab: true,
+        description: 'Prove you are not a robot!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/not-a-robot.svg',
+        category: 'puzzle',
+        plays: 178000
+    },
+    'internet-artifacts': {
+        name: 'Internet Artifacts',
+        url: 'https://neal.fun/internet-artifacts/',
+        newTab: true,
+        description: 'Explore historic internet artifacts!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/internet-artifacts.svg',
+        category: 'educational',
+        plays: 234000
+    },
+    'wonders-of-street-view': {
+        name: 'Wonders of Street View',
+        url: 'https://neal.fun/wonders-of-street-view/',
+        newTab: true,
+        description: 'Discover amazing places on Street View!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/wonders-of-street-view.svg',
+        category: 'educational',
+        plays: 189000
+    },
+    'days-since-incident': {
+        name: 'Days Since Incident',
+        url: 'https://neal.fun/days-since-incident/',
+        newTab: true,
+        description: 'Track days since various incidents!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/days-since-incident.svg',
+        category: 'casual',
+        plays: 98000
+    },
+    'share-this-page': {
+        name: 'Share This Page',
+        url: 'https://neal.fun/share-this-page/',
+        newTab: true,
+        description: 'An overwhelming number of share buttons!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/share-this-page.svg',
+        category: 'casual',
+        plays: 76000
+    },
+    'where-does-the-day-go': {
+        name: 'Where Does the Day Go',
+        url: 'https://neal.fun/where-does-the-day-go/',
+        newTab: true,
+        description: 'See how people spend their time!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/where-does-the-day-go.svg',
+        category: 'educational',
+        plays: 134000
+    },
+    'life-checklist': {
+        name: 'Life Checklist',
+        url: 'https://neal.fun/life-checklist/',
+        newTab: true,
+        description: 'Check off life experiences!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/life-checklist.svg',
+        category: 'casual',
+        plays: 156000
+    },
+    'speed': {
+        name: 'Speed',
+        url: 'https://neal.fun/speed/',
+        newTab: true,
+        description: 'Compare the speeds of things!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/speed.svg',
+        category: 'educational',
+        plays: 112000
+    },
+    'paper': {
+        name: 'Paper',
+        url: 'https://neal.fun/paper/',
+        newTab: true,
+        description: 'Fold paper as many times as you can!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/paper.svg',
+        category: 'simulation',
+        plays: 145000
+    },
+    'logos-from-memory': {
+        name: 'Logos From Memory',
+        url: 'https://neal.fun/logos-from-memory/',
+        newTab: true,
+        description: 'Draw famous logos from memory!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/logos-from-memory.svg',
+        category: 'trivia',
+        plays: 178000
+    },
+    'progress': {
+        name: 'Progress',
+        url: 'https://neal.fun/progress/',
+        newTab: true,
+        description: 'Watch progress bars fill up!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/progress.svg',
+        category: 'casual',
+        plays: 98000
+    },
+    'baby-map': {
+        name: 'Baby Map',
+        url: 'https://neal.fun/baby-map/',
+        newTab: true,
+        description: 'See babies being born around the world!',
+        touchscreen: true,
+        image: 'https://neal.fun/link-images/baby-map.svg',
+        category: 'simulation',
+        plays: 134000
+    },
+    
+    'jetpack-joyride': {
+        name: 'Jetpack Joyride',
+        url: 'https://abinbins.github.io/a7/jetpack-joyride/',
+        description: 'Endless jetpack flying fun!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/jetpack-joyride.png',
+        category: 'arcade',
+        plays: 156000
+    },
+    'football-legends': {
+        name: 'Football Legends',
+        url: 'https://footballlegends-online.github.io/file/',
+        description: 'American football action!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/football-legends.png',
+        category: 'sports',
+        plays: 112000
+    },
+    'a-small-world-cup': {
+        name: 'A Small World Cup',
+        url: './a-small-world-cup/index.html',
+        description: 'Fun physics-based soccer game! Use ragdoll physics to score goals in this addictive World Cup game.',
+        touchscreen: true,
+        image: './a-small-world-cup/icon-256.png',
+        category: 'sports',
+        featured: true,
+        plays: 95000
+    },
+    'poly-track': {
+        name: 'Poly Track',
+        url: 'https://polytrack-online.github.io/file/',
+        description: 'Build and race on custom tracks!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/poly-track.png',
+        category: 'racing',
+        plays: 98000
+    },
+    'crossy-road': {
+        name: 'Crossy Road',
+        url: 'https://genizymath.github.io/iframe/24.html',
+        description: 'Why did the chicken cross the road?',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/crossy-road.png',
+        category: 'arcade',
+        plays: 145000
+    },
+    'tomb-of-the-mask': {
+        name: 'Tomb of the Mask',
+        url: 'https://genizymath.github.io/iframe/109.html',
+        description: 'Retro maze adventure!',
+        touchscreen: true,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/tomb-of-the-mask.png',
+        category: 'arcade',
+        plays: 123000
+    },
+    'run-3': {
+        name: 'Run 3',
+        url: 'https://ubgwtf.gitlab.io/run-3/',
+        description: 'Run through space tunnels!',
+        touchscreen: false,
+        image: 'https://newunblockedgames.gitlab.io/assets/thumb/run-3.png',
+        category: 'arcade',
+        plays: 198000
+    }
+};
+
+// ============================================
+// CATEGORY DEFINITIONS
+// ============================================
+const CATEGORIES = {
+    all: { name: 'All Games', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>', color: '#6366f1' },
+    featured: { name: 'Featured', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>', color: '#f59e0b' },
+    favorites: { name: 'Favorites', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>', color: '#ef4444' },
+    rhythm: { name: 'Rhythm', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>', color: '#8b5cf6' },
+    horror: { name: 'Horror', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C7.03 2 3 6.03 3 11c0 2.96 1.46 5.59 3.7 7.21L6 21l3-1c.96.32 2 .5 3 .5s2.04-.18 3-.5l3 1-.7-2.79C20.54 16.59 22 13.96 22 11c0-4.97-4.03-9-10-9zM9 12c-.83 0-1.5-.67-1.5-1.5S8.17 9 9 9s1.5.67 1.5 1.5S9.83 12 9 12zm6 0c-.83 0-1.5-.67-1.5-1.5S14.17 9 15 9s1.5.67 1.5 1.5S15.83 12 15 12z"/></svg>', color: '#dc2626' },
+    action: { name: 'Action', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 5h10v2h2V3c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v4h2V5zm8.41 11.59L20 12l-4.59-4.59L14 8.83 17.17 12 14 15.17l1.41 1.42zM10 15.17L6.83 12 10 8.83 8.59 7.41 4 12l4.59 4.59L10 15.17zM17 19H7v-2H5v4c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4h-2v2z"/></svg>', color: '#f97316' },
+    arcade: { name: 'Arcade', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>', color: '#22c55e' },
+    racing: { name: 'Racing', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>', color: '#3b82f6' },
+    sports: { name: 'Sports', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 2.07c2.52.41 4.65 2.04 5.69 4.29L14 10.52V4.07zM8 5.08l3 1.5V10l-4-2 .03-.03C7.53 6.8 8 5.97 8 5.08zM5.52 14l2.81-1.41L12 15v4.93c-3.24-.5-5.82-2.86-6.48-5.93zM13 19.93V15l3.67-2.44 2.81 1.41c-.66 3.07-3.24 5.43-6.48 5.96zm5.31-7.17l-3.67-2.2 4.55-2.27c.49 1.37.78 2.85.78 4.41 0 .03-.01.05-.01.08l-1.65-.02z"/></svg>', color: '#10b981' },
+    puzzle: { name: 'Puzzle', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>', color: '#6366f1' },
+    multiplayer: { name: 'Multiplayer', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>', color: '#ec4899' },
+    fighting: { name: 'Fighting', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 5h2V3H7v2zm0 8h2v-2H7v2zm0 8h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm-8 0h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm0-4h2V3H3v2zm8 8h2v-2h-2v2zm8 4h2v-2h-2v2zm0-4h2v-2h-2v2zm0 8h2v-2h-2v2zm0-12h2V7h-2v2zm-8 0h2V7h-2v2zm8-6v2h2V3h-2zm-8 2h2V3h-2v2zm4 16h2v-2h-2v2zm0-8h2v-2h-2v2zm0-8h2V3h-2v2z"/></svg>', color: '#ef4444' },
+    adventure: { name: 'Adventure', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>', color: '#14b8a6' },
+    casual: { name: 'Casual', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>', color: '#a855f7' }
+};
+
+// ============================================
+// STATE MANAGEMENT
+// ============================================
+let currentFilter = 'all';
+let currentSort = 'popular';
+let searchQuery = '';
+let favorites = safeParseJSON(localStorage.getItem('gemtraFavorites'), []);
+let recentlyPlayed = safeParseJSON(localStorage.getItem('gemtraRecent'), []);
+let currentGame = null;
+let viewMode = localStorage.getItem('gemtraViewMode') || 'grid';
+
+// Safe JSON parse utility
+function safeParseJSON(str, fallback = null) {
+    if (!str) return fallback;
+    try {
+        const parsed = JSON.parse(str);
+        return parsed !== null ? parsed : fallback;
+    } catch (e) {
+        console.warn('Failed to parse JSON from storage:', e);
+        return fallback;
+    }
+}
+let firebaseInitialized = false;
+let realtimePlayCounts = {}; // Store real-time play counts from Firebase
+let ticketNotificationListener = null; // Listener for ticket updates
+let lastTicketCheckTime = parseInt(localStorage.getItem('gemtraLastTicketCheck')) || 0;
+let previousUnreadCount = 0; // Track previous count to detect new notifications
+
+// ============================================
+// FIREBASE REAL-TIME FUNCTIONALITY
+// ============================================
+function initializeFirebase() {
+    if (window.firebaseReady && !firebaseInitialized) {
+        try {
+            setupFirebaseListeners();
+            firebaseInitialized = true;
+            console.log('Firebase initialized!');
+        } catch (error) {
+            console.warn('Firebase initialization failed:', error);
+            firebaseInitialized = false;
+        }
+    }
+}
+
+function setupFirebaseListeners() {
+    if (!window.firebaseDB || !window.firebaseRef || !window.firebaseOnValue) {
+        console.warn('Firebase dependencies not available');
+        return;
+    }
+
+    try {
+        // Listen for real-time play count updates
+        const playsRef = window.firebaseRef(window.firebaseDB, 'games/plays');
+        window.firebaseOnValue(playsRef, (snapshot) => {
+            try {
+                if (snapshot.exists()) {
+                    realtimePlayCounts = snapshot.val();
+                    updateAllPlayCountDisplays();
+                }
+            } catch (e) {
+                console.warn('Error processing play counts:', e);
+            }
+        }, (error) => {
+            console.warn('Play counts listener error:', error);
+        });
+
+        // Listen for total site stats
+        const statsRef = window.firebaseRef(window.firebaseDB, 'stats');
+        window.firebaseOnValue(statsRef, (snapshot) => {
+            try {
+                if (snapshot.exists()) {
+                    const stats = snapshot.val();
+                    updateSiteStats(stats);
+                }
+            } catch (e) {
+                console.warn('Error processing stats:', e);
+            }
+        }, (error) => {
+            console.warn('Stats listener error:', error);
+        });
+
+        // Setup presence tracking for online users
+        setupPresence();
+    } catch (error) {
+        console.warn('Error setting up Firebase listeners:', error);
+    }
+}
+
+function updateAllPlayCountDisplays() {
+    // Update play counts on all visible game cards
+    Object.entries(realtimePlayCounts).forEach(([gameKey, plays]) => {
+        const card = document.querySelector(`.game-card[data-game="${gameKey}"]`);
+        if (card) {
+            const playsEl = card.querySelector('.card-plays');
+            if (playsEl) {
+                const svg = playsEl.querySelector('svg');
+                playsEl.innerHTML = '';
+                if (svg) playsEl.appendChild(svg);
+                playsEl.appendChild(document.createTextNode(' ' + formatNumber(plays)));
+            }
+        }
+    });
+}
+
+function updateSiteStats(stats) {
+    if (stats.totalPlays !== undefined) {
+        const totalPlaysEl = document.getElementById('statTotalPlays');
+        if (totalPlaysEl) {
+            totalPlaysEl.textContent = formatNumber(stats.totalPlays);
+        }
+    }
+    if (stats.onlineCount !== undefined) {
+        const onlineEl = document.getElementById('statOnline');
+        if (onlineEl) {
+            onlineEl.textContent = stats.onlineCount;
+        }
+    }
+}
+
+// Global presence interval for cleanup
+let _presenceInterval = null;
+
+// Track user presence (online status)
+async function setupPresence() {
+    // Clean up any existing interval first
+    if (_presenceInterval) {
+        clearInterval(_presenceInterval);
+        _presenceInterval = null;
+    }
+    
+    if (!window.firebaseDB || !window.firebaseRef || !window.firebaseSet || !window.firebaseOnValue) {
+        console.warn('Firebase presence dependencies not available');
+        return;
+    }
+
+    try {
+        // Generate unique session ID
+        const sessionId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        const presenceRef = window.firebaseRef(window.firebaseDB, `presence/${sessionId}`);
+        const onlineCountRef = window.firebaseRef(window.firebaseDB, 'stats/onlineCount');
+
+        // Set user as online
+        await window.firebaseSet(presenceRef, {
+            online: true,
+            timestamp: Date.now(),
+            page: window.location.pathname
+        }).catch(e => console.warn('Initial presence set failed:', e));
+
+        // Listen for online count changes
+        window.firebaseOnValue(onlineCountRef, (snapshot) => {
+            try {
+                const count = snapshot.val() || 0;
+                const onlineEl = document.getElementById('statOnline');
+                if (onlineEl) {
+                    onlineEl.textContent = count;
+                }
+            } catch (e) {
+                console.warn('Online count update failed:', e);
+            }
+        }, (error) => {
+            console.warn('Online count listener error:', error);
+        });
+
+        // Update online count when user connects
+        const presenceListRef = window.firebaseRef(window.firebaseDB, 'presence');
+        window.firebaseOnValue(presenceListRef, (snapshot) => {
+            try {
+                const presenceData = snapshot.val() || {};
+                const now = Date.now();
+                const fiveMinutesAgo = now - (5 * 60 * 1000);
+                
+                // Count users active in last 5 minutes
+                let onlineCount = 0;
+                Object.values(presenceData).forEach(user => {
+                    if (user && user.timestamp && user.timestamp > fiveMinutesAgo) {
+                        onlineCount++;
+                    }
+                });
+                
+                // Update the online count in stats
+                window.firebaseSet(onlineCountRef, onlineCount).catch(e => {
+                    // Silently fail - this is not critical
+                });
+            } catch (e) {
+                console.warn('Presence count update failed:', e);
+            }
+        }, (error) => {
+            console.warn('Presence list listener error:', error);
+        });
+
+        // Update presence every 2 minutes to keep alive
+        _presenceInterval = setInterval(async () => {
+            try {
+                await window.firebaseSet(presenceRef, {
+                    online: true,
+                    timestamp: Date.now(),
+                    page: window.location.pathname
+                });
+            } catch (e) {
+                // Silently fail - not critical
+            }
+        }, 2 * 60 * 1000);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            if (_presenceInterval) {
+                clearInterval(_presenceInterval);
+                _presenceInterval = null;
+            }
+        });
+
+        console.log('Presence tracking active');
+    } catch (error) {
+        console.warn('Presence setup error:', error);
+        // Clean up interval if setup failed
+        if (_presenceInterval) {
+            clearInterval(_presenceInterval);
+            _presenceInterval = null;
+        }
+    }
+}
+
+async function incrementPlayCount(gameKey) {
+    if (!window.firebaseDB || !window.firebaseRef || !window.firebaseRunTransaction) {
+        console.warn('Firebase not available for play count');
+        return;
+    }
+
+    try {
+        // Increment play count for this game
+        const gamePlayRef = window.firebaseRef(window.firebaseDB, `games/plays/${gameKey}`);
+        await window.firebaseRunTransaction(gamePlayRef, (currentPlays) => {
+            return (currentPlays || 0) + 1;
+        });
+
+        // Increment total site plays
+        const totalPlaysRef = window.firebaseRef(window.firebaseDB, 'stats/totalPlays');
+        await window.firebaseRunTransaction(totalPlaysRef, (currentTotal) => {
+            return (currentTotal || 0) + 1;
+        });
+
+        // Log analytics event (non-blocking)
+        if (window.firebaseLogEvent && window.firebaseAnalytics) {
+            try {
+                window.firebaseLogEvent(window.firebaseAnalytics, 'game_play', {
+                    game_key: gameKey,
+                    game_name: GAMES[gameKey]?.name || gameKey
+                });
+            } catch (analyticsError) {
+                // Analytics errors are non-critical
+            }
+        }
+
+        console.log(`Play counted for: ${gameKey}`);
+    } catch (error) {
+        console.warn('Firebase play count error:', error);
+        // Continue silently - play count is not critical for user experience
+    }
+}
+
+// Get play count (Firebase or fallback to local)
+function getPlayCount(gameKey) {
+    if (realtimePlayCounts[gameKey]) {
+        return realtimePlayCounts[gameKey];
+    }
+    return GAMES[gameKey]?.plays || 0;
+}
+
+// ============================================
+// DOM ELEMENTS (initialized after DOM ready)
+// ============================================
+let elements = {};
+
+// ============================================
+// INITIALIZATION
+// ============================================
+// Track page load start time for minimum loading duration
+window.pageLoadStartTime = Date.now();
+
+// ============================================
+// FAST MODE - Performance Optimization
+// ============================================
+const FastMode = {
+    // Check if device is likely low-end
+    isLowEndDevice() {
+        // Check for older/slower devices
+        const memoryGiB = navigator.deviceMemory || 4;
+        const cores = navigator.hardwareConcurrency || 4;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Consider low-end if: less than 4GB RAM, less than 4 cores, or mobile device
+        return memoryGiB < 4 || cores < 4 || isMobile;
+    },
+    
+    // Check if browser is Safari
+    isSafari() {
+        const ua = navigator.userAgent;
+        return /^((?!chrome|android).)*safari/i.test(ua) && !/CriOS|FxiOS/.test(ua);
+    },
+    
+    // Check if device is iPad
+    isIPad() {
+        return /iPad/i.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    },
+    
+    // Should show the fast mode prompt
+    shouldPrompt() {
+        // Don't prompt if user already made a choice
+        const savedChoice = localStorage.getItem('fastModeChoice');
+        if (savedChoice !== null) return false;
+        
+        // Prompt for Safari, iPad, or low-end devices
+        return this.isSafari() || this.isIPad() || this.isLowEndDevice();
+    },
+    
+    // Enable fast mode
+    enable() {
+        document.body.classList.add('fast-mode');
+        localStorage.setItem('fastMode', 'true');
+        console.log('⚡ Fast Mode enabled');
+    },
+    
+    // Disable fast mode
+    disable() {
+        document.body.classList.remove('fast-mode');
+        localStorage.setItem('fastMode', 'false');
+    },
+    
+    // Load saved preference
+    loadSavedPreference() {
+        const saved = localStorage.getItem('fastMode');
+        if (saved === 'true') {
+            this.enable();
+        }
+    },
+    
+    // Show the fast mode modal
+    showModal() {
+        const modal = document.getElementById('fastModeModal');
+        if (modal) {
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+    
+    // Hide the fast mode modal
+    hideModal() {
+        const modal = document.getElementById('fastModeModal');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+};
+
+// Global functions for HTML onclick handlers
+function enableFastMode() {
+    const rememberChoice = document.getElementById('fastModeRemember')?.checked;
+    FastMode.enable();
+    
+    if (rememberChoice) {
+        localStorage.setItem('fastModeChoice', 'enabled');
+    }
+    
+    FastMode.hideModal();
+    showToast('⚡ Fast Mode enabled! Enjoy smoother performance.', 'success');
+}
+
+function closeFastModeModal() {
+    const rememberChoice = document.getElementById('fastModeRemember')?.checked;
+    
+    if (rememberChoice) {
+        localStorage.setItem('fastModeChoice', 'disabled');
+    }
+    
+    FastMode.hideModal();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Keep scroll locked at top during initialization
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Initialize DOM elements now that DOM is ready
+    const loadingEl = document.getElementById('loadingScreen');
+    
+    elements = {
+        loadingScreen: loadingEl,
+        gamesGrid: document.getElementById('gamesGrid'),
+        searchInput: document.getElementById('searchInput'),
+        searchClear: document.getElementById('searchClear'),
+        filterButtons: document.querySelectorAll('.filter-btn'),
+        sortBtn: document.getElementById('sortBtn'),
+        sortMenu: document.getElementById('sortMenu'),
+        viewBtns: document.querySelectorAll('.view-btn'),
+        gameModal: document.getElementById('gameModal'),
+        gameIframe: document.getElementById('gameIframe'),
+        modalTitle: document.getElementById('modalGameTitle'),
+        modalClose: document.getElementById('modalClose'),
+        modalFullscreen: document.getElementById('modalFullscreen'),
+        modalFavorite: document.getElementById('modalFavorite'),
+        modalRestart: document.getElementById('modalRestart'),
+        modalBackdrop: document.getElementById('modalBackdrop'),
+        themeToggle: document.getElementById('themeToggle'),
+        navToggle: document.getElementById('navToggle'),
+        navMenu: document.getElementById('navMenu'),
+        backToTop: document.getElementById('backToTop'),
+        toastContainer: document.getElementById('toastContainer'),
+        gameCountDisplay: document.getElementById('gameCount'),
+        featuredGrid: document.getElementById('featuredGrid'),
+        favoritesCount: document.getElementById('favoritesCount'),
+        heroPlayBtn: document.getElementById('heroPlayBtn')
+    };
+    
+    initializeApp();
+});
+
+function initializeApp() {
+    // Load Fast Mode preference first
+    FastMode.loadSavedPreference();
+    
+    // Initialize Firebase if ready, or wait for it
+    if (window.firebaseReady) {
+        initializeFirebase();
+    } else {
+        window.addEventListener('firebaseReady', initializeFirebase, { once: true });
+    }
+
+    // Initialize auth (user menu, auth state listeners)
+    initializeAuth();
+
+    // Initialize all features
+    renderGames();
+    renderFeaturedGames();
+    initializeSearch();
+    initializeFilters();
+    initializeSort();
+    initializeViewToggle();
+    initializeModal();
+    initializeTheme();
+    initializeMobileMenu();
+    initializeBackToTop();
+    initializeSmoothScroll();
+    initializeHeroPlay();
+    updateFavoritesCount();
+    updateGameCount();
+
+    // Set initial view mode
+    if (elements.gamesGrid) {
+        elements.gamesGrid.className = `games-grid ${viewMode}-view`;
+    }
+
+    // Track when initialization started
+    const initStartTime = window.pageLoadStartTime || Date.now();
+    const minLoadingTime = 2000; // Minimum 2 seconds loading screen
+    const elapsed = Date.now() - initStartTime;
+    const remainingTime = Math.max(0, minLoadingTime - elapsed);
+
+    // Hide loading screen after minimum time and ensure page is at top
+    setTimeout(() => {
+        // Scroll to very top before showing content
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                hideLoadingScreen();
+            });
+        });
+    }, remainingTime);
+
+    console.log('Gemtra Games initialized successfully!');
+}
+
+// ============================================
+// HIDE LOADING SCREEN - ENHANCED
+// ============================================
+function hideLoadingScreen() {
+    const loader = document.getElementById('loadingScreen');
+    const html = document.documentElement;
+    
+    if (loader) {
+        // Force scroll to absolute top before showing content
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Add hidden class to trigger fade out
+        loader.classList.add('hidden');
+        
+        // Remove loading class from html to enable scroll and show content
+        setTimeout(() => {
+            html.classList.remove('loading');
+            // Ensure scroll is at top after loading
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        }, 100);
+        
+        // Remove loader from DOM after animation
+        setTimeout(() => {
+            loader.style.display = 'none';
+            
+            // Check if we should show Fast Mode prompt (after loading is done)
+            if (FastMode.shouldPrompt()) {
+                setTimeout(() => FastMode.showModal(), 500);
+            }
+        }, 600);
+    } else {
+        // If no loader, just enable content
+        html.classList.remove('loading');
+        
+        // Check Fast Mode for no-loader case
+        if (FastMode.shouldPrompt()) {
+            setTimeout(() => FastMode.showModal(), 500);
+        }
+    }
+}
+
+// ============================================
+// GAME RENDERING
+// ============================================
+function renderGames() {
+    if (!elements.gamesGrid) return;
+
+    const filteredGames = getFilteredGames();
+    const sortedGames = getSortedGames(filteredGames);
+
+    elements.gamesGrid.innerHTML = '';
+
+    if (sortedGames.length === 0) {
+        const searchTerm = searchQuery || '';
+        elements.gamesGrid.innerHTML = `
+            <div class="no-results">
+                <div class="no-results-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="64" height="64"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+                <h3>No games found${searchTerm ? ` for "${searchTerm}"` : ''}</h3>
+                <p>We don't have what you're looking for yet - but you can request it!</p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px;">
+                    <button class="btn btn-primary" onclick="openRequestModal('game-request')">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Request This Game
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAllFilters()">Clear Filters</button>
+                </div>
+            </div>
+        `;
+        updateGameCountDisplay(0);
+        updateSectionTitle();
+        return;
+    }
+
+    sortedGames.forEach(([key, game], index) => {
+        const card = createGameCard(key, game, index);
+        elements.gamesGrid.appendChild(card);
+    });
+
+    // Update game count and section title
+    updateGameCountDisplay(sortedGames.length);
+    updateSectionTitle();
+}
+
+function createGameCard(key, game, index) {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.setAttribute('data-game', key);
+    card.setAttribute('data-category', game.category);
+    card.style.animationDelay = `${index * 0.05}s`;
+
+    const isFavorite = favorites.includes(key);
+    const categoryInfo = CATEGORIES[game.category] || CATEGORIES.casual;
+    const playCount = getPlayCount(key); // Use Firebase play count if available
+
+    const escapedName = game.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    // Use proxy for images from blocked domains
+    const imageUrl = getProxiedImageUrl(game.image);
+    card.innerHTML = `
+        <div class="card-image-wrapper">
+            <img class="card-image" src="${imageUrl}" alt="${escapedName}" loading="lazy" decoding="async" onerror="handleImageError(this, '${escapedName}')">
+            <div class="card-overlay">
+                <button class="play-btn" aria-label="Play ${escapedName}">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+            </div>
+            <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-game="${key}" aria-label="Add to favorites">
+                <svg viewBox="0 0 24 24" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </button>
+            ${game.featured ? '<span class="featured-badge"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle;margin-right:3px"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Featured</span>' : ''}
+        </div>
+        <div class="card-content">
+            <span class="card-category" style="--category-color: ${categoryInfo.color}">
+                ${categoryInfo.icon} ${categoryInfo.name}
+            </span>
+            <h3 class="card-title">${game.name}</h3>
+            <p class="card-description">${game.description}</p>
+            <div class="card-meta">
+                <span class="card-plays">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    ${formatNumber(playCount)}
+                </span>
+                <span class="card-touch ${game.touchscreen ? 'supported' : ''}">
+                    ${game.touchscreen ? '<svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> Touch' : '<svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" style="vertical-align:middle"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg> Desktop'}
+                </span>
+            </div>
+        </div>
+    `;
+
+    // Add click handlers
+    const playBtn = card.querySelector('.play-btn');
+    const favoriteBtn = card.querySelector('.favorite-btn');
+    const cardImage = card.querySelector('.card-image-wrapper');
+
+    playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openGame(key);
+    });
+
+    cardImage.addEventListener('click', () => {
+        openGame(key);
+    });
+
+    favoriteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(key);
+    });
+
+    return card;
+}
+
+// Category-based fallback images (reliable, fast-loading)
+const CATEGORY_FALLBACK_IMAGES = {
+    rhythm: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%236366f1"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M100 30v60c-5-3-11-5-18-5-15 0-27 12-27 27s12 27 27 27 27-12 27-27V50h27V30h-36z" fill="%236366f1"/%3E%3C/svg%3E',
+    horror: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23ef4444"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M100 20c-33 0-60 27-60 60s27 60 60 60 60-27 60-60-27-60-60-60zm-20 80l10-17 10 17H80zm-17-27a10 10 0 110-20 10 10 0 010 20zm74 0a10 10 0 110-20 10 10 0 010 20z" fill="%23ef4444"/%3E%3C/svg%3E',
+    action: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23f59e0b"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M130 35H70c-8 0-15 7-15 15v15h90V50c0-8-7-15-15-15zm-30 45l20 35H80l20-35zm-40 35v-35h-5l-10-10v55h25v-10H60zm80 0v10h25V70l-10 10h-5v35h-10z" fill="%23f59e0b"/%3E%3C/svg%3E',
+    racing: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%2310b981"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M155 55c-2-5-7-8-12-8H57c-5 0-10 3-12 8L30 90v50c0 4 3 7 7 7h7c4 0 7-3 7-7v-7h98v7c0 4 3 7 7 7h7c4 0 7-3 7-7V90l-15-35zM57 110c-6 0-10-5-10-10s4-10 10-10 10 5 10 10-4 10-10 10zm86 0c-6 0-10-5-10-10s4-10 10-10 10 5 10 10-4 10-10 10zM40 80l10-30h100l10 30H40z" fill="%2310b981"/%3E%3C/svg%3E',
+    arcade: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23ec4899"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M160 40H40c-8 0-15 7-15 15v55c0 8 7 15 15 15h120c8 0 15-7 15-15V55c0-8-7-15-15-15zM85 95H65v15H55V95H35V85h20V70h10v15h20v10zm30 10c-5 0-10-5-10-10s5-10 10-10 10 5 10 10-5 10-10 10zm27-20c-5 0-10-5-10-10s5-10 10-10 10 5 10 10-5 10-10 10z" fill="%23ec4899"/%3E%3C/svg%3E',
+    adventure: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%2306b6d4"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M100 15c-25 0-45 20-45 45 0 34 45 85 45 85s45-51 45-85c0-25-20-45-45-45zm0 61c-9 0-16-7-16-16s7-16 16-16 16 7 16 16-7 16-16 16z" fill="%2306b6d4"/%3E%3C/svg%3E',
+    puzzle: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%238b5cf6"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M145 70h-10V50c0-8-7-15-15-15h-15v-8c0-10-8-18-18-18s-18 8-18 18v8H55c-8 0-15 7-15 15v25h8c10 0 18 8 18 18s-8 18-18 18h-8v20c0 8 7 15 15 15h25v-8c0-10 8-18 18-18s18 8 18 18v8h20c8 0 15-7 15-15v-15h8c10 0 18-8 18-18s-8-18-18-18z" fill="%238b5cf6"/%3E%3C/svg%3E',
+    multiplayer: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23f472b6"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Ccircle cx="130" cy="50" r="20" fill="%23f472b6"/%3E%3Ccircle cx="70" cy="50" r="20" fill="%23f472b6"/%3E%3Cpath d="M70 80c-17 0-50 8-50 25v15h100v-15c0-17-33-25-50-25zm60 0c-2 0-4 0-7 1 8 6 14 14 14 24v15h43v-15c0-17-33-25-50-25z" fill="%23f472b6"/%3E%3C/svg%3E',
+    fighting: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23ef4444"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Cpath d="M150 25H50c-4 0-8 4-8 8v11c0 7 4 13 10 15L80 70v55h10V70l30-11c6-2 10-8 10-15V33c0-4-4-8-8-8zM70 50l-14-7V33h14v17zm25 0l-14-7V33h28v10l-14 7zm39-7l-14 7V33h14v10z" fill="%23ef4444"/%3E%3C/svg%3E',
+    sports: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%2322c55e"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Ccircle cx="100" cy="75" r="50" fill="none" stroke="%2322c55e" stroke-width="8"/%3E%3Cpath d="M100 25v100M50 75h100" stroke="%2322c55e" stroke-width="4"/%3E%3C/svg%3E',
+    casual: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="%23fbbf24"%3E%3Crect width="200" height="150" fill="%231a1a25"/%3E%3Ccircle cx="100" cy="75" r="50" fill="%23fbbf24"/%3E%3Ccircle cx="80" cy="60" r="8" fill="%231a1a25"/%3E%3Ccircle cx="120" cy="60" r="8" fill="%231a1a25"/%3E%3Cpath d="M70 90c15 20 45 20 60 0" fill="none" stroke="%231a1a25" stroke-width="5" stroke-linecap="round"/%3E%3C/svg%3E'
+};
+
+function handleImageError(img, gameName) {
+    // Get the original source (before any proxy attempts)
+    const currentSrc = img.src;
+    
+    // Check if this is already a proxy URL or a data URI (fallback)
+    const isProxyUrl = currentSrc.includes('gemtra-proxy') || currentSrc.includes('/img/');
+    const isDataUri = currentSrc.startsWith('data:');
+    
+    // If direct load failed and we haven't tried proxy yet
+    if (!isProxyUrl && !isDataUri && !img.dataset.proxyTried) {
+        img.dataset.proxyTried = 'true';
+        img.dataset.originalSrc = currentSrc; // Save original URL
+        const proxiedSrc = `${PROXY_URL}/img/${encodeURIComponent(currentSrc)}`;
+        img.src = proxiedSrc;
+        return; // Give proxy a chance
+    }
+    
+    // Proxy also failed (or was already a proxy URL), use category fallback
+    const card = img.closest('.game-card');
+    const category = card?.dataset?.category || 'arcade';
+    const fallbackImg = CATEGORY_FALLBACK_IMAGES[category] || CATEGORY_FALLBACK_IMAGES.arcade;
+    
+    // Use SVG fallback image
+    img.src = fallbackImg;
+    img.dataset.fallbackUsed = 'true';
+    img.style.objectFit = 'cover';
+}
+
+// ============================================
+// FILTERING & SORTING
+// ============================================
+function getFilteredGames() {
+    let games = Object.entries(GAMES);
+
+    // Apply search filter
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        games = games.filter(([key, game]) => 
+            key.toLowerCase().includes(query) ||
+            game.name.toLowerCase().includes(query) ||
+            game.description.toLowerCase().includes(query) ||
+            game.category.toLowerCase().includes(query)
+        );
+    }
+
+    // Apply category filter
+    if (currentFilter === 'favorites') {
+        games = games.filter(([key]) => favorites.includes(key));
+    } else if (currentFilter === 'featured') {
+        games = games.filter(([key, game]) => game.featured);
+    } else if (currentFilter !== 'all') {
+        games = games.filter(([key, game]) => game.category === currentFilter);
+    }
+
+    return games;
+}
+
+function getSortedGames(games) {
+    switch (currentSort) {
+        case 'popular':
+            // Use Firebase real-time play counts if available, fallback to local
+            return games.sort((a, b) => getPlayCount(b[0]) - getPlayCount(a[0]));
+        case 'newest':
+            return games.reverse();
+        case 'alphabetical':
+            return games.sort((a, b) => a[1].name.localeCompare(b[1].name));
+        case 'random':
+            return games.sort(() => Math.random() - 0.5);
+        default:
+            return games;
+    }
+}
+
+// ============================================
+// SEARCH FUNCTIONALITY
+// ============================================
+function initializeSearch() {
+    const mainSearchInput = document.getElementById('mainSearchInput');
+    const mainSearchClear = document.getElementById('mainSearchClear');
+
+    // Hide clear buttons initially
+    if (elements.searchClear) {
+        elements.searchClear.style.display = 'none';
+    }
+    if (mainSearchClear) {
+        mainSearchClear.style.display = 'none';
+    }
+
+    // Function to handle search
+    const handleSearch = (value) => {
+        searchQuery = value.trim();
+        // Sync both search inputs
+        if (elements.searchInput) elements.searchInput.value = value;
+        if (mainSearchInput) mainSearchInput.value = value;
+        // Update clear buttons
+        if (elements.searchClear) elements.searchClear.style.display = searchQuery ? 'flex' : 'none';
+        if (mainSearchClear) mainSearchClear.style.display = searchQuery ? 'flex' : 'none';
+        renderGames();
+    };
+
+    // Nav search input
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', debounce((e) => {
+            handleSearch(e.target.value);
+        }, 300));
+    }
+
+    // Main search input
+    if (mainSearchInput) {
+        mainSearchInput.addEventListener('input', debounce((e) => {
+            handleSearch(e.target.value);
+        }, 300));
+    }
+
+    // Clear buttons
+    if (elements.searchClear) {
+        elements.searchClear.addEventListener('click', () => {
+            handleSearch('');
+        });
+    }
+
+    if (mainSearchClear) {
+        mainSearchClear.addEventListener('click', () => {
+            handleSearch('');
+        });
+    }
+}
+
+// ============================================
+// FILTER BUTTONS
+// ============================================
+function initializeFilters() {
+    elements.filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            elements.filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.category;
+            renderGames();
+        });
+    });
+
+    // Category cards in the categories section
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = card.dataset.category;
+            if (category) {
+                currentFilter = category;
+                // Update filter buttons
+                elements.filterButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.category === category);
+                });
+                renderGames();
+                // Scroll to games section
+                document.getElementById('games')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+}
+
+// ============================================
+// SORT FUNCTIONALITY
+// ============================================
+function initializeSort() {
+    if (!elements.sortBtn || !elements.sortMenu) return;
+
+    elements.sortBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.sortMenu.classList.toggle('show');
+    });
+
+    elements.sortMenu.querySelectorAll('[data-sort]').forEach(item => {
+        item.addEventListener('click', () => {
+            currentSort = item.dataset.sort;
+            elements.sortBtn.querySelector('span').textContent = item.textContent;
+            elements.sortMenu.classList.remove('show');
+            renderGames();
+        });
+    });
+
+    document.addEventListener('click', () => {
+        elements.sortMenu.classList.remove('show');
+    });
+}
+
+// ============================================
+// VIEW TOGGLE
+// ============================================
+function initializeViewToggle() {
+    elements.viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            elements.viewBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            viewMode = btn.dataset.view;
+            localStorage.setItem('gemtraViewMode', viewMode);
+            
+            if (elements.gamesGrid) {
+                elements.gamesGrid.className = `games-grid ${viewMode}-view`;
+            }
+        });
+    });
+}
+
+// ============================================
+// GAME MODAL
+// ============================================
+function initializeModal() {
+    if (elements.modalClose) {
+        elements.modalClose.addEventListener('click', closeGame);
+    }
+
+    if (elements.modalBackdrop) {
+        elements.modalBackdrop.addEventListener('click', closeGame);
+    }
+
+    if (elements.modalFullscreen) {
+        elements.modalFullscreen.addEventListener('click', toggleFullscreen);
+    }
+
+    if (elements.modalFavorite) {
+        elements.modalFavorite.addEventListener('click', () => {
+            if (currentGame) {
+                toggleFavorite(currentGame);
+                updateModalFavoriteButton();
+            }
+        });
+    }
+
+    if (elements.modalRestart) {
+        elements.modalRestart.addEventListener('click', restartGame);
+    }
+
+    // Track last escape press for double-escape to exit
+    let lastEscapeTime = 0;
+    
+    // Close on escape key (double-tap Escape when iframe is focused to exit)
+    document.addEventListener('keydown', (e) => {
+        // Skip if user is actively in the game iframe
+        const isIframeFocused = document.activeElement === elements.gameIframe;
+        
+        if (e.key === 'Escape' && elements.gameModal?.classList.contains('active')) {
+            if (isIframeFocused) {
+                // If iframe is focused, only close on double-escape (within 500ms)
+                const now = Date.now();
+                if (now - lastEscapeTime < 500) {
+                    closeGame();
+                    lastEscapeTime = 0;
+                } else {
+                    lastEscapeTime = now;
+                    // Let the game handle the first escape
+                }
+            } else {
+                // If iframe not focused, close immediately
+                closeGame();
+            }
+        }
+        // Only trigger F and R shortcuts if iframe isn't focused (so game can use these keys)
+        if (!isIframeFocused) {
+            // Fullscreen on F key
+            if (e.key === 'f' && elements.gameModal?.classList.contains('active')) {
+                toggleFullscreen();
+            }
+            // Restart on R key
+            if (e.key === 'r' && elements.gameModal?.classList.contains('active')) {
+                restartGame();
+            }
+        }
+    });
+}
+
+function openGame(gameKey) {
+    const game = GAMES[gameKey];
+    if (!game) return;
+
+    // Handle games that need to open in new tab (like neal.fun)
+    if (game.newTab) {
+        window.open(game.url, '_blank');
+        // Still track play count
+        incrementPlayCount(gameKey);
+        addToRecentlyPlayed(gameKey);
+        showToast(`Opening ${game.name} in new tab`, 'success');
+        return;
+    }
+
+    // NAVIGATE TO DEDICATED GAME PAGE (better performance, especially on iPad)
+    // Build the play page URL with game info as query params
+    const playUrl = new URL('play.html', window.location.href);
+    playUrl.searchParams.set('game', gameKey);
+    playUrl.searchParams.set('url', game.url);
+    playUrl.searchParams.set('name', game.name);
+    playUrl.searchParams.set('touch', game.touchscreen ? 'true' : 'false');
+    
+    // Track before navigating
+    incrementPlayCount(gameKey);
+    addToRecentlyPlayed(gameKey);
+    
+    // Navigate to the dedicated game page
+    window.location.href = playUrl.toString();
+    return;
+
+    // === OLD MODAL CODE (KEPT FOR REFERENCE) ===
+    /*
+    currentGame = gameKey;
+
+    // Update modal
+    if (elements.modalTitle) elements.modalTitle.textContent = game.name;
+    // Use proxy for blocked domains
+    if (elements.gameIframe) elements.gameIframe.src = getProxiedGameUrl(game.url);
+
+    // Show modal
+    if (elements.gameModal) {
+        elements.gameModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // PERFORMANCE: Hide page sections (not main, since modal is inside main)
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+    const hero = document.querySelector('.hero');
+    const featured = document.querySelector('.featured-section');
+    const filter = document.querySelector('.filter-section');
+    const gamesSection = document.querySelector('.games-section');
+    if (header) header.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+    if (hero) hero.style.display = 'none';
+    if (featured) featured.style.display = 'none';
+    if (filter) filter.style.display = 'none';
+    if (gamesSection) gamesSection.style.display = 'none';
+
+    // Focus the iframe so keyboard events go to the game
+    // Use preventScroll to avoid scrolling to bottom
+    setTimeout(() => {
+        if (elements.gameIframe) {
+            elements.gameIframe.focus({ preventScroll: true });
+            window.scrollTo(0, 0);
+        }
+    }, 100);
+
+    // Update favorite button
+    updateModalFavoriteButton();
+
+    // Add to recently played
+    addToRecentlyPlayed(gameKey);
+    */
+
+    // Increment play count in Firebase (real-time!)
+    incrementPlayCount(gameKey);
+
+    // Show toast
+    showToast(`Now playing: ${game.name}`, 'success');
+}
+
+function closeGame() {
+    // First, clear the iframe src to prevent beforeunload warnings from games
+    if (elements.gameIframe) {
+        // Remove the iframe temporarily to bypass game's beforeunload event
+        const iframe = elements.gameIframe;
+        const parent = iframe.parentNode;
+        
+        // Create a new clean iframe to replace the old one
+        const newIframe = document.createElement('iframe');
+        newIframe.id = 'gameIframe';
+        newIframe.src = 'about:blank';
+        newIframe.allow = 'autoplay; fullscreen; accelerometer; gyroscope; gamepad; microphone; camera';
+        newIframe.allowFullscreen = true;
+        
+        // Replace old iframe with new one (bypasses beforeunload)
+        parent.replaceChild(newIframe, iframe);
+        elements.gameIframe = newIframe;
+    }
+
+    if (elements.gameModal) {
+        elements.gameModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // PERFORMANCE: Restore page sections visibility
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+    const hero = document.querySelector('.hero');
+    const featured = document.querySelector('.featured-section');
+    const filter = document.querySelector('.filter-section');
+    const gamesSection = document.querySelector('.games-section');
+    if (header) header.style.display = '';
+    if (footer) footer.style.display = '';
+    if (hero) hero.style.display = '';
+    if (featured) featured.style.display = '';
+    if (filter) filter.style.display = '';
+    if (gamesSection) gamesSection.style.display = '';
+
+    currentGame = null;
+
+    // Exit fullscreen if active
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+}
+
+function toggleFullscreen() {
+    const modalContainer = document.querySelector('.modal-container');
+    if (!modalContainer) return;
+
+    if (!document.fullscreenElement) {
+        modalContainer.requestFullscreen().catch(err => {
+            console.error('Fullscreen error:', err);
+            showToast('Fullscreen not available', 'error');
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function restartGame() {
+    if (elements.gameIframe && currentGame) {
+        elements.gameIframe.src = elements.gameIframe.src;
+        showToast('Game restarted', 'info');
+    }
+}
+
+function updateModalFavoriteButton() {
+    if (!elements.modalFavorite || !currentGame) return;
+
+    const isFavorite = favorites.includes(currentGame);
+    const svg = elements.modalFavorite.querySelector('svg');
+    
+    if (svg) {
+        svg.setAttribute('fill', isFavorite ? 'currentColor' : 'none');
+    }
+    
+    elements.modalFavorite.classList.toggle('active', isFavorite);
+}
+
+// ============================================
+// FAVORITES SYSTEM
+// ============================================
+function toggleFavorite(gameKey) {
+    const index = favorites.indexOf(gameKey);
+    
+    if (index > -1) {
+        favorites.splice(index, 1);
+        showToast('Removed from favorites', 'info');
+    } else {
+        favorites.push(gameKey);
+        showToast('Added to favorites!', 'success');
+    }
+
+    localStorage.setItem('gemtraFavorites', JSON.stringify(favorites));
+    
+    // Update UI
+    const card = document.querySelector(`.game-card[data-game="${gameKey}"]`);
+    if (card) {
+        const btn = card.querySelector('.favorite-btn');
+        const svg = btn?.querySelector('svg');
+        if (btn) btn.classList.toggle('active', favorites.includes(gameKey));
+        if (svg) svg.setAttribute('fill', favorites.includes(gameKey) ? 'currentColor' : 'none');
+    }
+
+    // Update favorites count in nav
+    updateFavoritesCount();
+
+    // Re-render if on favorites filter
+    if (currentFilter === 'favorites') {
+        renderGames();
+    }
+}
+
+// ============================================
+// RECENTLY PLAYED
+// ============================================
+function addToRecentlyPlayed(gameKey) {
+    recentlyPlayed = recentlyPlayed.filter(key => key !== gameKey);
+    recentlyPlayed.unshift(gameKey);
+    recentlyPlayed = recentlyPlayed.slice(0, 10);
+    localStorage.setItem('gemtraRecent', JSON.stringify(recentlyPlayed));
+}
+
+// ============================================
+// THEME TOGGLE
+// ============================================
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('gemtraTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    if (elements.themeToggle) {
+        elements.themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('gemtraTheme', newTheme);
+
+            // Update icon
+            const icon = elements.themeToggle.querySelector('svg');
+            if (icon) {
+                if (newTheme === 'light') {
+                    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+                } else {
+                    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                }
+            }
+
+            showToast(`${newTheme === 'dark' ? 'Dark' : 'Light'} mode activated`, 'info');
+        });
+    }
+}
+
+// ============================================
+// MOBILE MENU
+// ============================================
+function initializeMobileMenu() {
+    if (!elements.navToggle || !elements.navMenu) return;
+
+    elements.navToggle.addEventListener('click', () => {
+        elements.navMenu.classList.toggle('active');
+        elements.navToggle.classList.toggle('active');
+    });
+
+    // Close menu when clicking a link
+    elements.navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            elements.navMenu.classList.remove('active');
+            elements.navToggle.classList.remove('active');
+        });
+    });
+}
+
+// ============================================
+// BACK TO TOP
+// ============================================
+function initializeBackToTop() {
+    if (!elements.backToTop) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            elements.backToTop.classList.add('visible');
+        } else {
+            elements.backToTop.classList.remove('visible');
+        }
+    });
+
+    elements.backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// ============================================
+// SMOOTH SCROLL
+// ============================================
+function initializeSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href.length > 1) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+}
+
+// ============================================
+// HERO PLAY BUTTON
+// ============================================
+function initializeHeroPlay() {
+    if (elements.heroPlayBtn) {
+        elements.heroPlayBtn.addEventListener('click', () => {
+            openGame('gd-main');
+        });
+    }
+}
+
+// ============================================
+// UPDATE GAME COUNT
+// ============================================
+function updateGameCount() {
+    const count = Object.keys(GAMES).length;
+    updateGameCountDisplay(count);
+}
+
+function updateGameCountDisplay(count) {
+    if (elements.gameCountDisplay) {
+        elements.gameCountDisplay.textContent = `(${count})`;
+    }
+    // Also update the hero stat games counter
+    const statGamesEl = document.getElementById('statGames');
+    if (statGamesEl) {
+        statGamesEl.textContent = count;
+    }
+    // Update the hero badge count too
+    const heroBadgeCountEl = document.getElementById('heroBadgeCount');
+    if (heroBadgeCountEl) {
+        heroBadgeCountEl.textContent = count;
+    }
+}
+
+// ============================================
+// UPDATE SECTION TITLE
+// ============================================
+function updateSectionTitle() {
+    const sectionTitle = document.querySelector('.games-section .section-title');
+    if (!sectionTitle) return;
+    
+    const categoryInfo = CATEGORIES[currentFilter] || CATEGORIES.all;
+    const icon = sectionTitle.querySelector('.title-icon');
+    
+    // Update the icon
+    if (icon) {
+        icon.innerHTML = categoryInfo.icon;
+    }
+    
+    // Find and update the text node between icon and count
+    const childNodes = Array.from(sectionTitle.childNodes);
+    for (let i = 0; i < childNodes.length; i++) {
+        const node = childNodes[i];
+        if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent.trim();
+            if (text && text !== '') {
+                node.textContent = ` ${categoryInfo.name} `;
+                break;
+            }
+        }
+    }
+}
+
+// ============================================
+// UPDATE FAVORITES COUNT
+// ============================================
+function updateFavoritesCount() {
+    if (elements.favoritesCount) {
+        elements.favoritesCount.textContent = favorites.length;
+    }
+}
+
+// ============================================
+// RENDER FEATURED GAMES
+// ============================================
+function renderFeaturedGames() {
+    if (!elements.featuredGrid) return;
+
+    const featuredGames = Object.entries(GAMES).filter(([key, game]) => game.featured);
+    
+    elements.featuredGrid.innerHTML = '';
+    
+    // Show all featured games (no limit)
+    featuredGames.forEach(([key, game]) => {
+        const card = createGameCard(key, game, 0);
+        elements.featuredGrid.appendChild(card);
+    });
+}
+
+// ============================================
+// TOAST NOTIFICATIONS
+// ============================================
+function showToast(message, type = 'info', title = null) {
+    // Get container, or create one if it doesn't exist
+    let container = elements.toastContainer || document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+        elements.toastContainer = container;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icons = {
+        success: '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+        error: '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+        info: '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+        warning: '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>'
+    };
+    
+    const titles = {
+        success: 'Success',
+        error: 'Error',
+        info: 'Info',
+        warning: 'Warning'
+    };
+
+    toast.innerHTML = `
+        <button class="toast-close">×</button>
+        <div class="toast-header">
+            <span class="toast-icon">${icons[type] || icons.info}</span>
+            <div class="toast-content">
+                <div class="toast-title">${title || titles[type] || titles.info}</div>
+                <div class="toast-message">${escapeHtml(message)}</div>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+    
+    // Close button handler with proper cleanup
+    const closeBtn = toast.querySelector('.toast-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (toast._removeTimeout) {
+                clearTimeout(toast._removeTimeout);
+                toast._removeTimeout = null;
+            }
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 300);
+        });
+    }
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    // Remove after delay
+    const removeTimeout = setTimeout(() => {
+        toast._removeTimeout = null;
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 300);
+    }, 4000);
+    
+    // Store timeout reference for cleanup
+    toast._removeTimeout = removeTimeout;
+    
+    return toast;
+}
+
+// Show confirmation toast with actions (inline instead of alert)
+function showConfirmToast(message, title, onConfirm, onCancel = null) {
+    // Get container, or create one if it doesn't exist
+    let container = elements.toastContainer || document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+        elements.toastContainer = container;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-warning';
+    
+    toast.innerHTML = `
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        <div class="toast-header">
+            <span class="toast-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span>
+            <div class="toast-content">
+                <div class="toast-title">${escapeHtml(title)}</div>
+                <div class="toast-message">${escapeHtml(message)}</div>
+            </div>
+        </div>
+        <div class="toast-actions">
+            <button class="toast-btn toast-btn-secondary" data-action="cancel">Cancel</button>
+            <button class="toast-btn toast-btn-primary" data-action="confirm">Delete</button>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Button handlers
+    const confirmBtn = toast.querySelector('[data-action="confirm"]');
+    const cancelBtn = toast.querySelector('[data-action="cancel"]');
+    
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            toast.remove();
+            if (typeof onConfirm === 'function') onConfirm();
+        });
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            toast.remove();
+            if (typeof onCancel === 'function') onCancel();
+        });
+    }
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    // Don't auto-remove confirmation toasts - user must click
+    return toast;
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
+
+// Validate URL is safe to render as link
+function isValidUrl(str) {
+    if (!str || typeof str !== 'string') return false;
+    try {
+        const url = new URL(str);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (e) {
+        return false;
+    }
+}
+
+// ============================================
+// AUTH & USER MENU
+// ============================================
+function initializeAuth() {
+    const userBtn = document.getElementById('userBtn');
+    const userMenu = document.getElementById('userMenu');
+
+    // User button click
+    if (userBtn) {
+        userBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (window.currentUser) {
+                toggleUserMenu();
+            } else {
+                openAuthModal();
+            }
+        });
+    }
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#userMenu') && !e.target.closest('#userBtn')) {
+            closeUserMenu();
+        }
+    });
+
+    // Listen for auth state changes
+    window.addEventListener('authStateChanged', (e) => {
+        updateAuthUI(e.detail);
+        // Setup ticket notifications when user logs in
+        setupTicketNotifications(e.detail);
+    });
+}
+
+// ============================================
+// TICKET NOTIFICATION SYSTEM
+// ============================================
+function setupTicketNotifications(user) {
+    // Clean up previous listener
+    if (ticketNotificationListener) {
+        try {
+            ticketNotificationListener();
+        } catch (e) {
+            console.warn('Error cleaning up ticket listener:', e);
+        }
+        ticketNotificationListener = null;
+    }
+    
+    if (!user || !window.firebaseDB) {
+        updateNotificationBadge(0);
+        return;
+    }
+    
+    try {
+        const ticketsRef = window.firebaseRef(window.firebaseDB, 'tickets');
+        ticketNotificationListener = window.firebaseOnValue(ticketsRef, (snapshot) => {
+            try {
+                if (!snapshot.exists()) {
+                    updateNotificationBadge(0);
+                    return;
+                }
+                
+                const allTickets = [];
+                snapshot.forEach((child) => {
+                    try {
+                        const ticket = { id: child.key, ...child.val() };
+                        if (ticket.userId === user.uid) {
+                            allTickets.push(ticket);
+                        }
+                    } catch (e) {
+                        // Skip malformed ticket
+                    }
+                });
+                
+                // Calculate total unread updates
+                const lastChecked = parseInt(localStorage.getItem('gemtraLastTicketCheck')) || 0;
+                let totalUnread = 0;
+                let newNotification = null;
+                
+                allTickets.forEach(ticket => {
+                    // Count unread messages from admin
+                    const unreadFromAdmin = ticket.unreadUser || 0;
+                    totalUnread += unreadFromAdmin;
+                    
+                    // Check if there's a new notification (status update or message)
+                    const statusTime = ticket.statusUpdatedAt || 0;
+                    const lastActivity = ticket.lastActivity || 0;
+                    
+                    if (statusTime > lastChecked || lastActivity > lastChecked) {
+                        if (unreadFromAdmin > 0) {
+                            newNotification = ticket;
+                        }
+                    }
+                });
+                
+                // Show toast for NEW notifications (when count increases)
+                if (totalUnread > previousUnreadCount && newNotification) {
+                    const statusText = getStatusText(newNotification.status);
+                    const toastMsg = newNotification.status === 'rejected' && newNotification.rejectionReason
+                        ? `"${newNotification.title}" - ${statusText}`
+                        : `Update on "${newNotification.title}"`;
+                    showToast(toastMsg, 'info');
+                }
+                
+                previousUnreadCount = totalUnread;
+                updateNotificationBadge(totalUnread);
+            } catch (e) {
+                console.warn('Error processing tickets:', e);
+                updateNotificationBadge(0);
+            }
+        }, (error) => {
+            console.warn('Ticket notification listener error:', error);
+            updateNotificationBadge(0);
+        });
+    } catch (error) {
+        console.warn('Error setting up ticket notifications:', error);
+        updateNotificationBadge(0);
+    }
+}
+
+function getStatusText(status) {
+    const statusLabels = {
+        'pending': 'Pending Review',
+        'in-progress': 'In Progress',
+        'completed': 'Completed!',
+        'rejected': 'Rejected',
+        'closed': 'Closed'
+    };
+    return statusLabels[status] || status;
+}
+
+function updateNotificationBadge(count) {
+    // Update badge on user button
+    let badge = document.getElementById('notificationBadge');
+    if (!badge) {
+        const userBtn = document.getElementById('userBtn');
+        if (userBtn) {
+            badge = document.createElement('span');
+            badge.id = 'notificationBadge';
+            badge.className = 'notification-badge';
+            userBtn.appendChild(badge);
+        }
+    }
+    
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 9 ? '9+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+    
+    // Also update My Requests badge
+    const myRequestsBadge = document.getElementById('myRequestsBadge');
+    if (myRequestsBadge) {
+        if (count > 0) {
+            myRequestsBadge.textContent = count;
+            myRequestsBadge.style.display = 'inline';
+        } else {
+            myRequestsBadge.style.display = 'none';
+        }
+    }
+    
+    // Update support panel badge
+    const supportBadge = document.getElementById('supportMyRequestsCount');
+    if (supportBadge) {
+        if (count > 0) {
+            supportBadge.textContent = count;
+            supportBadge.style.display = 'inline';
+        } else {
+            supportBadge.style.display = 'none';
+        }
+    }
+}
+
+function markTicketsAsRead() {
+    localStorage.setItem('gemtraLastTicketCheck', Date.now().toString());
+    previousUnreadCount = 0;
+}
+
+function updateAuthUI(user) {
+    const userBtn = document.getElementById('userBtn');
+    const userName = document.getElementById('userMenuName');
+    const userEmail = document.getElementById('userMenuEmail');
+    const userAvatar = document.getElementById('userMenuAvatar');
+    const adminBadge = document.getElementById('adminBadge');
+    const adminLink = document.getElementById('adminLink');
+    const signOutBtn = document.getElementById('signOutBtn');
+
+    if (user) {
+        userBtn?.classList.add('logged-in');
+        
+        const displayName = user.displayName || user.email?.split('@')[0] || 'Guest';
+        const email = user.email || (user.isAnonymous ? 'Anonymous User' : '');
+        
+        if (userName) userName.textContent = displayName;
+        if (userEmail) userEmail.textContent = email;
+        if (userAvatar) userAvatar.textContent = displayName[0].toUpperCase();
+
+        // Check if admin
+        const isAdmin = window.ADMINS && window.ADMINS[user.uid];
+        if (adminBadge) adminBadge.style.display = isAdmin ? 'flex' : 'none';
+        if (adminLink) adminLink.style.display = isAdmin ? 'flex' : 'none';
+        if (signOutBtn) signOutBtn.style.display = 'flex';
+
+        // Update user count in Firebase
+        if (window.firebaseReady) {
+            const userRef = window.firebaseRef(window.firebaseDB, `users/${user.uid}`);
+            window.firebaseUpdate(userRef, {
+                lastActive: Date.now(),
+                displayName: displayName,
+                email: email
+            }).catch(() => {});
+        }
+    } else {
+        userBtn?.classList.remove('logged-in');
+        if (userName) userName.textContent = 'Guest';
+        if (userEmail) userEmail.textContent = 'Not signed in';
+        if (userAvatar) userAvatar.textContent = 'G';
+        if (adminBadge) adminBadge.style.display = 'none';
+        if (adminLink) adminLink.style.display = 'none';
+        if (signOutBtn) signOutBtn.style.display = 'none';
+        
+        // Clear notifications when logged out
+        updateNotificationBadge(0);
+    }
+}
+
+function openAuthModal() {
+    document.getElementById('authModal')?.classList.add('open');
+}
+
+function closeAuthModal() {
+    document.getElementById('authModal')?.classList.remove('open');
+}
+
+function toggleUserMenu() {
+    document.getElementById('userMenu')?.classList.toggle('open');
+}
+
+function closeUserMenu() {
+    document.getElementById('userMenu')?.classList.remove('open');
+}
+
+// ============================================
+// REQUEST MODAL
+// ============================================
+function openRequestModal(type = 'game-request') {
+    const modal = document.getElementById('requestModal');
+    const title = document.getElementById('requestModalTitle');
+    const desc = document.getElementById('requestModalDesc');
+    const typeInput = document.getElementById('requestType');
+    const urlGroup = document.getElementById('gameUrlGroup');
+
+    const configs = {
+        'game-request': {
+            title: 'Request a Game',
+            desc: "Let us know what game you'd like us to add!",
+            showUrl: true
+        },
+        'bug-report': {
+            title: 'Report a Bug',
+            desc: 'Found something broken? Let us know!',
+            showUrl: false
+        },
+        'suggestion': {
+            title: 'Make a Suggestion',
+            desc: 'Have an idea to improve Gemtra? Share it!',
+            showUrl: false
+        },
+        'feedback': {
+            title: 'Send Feedback',
+            desc: 'Tell us what you think about Gemtra!',
+            showUrl: false
+        }
+    };
+
+    const config = configs[type] || configs['game-request'];
+    
+    if (title) title.textContent = config.title;
+    if (desc) desc.textContent = config.desc;
+    if (typeInput) typeInput.value = type;
+    if (urlGroup) urlGroup.style.display = config.showUrl ? 'block' : 'none';
+
+    // Pre-fill with search query if requesting from no-results
+    const searchInput = document.getElementById('mainSearchInput') || document.getElementById('searchInput');
+    if (type === 'game-request' && searchInput?.value) {
+        document.getElementById('requestTitle').value = searchInput.value;
+    }
+
+    closeUserMenu();
+    modal?.classList.add('open');
+}
+
+function closeRequestModal() {
+    document.getElementById('requestModal')?.classList.remove('open');
+    document.getElementById('requestForm')?.reset();
+}
+
+async function submitRequest(e) {
+    e.preventDefault();
+
+    // Check online status
+    if (!navigator.onLine) {
+        showToast('You appear to be offline. Please check your connection.', 'error');
+        return;
+    }
+
+    if (!window.firebaseReady || !window.firebaseDB) {
+        showToast('Unable to connect to server. Please try again later.', 'error');
+        return;
+    }
+
+    const type = document.getElementById('requestType')?.value || 'game-request';
+    const titleInput = document.getElementById('requestTitle');
+    const descInput = document.getElementById('requestDescription');
+    const urlInput = document.getElementById('requestGameUrl');
+    
+    const title = titleInput?.value.trim();
+    const description = descInput?.value.trim();
+    const gameUrl = urlInput?.value.trim();
+
+    if (!title || !description) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+    }
+    
+    // Basic validation
+    if (title.length < 3) {
+        showToast('Title must be at least 3 characters', 'error');
+        return;
+    }
+    
+    if (description.length < 10) {
+        showToast('Description must be at least 10 characters', 'error');
+        return;
+    }
+
+    const user = window.currentUser;
+    const ticket = {
+        type,
+        title: title.substring(0, 200), // Limit title length
+        description: description.substring(0, 2000), // Limit description length
+        gameUrl: gameUrl ? gameUrl.substring(0, 500) : null,
+        userId: user?.uid || 'anonymous',
+        userName: user?.displayName || user?.email?.split('@')[0] || 'Anonymous',
+        userEmail: user?.email || null,
+        status: 'pending',
+        createdAt: Date.now(),
+        timestamp: Date.now()
+    };
+
+    // Disable submit button during submission
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+    }
+
+    try {
+        const ticketsRef = window.firebaseRef(window.firebaseDB, 'tickets');
+        await window.firebasePush(ticketsRef, ticket);
+        
+        closeRequestModal();
+        showToast('Request submitted successfully! We\'ll review it soon.', 'success', 'Submitted!');
+        
+        // Clear the form
+        if (titleInput) titleInput.value = '';
+        if (descInput) descInput.value = '';
+        if (urlInput) urlInput.value = '';
+        
+    } catch (error) {
+        console.error('Error submitting request:', error);
+        
+        const errorMsg = error.code === 'PERMISSION_DENIED'
+            ? 'Permission denied. Please sign in and try again.'
+            : 'Failed to submit request. Please try again.';
+        
+        showToast(errorMsg, 'error');
+    } finally {
+        // Re-enable submit button
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                Submit Request
+            `;
+        }
+    }
+}
+
+// ============================================
+// AI ASSISTANT
+// ============================================
+// Cloudflare Worker proxy for AI requests
+const AI_API_URL = 'https://gemtra-ai.modmojheh.workers.dev';
+
+let aiConversation = [
+    {
+        role: 'system',
+        content: `You are Gemtra AI, a gaming assistant for Gemtra Games. Be brief and helpful.
+
+GAMES WE HAVE:
+- FNAF: FNAF 1-4, Sister Location, FNAF 6, Ultimate Custom Night, FNAF World, FNAF Plus, Free Roam, Five Nights at Candy's
+- Horror: Backrooms, Granny, Baldi's Basics
+- Rhythm: Geometry Dash (main, Lite, Meltdown, SubZero, World)
+- Other: Minecraft 1.8.8, Pokemon Emerald, Slope, Subway Surfers, Run 3, Moto X3M, Stickman Hook, etc.
+
+Categories: rhythm, horror, action, racing, arcade, puzzle, multiplayer, fighting, adventure, casual, sports.
+
+Rules:
+- Keep responses under 50 words
+- Suggest specific games
+- If asked about a game we don't have, say "We don't have that, but you can request it!"`
+    }
+];
+
+function toggleAIChat() {
+    const chat = document.getElementById('aiChat');
+    chat?.classList.toggle('open');
+}
+
+// Support Panel Functions
+function openSupportPanel() {
+    const panel = document.getElementById('supportPanel');
+    const backdrop = document.getElementById('supportBackdrop');
+    panel?.classList.add('open');
+    backdrop?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    
+    // Update sign in button visibility based on auth state
+    const signInBtn = document.getElementById('supportSignInBtn');
+    if (signInBtn && window.currentUser) {
+        signInBtn.style.display = 'none';
+    }
+}
+
+function closeSupportPanel() {
+    const panel = document.getElementById('supportPanel');
+    const backdrop = document.getElementById('supportBackdrop');
+    panel?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ============================================
+// MY REQUESTS PANEL
+// ============================================
+
+let currentRequestId = null;
+let requestChatListener = null;
+
+function openMyRequests() {
+    const user = window.currentUser;
+    if (!user) {
+        showToast('Please sign in to view your requests', 'warning');
+        openAuthModal();
+        return;
+    }
+    
+    // Close user menu
+    document.getElementById('userMenu')?.classList.remove('open');
+    
+    const panel = document.getElementById('myRequestsPanel');
+    const backdrop = document.getElementById('myRequestsBackdrop');
+    panel?.classList.add('open');
+    backdrop?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    
+    loadMyRequests();
+}
+
+function closeMyRequests() {
+    const panel = document.getElementById('myRequestsPanel');
+    const backdrop = document.getElementById('myRequestsBackdrop');
+    panel?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+async function loadMyRequests() {
+    const user = window.currentUser;
+    if (!user || !window.firebaseDB) {
+        console.warn('Cannot load requests: user or Firebase not available');
+        return;
+    }
+    
+    const listEl = document.getElementById('myRequestsList');
+    const emptyEl = document.getElementById('myRequestsEmpty');
+    
+    if (!listEl || !emptyEl) {
+        console.warn('Request list elements not found');
+        return;
+    }
+    
+    try {
+        const ticketsRef = window.firebaseRef(window.firebaseDB, 'tickets');
+        const snapshot = await window.firebaseGet(ticketsRef);
+        
+        if (!snapshot.exists()) {
+            listEl.innerHTML = '';
+            emptyEl.style.display = 'block';
+            return;
+        }
+        
+        const allTickets = snapshot.val() || {};
+        const userTickets = [];
+        
+        // Filter tickets by user with null safety
+        Object.entries(allTickets).forEach(([id, ticket]) => {
+            if (ticket && ticket.userId === user.uid) {
+                userTickets.push({ id, ...ticket });
+            }
+        });
+        
+        // Sort by date (newest first)
+        userTickets.sort((a, b) => (b.createdAt || b.timestamp || 0) - (a.createdAt || a.timestamp || 0));
+        
+        if (userTickets.length === 0) {
+            listEl.innerHTML = '';
+            emptyEl.style.display = 'block';
+            return;
+        }
+        
+        emptyEl.style.display = 'none';
+        listEl.innerHTML = userTickets.map(ticket => {
+            try {
+                return renderRequestCard(ticket);
+            } catch (e) {
+                console.warn('Error rendering ticket card:', e);
+                return '';
+            }
+        }).join('');
+        
+        // Update badge
+        updateMyRequestsBadge(userTickets);
+        
+    } catch (error) {
+        console.error('Error loading requests:', error);
+        showToast('Failed to load requests. Please try again.', 'error');
+        listEl.innerHTML = `
+            <div class="request-error">
+                <p>Unable to load requests</p>
+                <button class="btn btn-secondary" onclick="loadMyRequests()">Try Again</button>
+            </div>
+        `;
+    }
+}
+
+function renderRequestCard(ticket) {
+    const typeLabels = {
+        'game-request': 'Game Request',
+        'bug-report': 'Bug Report',
+        'suggestion': 'Suggestion',
+        'feedback': 'Feedback'
+    };
+    
+    const statusLabels = {
+        'pending': 'Pending Review',
+        'in-progress': 'In Progress',
+        'completed': 'Completed',
+        'rejected': 'Rejected',
+        'closed': 'Closed'
+    };
+    
+    const dateVal = ticket.createdAt || ticket.timestamp;
+    const date = dateVal ? new Date(dateVal).toLocaleDateString() : 'Unknown';
+    const status = ticket.status || 'pending';
+    const unreadCount = ticket.unreadUser || 0;
+    const hasUpdate = unreadCount > 0;
+    const canDeleteSafely = status === 'completed' || status === 'rejected' || status === 'closed';
+    
+    // Show rejection reason preview if rejected
+    const rejectionPreview = status === 'rejected' && ticket.rejectionReason 
+        ? `<p class="request-card-rejection">Reason: ${escapeHtml(ticket.rejectionReason)}</p>` 
+        : '';
+    
+    return `
+        <div class="request-card ${hasUpdate ? 'has-update' : ''}" data-ticket-id="${ticket.id}" data-status="${status}">
+            ${hasUpdate ? '<div class="update-indicator"></div>' : ''}
+            <button class="request-delete-btn" onclick="event.stopPropagation(); deleteRequest('${ticket.id}', '${status}')" title="Delete request">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </button>
+            <div class="request-card-content" onclick="openRequestChat('${ticket.id}')">
+                <div class="request-card-header">
+                    <h5 class="request-card-title">${escapeHtml(ticket.title || 'Untitled')}</h5>
+                    <span class="request-card-type ${ticket.type}">${typeLabels[ticket.type] || ticket.type}</span>
+                </div>
+                <p class="request-card-desc">${escapeHtml(ticket.description || '')}</p>
+                ${rejectionPreview}
+                <div class="request-card-footer">
+                    <span class="request-card-status ${status}">
+                        <span class="status-dot"></span>
+                        ${statusLabels[status] || status}
+                    </span>
+                    <span class="request-card-date">${date}</span>
+                    ${unreadCount > 0 ? `<span class="request-card-unread">${unreadCount} new</span>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Delete a request with confirmation for active requests
+function deleteRequest(ticketId, status) {
+    const canDeleteSafely = status === 'completed' || status === 'rejected' || status === 'closed';
+    
+    if (!canDeleteSafely) {
+        // Show warning for active requests using inline confirm dialog
+        showConfirmDialog(
+            'This request is still being processed. Are you sure you want to delete it?',
+            'Delete Active Request?',
+            () => performDeleteRequest(ticketId)
+        );
+    } else {
+        // Direct delete for completed/rejected
+        performDeleteRequest(ticketId);
+    }
+}
+
+// Inline confirmation dialog (no alerts)
+function showConfirmDialog(message, title, onConfirm) {
+    // Remove any existing dialog
+    const existing = document.querySelector('.confirm-dialog-overlay');
+    if (existing) existing.remove();
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-dialog-overlay';
+    overlay.innerHTML = `
+        <div class="confirm-dialog">
+            <h4>${title}</h4>
+            <p>${message}</p>
+            <div class="confirm-dialog-actions">
+                <button class="confirm-dialog-btn cancel">Cancel</button>
+                <button class="confirm-dialog-btn delete">Delete</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Animate in
+    setTimeout(() => overlay.classList.add('show'), 10);
+    
+    // Button handlers
+    overlay.querySelector('.cancel').addEventListener('click', () => {
+        overlay.remove();
+    });
+    
+    overlay.querySelector('.delete').addEventListener('click', () => {
+        overlay.remove();
+        onConfirm();
+    });
+    
+    // Close on backdrop click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+async function performDeleteRequest(ticketId) {
+    if (!ticketId) {
+        showToast('Invalid request ID', 'error');
+        return;
+    }
+    
+    if (!navigator.onLine) {
+        showToast('You appear to be offline. Please check your connection.', 'error');
+        return;
+    }
+    
+    if (!window.firebaseDB || !window.firebaseRemove) {
+        showToast('Unable to connect to server', 'error');
+        return;
+    }
+    
+    try {
+        const ticketRef = window.firebaseRef(window.firebaseDB, `tickets/${ticketId}`);
+        await window.firebaseRemove(ticketRef);
+        
+        showToast('Request deleted successfully', 'success', 'Deleted');
+        
+        // Refresh the list
+        loadMyRequests();
+        
+    } catch (error) {
+        console.error('Error deleting request:', error);
+        
+        const errorMsg = error.code === 'PERMISSION_DENIED'
+            ? 'Permission denied. You can only delete your own requests.'
+            : 'Failed to delete request. Please try again.';
+        
+        showToast(errorMsg, 'error');
+    }
+}
+
+function updateMyRequestsBadge(tickets) {
+    const badge = document.getElementById('myRequestsBadge');
+    if (!badge) return;
+    
+    const unreadTotal = tickets.reduce((sum, t) => sum + (t.unreadUser || 0), 0);
+    if (unreadTotal > 0) {
+        badge.textContent = unreadTotal;
+        badge.style.display = 'inline';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// ============================================
+// REQUEST CHAT PANEL
+// ============================================
+
+function openRequestChat(ticketId) {
+    currentRequestId = ticketId;
+    
+    closeMyRequests();
+    
+    const panel = document.getElementById('requestChatPanel');
+    const backdrop = document.getElementById('requestChatBackdrop');
+    panel?.classList.add('open');
+    backdrop?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    
+    loadRequestChat(ticketId);
+}
+
+function closeRequestChat() {
+    const panel = document.getElementById('requestChatPanel');
+    const backdrop = document.getElementById('requestChatBackdrop');
+    panel?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+    
+    // Remove listener
+    if (requestChatListener) {
+        requestChatListener();
+        requestChatListener = null;
+    }
+    
+    currentRequestId = null;
+}
+
+async function loadRequestChat(ticketId) {
+    if (!window.firebaseDB) {
+        showToast('Unable to connect to server', 'error');
+        closeRequestChat();
+        return;
+    }
+    
+    const titleEl = document.getElementById('requestChatTitle');
+    const statusEl = document.getElementById('requestChatStatus');
+    const detailsEl = document.getElementById('requestChatDetails');
+    const messagesEl = document.getElementById('requestChatMessages');
+    
+    try {
+        // Load ticket details
+        const ticketRef = window.firebaseRef(window.firebaseDB, `tickets/${ticketId}`);
+        const snapshot = await window.firebaseGet(ticketRef);
+        
+        if (!snapshot.exists()) {
+            showToast('Request not found', 'error');
+            closeRequestChat();
+            return;
+        }
+        
+        const ticket = snapshot.val();
+        if (!ticket) {
+            showToast('Invalid request data', 'error');
+            closeRequestChat();
+            return;
+        }
+        
+        const status = ticket.status || 'pending';
+        
+        if (titleEl) titleEl.textContent = ticket.title || 'Untitled';
+        if (statusEl) {
+            const statusLabels = {
+                'pending': 'Pending Review',
+                'in-progress': 'In Progress',
+                'completed': 'Completed',
+                'rejected': 'Rejected',
+                'closed': 'Closed'
+            };
+            statusEl.textContent = statusLabels[status] || status;
+            statusEl.className = `request-chat-status ${status}`;
+        }
+        
+        // Render details with rejection reason if applicable
+        if (detailsEl) {
+            const typeLabels = {
+                'game-request': 'Game Request',
+                'bug-report': 'Bug Report',
+                'suggestion': 'Suggestion',
+                'feedback': 'Feedback'
+            };
+            
+            let rejectionHtml = '';
+            if (status === 'rejected' && ticket.rejectionReason) {
+                rejectionHtml = `
+                    <div class="rejection-notice">
+                        <div class="rejection-header">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span>Rejection Reason</span>
+                        </div>
+                        <p>${escapeHtml(ticket.rejectionReason)}</p>
+                    </div>
+                `;
+            }
+            
+            let completedHtml = '';
+            if (status === 'completed') {
+                completedHtml = `
+                    <div class="completed-notice">
+                        <div class="completed-header">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            <span>Request Completed!</span>
+                        </div>
+                        <p>Your request has been fulfilled. Thank you for your feedback!</p>
+                    </div>
+                `;
+            }
+            
+            detailsEl.innerHTML = `
+                ${rejectionHtml}
+                ${completedHtml}
+                <div class="request-details-card">
+                    <div class="detail-row">
+                        <span class="detail-label">Type:</span>
+                        <span class="detail-value">${typeLabels[ticket.type] || ticket.type || 'Unknown'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description:</span>
+                        <span class="detail-value">${escapeHtml(ticket.description || 'No description')}</span>
+                    </div>
+                    ${ticket.gameUrl && isValidUrl(ticket.gameUrl) ? `
+                    <div class="detail-row">
+                        <span class="detail-label">URL:</span>
+                        <span class="detail-value"><a href="${escapeHtml(ticket.gameUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ticket.gameUrl)}</a></span>
+                    </div>` : ''}
+                </div>
+            `;
+        }
+        
+        // Mark as read for user
+        if (ticket.unreadUser > 0) {
+            try {
+                await window.firebaseUpdate(ticketRef, { unreadUser: 0 });
+                // Update the last check time so notification badge updates
+                markTicketsAsRead();
+            } catch (e) {
+                console.warn('Failed to mark as read:', e);
+            }
+        }
+        
+        // Clean up any existing chat listener
+        if (requestChatListener) {
+            try {
+                requestChatListener();
+            } catch (e) {
+                // Ignore cleanup errors
+            }
+            requestChatListener = null;
+        }
+        
+        // Listen for chat messages
+        const chatRef = window.firebaseRef(window.firebaseDB, `tickets/${ticketId}/chat`);
+        requestChatListener = window.firebaseOnValue(chatRef, (snap) => {
+            if (!messagesEl) return;
+            
+            try {
+                if (!snap.exists()) {
+                    messagesEl.innerHTML = `
+                        <div class="no-messages">
+                            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                            <p>No messages yet. Start a conversation!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const messages = [];
+                snap.forEach((child) => {
+                    try {
+                        messages.push({ id: child.key, ...child.val() });
+                    } catch (e) {
+                        // Skip malformed message
+                    }
+                });
+                
+                // Sort by timestamp
+                messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                
+                messagesEl.innerHTML = messages.map(msg => {
+                    try {
+                        return renderChatMessage(msg);
+                    } catch (e) {
+                        return '';
+                    }
+                }).join('');
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            } catch (e) {
+                console.warn('Error processing chat messages:', e);
+            }
+        }, (error) => {
+            console.warn('Chat listener error:', error);
+            if (messagesEl) {
+                messagesEl.innerHTML = `
+                    <div class="no-messages">
+                        <p>Unable to load messages</p>
+                    </div>
+                `;
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error loading request chat:', error);
+        showToast('Failed to load request', 'error');
+        closeRequestChat();
+    }
+}
+
+function renderChatMessage(msg) {
+    const isAdmin = msg.isAdmin;
+    const time = msg.timestamp ? new Date(msg.timestamp).toLocaleString() : '';
+    const messageText = msg.message || msg.text || '';
+    
+    if (isAdmin) {
+        return `
+            <div class="chat-message admin">
+                <span class="admin-badge">
+                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                    Admin
+                </span>
+                <div class="message-bubble">${escapeHtml(messageText)}</div>
+                <span class="message-time">${time}</span>
+            </div>
+        `;
+    }
+    
+    return `
+        <div class="chat-message user">
+            <div class="message-bubble">${escapeHtml(messageText)}</div>
+            <span class="message-time">${time}</span>
+        </div>
+    `;
+}
+
+async function sendRequestMessage() {
+    const input = document.getElementById('requestChatInput');
+    const message = input?.value.trim();
+    
+    if (!message) {
+        return;
+    }
+    
+    if (!currentRequestId) {
+        showToast('No request selected', 'error');
+        return;
+    }
+    
+    if (!window.currentUser) {
+        showToast('Please sign in to send messages', 'warning');
+        return;
+    }
+    
+    if (!window.firebaseDB) {
+        showToast('Unable to connect to server', 'error');
+        return;
+    }
+    
+    // Clear input immediately for better UX
+    input.value = '';
+    
+    try {
+        const chatRef = window.firebaseRef(window.firebaseDB, `tickets/${currentRequestId}/chat`);
+        await window.firebasePush(chatRef, {
+            message: message,
+            userId: window.currentUser.uid,
+            userName: window.currentUser.displayName || 'User',
+            isAdmin: false,
+            timestamp: Date.now()
+        });
+        
+        // Mark unread for admin
+        const ticketRef = window.firebaseRef(window.firebaseDB, `tickets/${currentRequestId}`);
+        await window.firebaseUpdate(ticketRef, { 
+            unreadAdmin: window.firebaseIncrement(1),
+            lastActivity: Date.now()
+        });
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        showToast('Failed to send message. Please try again.', 'error');
+        // Restore the message so user doesn't lose it
+        if (input) {
+            input.value = message;
+        }
+    }
+}
+
+// Helper function to escape HTML
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+async function sendAIMessage(preset = null) {
+    const input = document.getElementById('aiInput');
+    const message = preset || input?.value.trim();
+    
+    if (!message) return;
+    
+    // Clear input
+    if (input && !preset) input.value = '';
+
+    // Add user message to UI
+    addAIMessage(message, 'user');
+
+    // Add to conversation
+    aiConversation.push({ role: 'user', content: message });
+
+    // Show typing indicator
+    const typing = addTypingIndicator();
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        
+        const response = await fetch(AI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messages: aiConversation,
+                max_tokens: 500,
+                temperature: 0.7
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+
+        if (typing.parentElement) typing.remove();
+
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const aiResponse = data.choices?.[0]?.message?.content || "I'm having trouble thinking right now. Try asking something else!";
+
+        // Add to conversation
+        aiConversation.push({ role: 'assistant', content: aiResponse });
+
+        // Add to UI
+        addAIMessage(aiResponse, 'bot');
+
+        // Handle game-related queries - check if we should filter games
+        handleAIGameSuggestion(message, aiResponse);
+
+    } catch (error) {
+        if (typing.parentElement) typing.remove();
+        
+        console.error('AI Error:', error);
+        
+        // Remove the failed user message from conversation
+        if (aiConversation.length > 0 && aiConversation[aiConversation.length - 1].content === message) {
+            aiConversation.pop();
+        }
+        
+        const errorMsg = error.name === 'AbortError' 
+            ? "Request timed out. Please try again."
+            : "Oops! I'm having trouble connecting. Please try again in a moment.";
+        
+        addAIMessage(errorMsg, 'bot');
+    }
+}
+
+function addAIMessage(text, type) {
+    const container = document.getElementById('aiMessages');
+    if (!container) return;
+
+    const msg = document.createElement('div');
+    msg.className = `ai-message ${type}`;
+    
+    msg.innerHTML = `
+        <div class="ai-avatar">${type === 'user' ? '<svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>'}</div>
+        <div class="ai-bubble">${escapeHTML(text)}</div>
+    `;
+
+    container.appendChild(msg);
+    container.scrollTop = container.scrollHeight;
+}
+
+function addTypingIndicator() {
+    const container = document.getElementById('aiMessages');
+    const typing = document.createElement('div');
+    typing.className = 'ai-message bot';
+    typing.innerHTML = `
+        <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg></div>
+        <div class="ai-bubble">
+            <div class="ai-typing">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    `;
+    container.appendChild(typing);
+    container.scrollTop = container.scrollHeight;
+    return typing;
+}
+
+function handleAIGameSuggestion(userMessage, aiResponse) {
+    // Check if user is looking for games by category
+    const categoryKeywords = {
+        'horror': 'horror',
+        'scary': 'horror',
+        'fnaf': 'horror',
+        'rhythm': 'rhythm',
+        'geometry': 'rhythm',
+        'action': 'action',
+        'shooter': 'action',
+        'racing': 'racing',
+        'car': 'racing',
+        'arcade': 'arcade',
+        'multiplayer': 'multiplayer',
+        'puzzle': 'puzzle',
+        'fighting': 'fighting',
+        'adventure': 'adventure'
+    };
+
+    const lowerMessage = userMessage.toLowerCase();
+    
+    for (const [keyword, category] of Object.entries(categoryKeywords)) {
+        if (lowerMessage.includes(keyword)) {
+            // Filter games to that category
+            setTimeout(() => {
+                currentFilter = category;
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                filterBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.category === category);
+                });
+                renderGames();
+                document.getElementById('games')?.scrollIntoView({ behavior: 'smooth' });
+            }, 1500);
+            break;
+        }
+    }
+}
+
+function escapeHTML(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============================================
+// KEYBOARD SHORTCUTS
+// ============================================
+document.addEventListener('keydown', (e) => {
+    // Focus search on / or Ctrl+K
+    const mainSearchInput = document.getElementById('mainSearchInput');
+    
+    if (e.key === '/' && document.activeElement !== mainSearchInput) {
+        e.preventDefault();
+        scrollToSearch();
+    }
+    
+    // Ctrl+K to scroll to search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        scrollToSearch();
+    }
+
+    // Close modal on Escape
+    if (e.key === 'Escape') {
+        if (elements.gameModal?.classList.contains('active')) {
+            closeGame();
+        }
+        elements.sortMenu?.classList.remove('show');
+        closeAuthModal();
+        closeRequestModal();
+        document.getElementById('aiChat')?.classList.remove('open');
+        closeUserMenu();
+    }
+});
+
+// Clear all filters function
+function clearAllFilters() {
+    searchQuery = '';
+    currentFilter = 'all';
+    const mainSearchInput = document.getElementById('mainSearchInput');
+    const navSearchInput = document.getElementById('searchInput');
+    if (mainSearchInput) mainSearchInput.value = '';
+    if (navSearchInput) navSearchInput.value = '';
+    
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === 'all');
+    });
+    
+    renderGames();
+}
+
+// ============================================
+// SCROLL TO SEARCH FUNCTION
+// ============================================
+function scrollToSearch() {
+    const mainSearch = document.getElementById('mainSearchInput');
+    if (mainSearch) {
+        // Scroll to the search section smoothly
+        mainSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Focus the input after scroll
+        setTimeout(() => {
+            mainSearch.focus();
+        }, 500);
+    }
+}
+
+// ============================================
+// EXPOSE FUNCTIONS GLOBALLY
+// ============================================
+window.scrollToSearch = scrollToSearch;
+window.handleImageError = handleImageError;
+window.openGame = openGame;
+window.closeGame = closeGame;
+window.toggleFavorite = toggleFavorite;
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.openRequestModal = openRequestModal;
+window.closeRequestModal = closeRequestModal;
+window.submitRequest = submitRequest;
+window.toggleAIChat = toggleAIChat;
+window.sendAIMessage = sendAIMessage;
+window.closeUserMenu = closeUserMenu;
+window.showToast = showToast;
+window.showConfirmToast = showConfirmToast;
+window.showConfirmDialog = showConfirmDialog;
+window.clearAllFilters = clearAllFilters;
+window.openSupportPanel = openSupportPanel;
+window.closeSupportPanel = closeSupportPanel;
+window.openMyRequests = openMyRequests;
+window.closeMyRequests = closeMyRequests;
+window.openRequestChat = openRequestChat;
+window.closeRequestChat = closeRequestChat;
+window.sendRequestMessage = sendRequestMessage;
+window.markTicketsAsRead = markTicketsAsRead;
+window.deleteRequest = deleteRequest;
+
+// ============================================
+// SHARE MODAL FUNCTIONS
+// ============================================
+
+function openShareModal() {
+    const modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeShareModal() {
+    const modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function copyShareLink(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile
+        
+        try {
+            navigator.clipboard.writeText(input.value).then(() => {
+                showToast('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                document.execCommand('copy');
+                showToast('Link copied to clipboard!', 'success');
+            });
+        } catch (err) {
+            document.execCommand('copy');
+            showToast('Link copied to clipboard!', 'success');
+        }
+    }
+}
+
+function nativeShare() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Gemtra Games - Free Unblocked Games',
+            text: 'Check out Gemtra Games - Play 100+ free games online!',
+            url: 'https://tinyurl.com/gemtra'
+        }).then(() => {
+            showToast('Thanks for sharing!', 'success');
+        }).catch((err) => {
+            if (err.name !== 'AbortError') {
+                showToast('Sharing cancelled', 'info');
+            }
+        });
+    } else {
+        // Fallback: copy to clipboard
+        copyShareLink('shortLinkInput');
+    }
+}
+
+// Expose share functions globally
+window.openShareModal = openShareModal;
+window.closeShareModal = closeShareModal;
+window.copyShareLink = copyShareLink;
+window.nativeShare = nativeShare;
+
+// ============================================
+// CONTACT MODAL FUNCTIONS
+// ============================================
+
+function openContactModal(type = 'support') {
+    const modal = document.getElementById('contactModal');
+    const title = document.getElementById('contactModalTitle');
+    const subtitle = document.getElementById('contactModalSubtitle');
+    const body = document.getElementById('contactModalBody');
+    
+    if (!modal || !body) return;
+    
+    let content = '';
+    
+    if (type === 'dmca') {
+        title.textContent = 'DMCA / Copyright Notice';
+        subtitle.textContent = 'How to submit a DMCA takedown request';
+        content = `
+            <div class="contact-section">
+                <h3>Before You Submit</h3>
+                <p>Gemtra Games is a <strong>game aggregator</strong> - we do not host game files directly. We embed games from third-party sources. If your content is being displayed without authorization, we will promptly remove it upon valid request.</p>
+            </div>
+            
+            <div class="contact-section">
+                <h3>How to Submit a DMCA Notice</h3>
+                <p>Send an email to our support address with the following information:</p>
+                <ul style="margin: 0.5rem 0 1rem 1.5rem; color: var(--text-secondary);">
+                    <li>Your name and contact information</li>
+                    <li>Identification of the copyrighted work</li>
+                    <li>URL of the infringing content on our site</li>
+                    <li>Statement of good faith belief</li>
+                    <li>Statement of accuracy under penalty of perjury</li>
+                    <li>Your physical or electronic signature</li>
+                </ul>
+                <div class="contact-email-display">
+                    <input type="text" value="gemtrahelpcenter@gmail.com" readonly id="dmcaEmailInput">
+                    <button onclick="copyContactEmail('dmcaEmailInput')">Copy</button>
+                </div>
+            </div>
+            
+            <div class="contact-section">
+                <h3>Email Subject Line</h3>
+                <p>Use this subject: <strong>"DMCA Takedown Notice - [Game Name]"</strong></p>
+            </div>
+            
+            <div class="contact-warning">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <p>False DMCA claims may result in legal liability. Only submit if you are the copyright owner or authorized to act on their behalf.</p>
+            </div>
+        `;
+    } else {
+        // General support
+        title.textContent = 'Contact Us';
+        subtitle.textContent = 'Choose how you\'d like to reach us';
+        content = `
+            <div class="contact-section">
+                <h3>Recommended: Support Center</h3>
+                <p>For the fastest response, use our built-in Support Center. You can chat with admins and track your requests.</p>
+                <button class="contact-btn-action" onclick="closeContactModal(); setTimeout(() => openSupportPanel(), 300);">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                    Open Support Center
+                </button>
+            </div>
+            
+            <div class="contact-section">
+                <h3>Email Contact</h3>
+                <p>For formal inquiries, partnerships, or detailed issues, you can email us directly:</p>
+                
+                <div class="contact-option">
+                    <div class="contact-option-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    </div>
+                    <div class="contact-option-content">
+                        <h4>General Support</h4>
+                        <p>Questions, feedback, and general inquiries</p>
+                    </div>
+                </div>
+                
+                <div class="contact-email-display">
+                    <input type="text" value="gemtrahelpcenter@gmail.com" readonly id="supportEmailInput">
+                    <button onclick="copyContactEmail('supportEmailInput')">Copy</button>
+                </div>
+            </div>
+            
+            <div class="contact-section">
+                <h3>⏱️ Response Time</h3>
+                <p>We typically respond within <strong>24-48 hours</strong>. For urgent issues, the Support Center usually gets faster responses.</p>
+            </div>
+        `;
+    }
+    
+    body.innerHTML = content;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contactModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function copyContactEmail(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.select();
+        input.setSelectionRange(0, 99999);
+        
+        try {
+            navigator.clipboard.writeText(input.value).then(() => {
+                showToast('Email copied to clipboard!', 'success');
+            }).catch(() => {
+                document.execCommand('copy');
+                showToast('Email copied to clipboard!', 'success');
+            });
+        } catch (err) {
+            document.execCommand('copy');
+            showToast('Email copied to clipboard!', 'success');
+        }
+    }
+}
+
+// Expose contact functions globally
+window.openContactModal = openContactModal;
+window.closeContactModal = closeContactModal;
+window.copyContactEmail = copyContactEmail;
+

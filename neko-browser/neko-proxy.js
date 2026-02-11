@@ -590,7 +590,7 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
         res.end(JSON.stringify({
           hasSession: true,
           browserId: browser.id,
-          browserUrl: `${protocol}://${host}/browser/${browser.id}/?token=${urlToken}`,
+          browserUrl: `${protocol}://${host}/browser/${browser.id}/?token=${urlToken}&usr=Nebula&pwd=blockeduser99`,
           sessionAge: Math.round(age / 1000),
         }));
         return;
@@ -642,7 +642,7 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
         // Tunnel uses HTTPS
         const protocol = req.headers['x-forwarded-proto'] || 'https';
         const host = req.headers['x-forwarded-host'] || req.headers.host;
-        const absoluteBrowserUrl = `${protocol}://${host}/browser/${browser.id}/?token=${urlToken}`;
+        const absoluteBrowserUrl = `${protocol}://${host}/browser/${browser.id}/?token=${urlToken}&usr=Nebula&pwd=blockeduser99`;
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
@@ -783,6 +783,25 @@ server.on('upgrade', (req, socket, head) => {
   console.log(`[WS Upgrade] Browser ${browser.id} -> ${target}${targetPath}`);
 
   trackWsConnect(browser.id);
+
+  // WebSocket keep-alive: send ping frames every 30s to prevent
+  // Cloudflare tunnel from killing idle connections (100s timeout)
+  const pingInterval = setInterval(() => {
+    if (socket.destroyed || socket.writableEnded) {
+      clearInterval(pingInterval);
+      return;
+    }
+    try {
+      // WebSocket ping frame: 0x89 = fin+ping opcode, 0x00 = no payload
+      socket.write(Buffer.from([0x89, 0x00]));
+    } catch (e) {
+      clearInterval(pingInterval);
+    }
+  }, 30000);
+
+  socket.on('close', () => {
+    clearInterval(pingInterval);
+  });
 
   proxy.ws(req, socket, head, { target }, (err) => {
     console.error(`[WS Proxy Error] Browser ${browser.id}: ${err.message}`);

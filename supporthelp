@@ -1,0 +1,1251 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Gemtra Games - Play Free Unblocked Games Online</title>
+    <meta name="description" content="Play 100+ free unblocked games instantly. No downloads. Geometry Dash, FNAF, Minecraft, shooters, racing and more!">
+    <meta name="keywords" content="unblocked games, free games, online games, geometry dash, fnaf, minecraft, school games">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mojhehh.github.io/gemtra/">
+    <meta property="og:title" content="Gemtra Games - Free Unblocked Games">
+    <meta property="og:description" content="Play 100+ free games instantly. No downloads required.">
+    <meta property="og:image" content="https://mojhehh.github.io/gemtra/og-image.png">
+    <meta property="og:site_name" content="Gemtra Games">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mojhehh.github.io/gemtra/">
+    <meta name="twitter:title" content="Gemtra Games - Free Unblocked Games">
+    <meta name="twitter:description" content="Play 100+ free games instantly. No downloads required.">
+    <meta name="twitter:image" content="https://mojhehh.github.io/gemtra/og-image.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mojhehh.github.io/gemtra/">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'%3E%3Cpath d='M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loader">
+                <div class="loader-cube">
+                    <div class="cube-face front"></div>
+                    <div class="cube-face back"></div>
+                    <div class="cube-face right"></div>
+                    <div class="cube-face left"></div>
+                    <div class="cube-face top"></div>
+                    <div class="cube-face bottom"></div>
+                </div>
+            </div>
+            <div class="loader-brand">
+                <span class="loader-logo">
+                    <svg viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="4" width="30" height="16" rx="8" fill="url(#loaderGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                        <rect x="6" y="10" width="6" height="2" rx="1" fill="white"/>
+                        <rect x="8" y="8" width="2" height="6" rx="1" fill="white"/>
+                        <circle cx="22" cy="9" r="1.5" fill="white"/>
+                        <circle cx="25" cy="12" r="1.5" fill="white"/>
+                        <defs>
+                            <linearGradient id="loaderGrad" x1="0" y1="0" x2="32" y2="24">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </span>
+                <span class="loader-title">Gemtra <span class="loader-accent">Games</span></span>
+            </div>
+            <p class="loader-text">Loading awesome games...</p>
+            <div class="loader-progress">
+                <div class="loader-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="logo-text">Gemtra <span class="logo-accent">Games</span></span>
+            </a>
+            
+            <!-- Search scroll button - scrolls to main search bar -->
+            <button class="nav-search-btn" id="navSearchBtn" aria-label="Search games" onclick="scrollToSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active" data-section="home">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    Home
+                </a></li>
+                <li><a href="#games" class="nav-link" data-section="games">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    All Games
+                </a></li>
+                <li><a href="#featured" class="nav-link" data-section="featured">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    Featured
+                </a></li>
+                <li><a href="#about" class="nav-link" data-section="about">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    About
+                </a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <!-- Share Button -->
+                <button class="nav-share-btn" id="navShareBtn" onclick="openShareModal()" aria-label="Share & Bookmark">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                    <span>Share</span>
+                </button>
+                <!-- Request Game Button - PROMINENT -->
+                <button class="nav-request-btn" id="navRequestBtn" onclick="openRequestModal('game-request')" aria-label="Request a Game">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <span>Request Game</span>
+                </button>
+                <!-- Support/Chat Button - PROMINENT -->
+                <button class="nav-support-btn" id="navSupportBtn" onclick="openSupportPanel()" aria-label="Support & Chat">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                    <span>Support</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+                </button>
+                <button class="favorites-btn" id="favoritesBtn" aria-label="Favorites">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="favorites-count" id="favoritesCount">0</span>
+                </button>
+                <!-- User Auth Button -->
+                <button class="user-btn" id="userBtn" aria-label="User account">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge animate-fade-in">
+                        <span class="badge-dot"></span>
+                        <span><span id="heroBadgeCount">130</span>+ Free Games Available</span>
+                    </div>
+                    <h1 class="hero-title animate-slide-up">
+                        Play <span class="gradient-text">Unlimited</span> Games
+                        <br>Anytime, Anywhere
+                    </h1>
+                    <p class="hero-desc animate-slide-up delay-1">
+                        The ultimate destination for free unblocked games. No downloads, no installations. 
+                        Just click and play instantly on any device.
+                    </p>
+                    <div class="hero-actions animate-slide-up delay-2">
+                        <a href="#games" class="btn btn-primary btn-glow">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            Browse Games
+                        </a>
+                        <a href="#featured" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            Featured Games
+                        </a>
+                    </div>
+                    <div class="hero-stats animate-fade-in delay-3">
+                        <div class="stat">
+                            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                            <span class="stat-number" id="statGames">60</span>+
+                            <span class="stat-label">Games</span>
+                        </div>
+                        <div class="stat stat-live">
+                            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span class="stat-number live-pulse" id="statOnline">0</span>
+                            <span class="stat-label">Online Now</span>
+                        </div>
+                        <div class="stat">
+                            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            <span class="stat-number" id="statTotalPlays">0</span>
+                            <span class="stat-label">Total Plays</span>
+                        </div>
+                        <div class="stat">
+                            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span class="stat-number" id="statFree">100</span>%
+                            <span class="stat-label">Free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual animate-float">
+                    <div class="hero-game-preview" id="heroPreview">
+                        <div class="preview-glow"></div>
+                        <img src="https://geodash.org/images/geodash-game-image.webp" alt="Featured Game" id="heroImage" onerror="this.onerror=null; this.src='https://gemtra-proxy.modmojheh.workers.dev/img/' + encodeURIComponent('https://geodash.org/images/geodash-game-image.webp');">
+                        <div class="preview-overlay">
+                            <button class="preview-play" id="heroPlayBtn" aria-label="Play featured game">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <div class="preview-info">
+                            <span class="preview-tag">Featured</span>
+                            <h3 id="heroGameTitle">Geometry Dash</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span>Scroll to explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- Featured Section -->
+        <section class="featured-section" id="featured">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="title-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
+                        Featured Games
+                    </h2>
+                    <p class="section-desc">Hand-picked favorites our players love</p>
+                </div>
+                <div class="featured-grid" id="featuredGrid">
+                    <!-- Featured games populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Filter Bar -->
+        <section class="filter-section" id="filterSection">
+            <div class="container">
+                <!-- Main Search Bar -->
+                <div class="main-search-container" id="mainSearchContainer">
+                    <div class="main-search-wrapper">
+                        <svg class="main-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="mainSearchInput" class="main-search-input" placeholder="Search for games... (Ctrl+K)" autocomplete="off">
+                        <button class="main-search-clear" id="mainSearchClear" aria-label="Clear search">×</button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-categories" id="categoryFilters">
+                        <button class="filter-btn active" data-category="all">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+                            All Games
+                        </button>
+                        <button class="filter-btn featured-filter" data-category="featured">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            Featured
+                        </button>
+                        <button class="filter-btn favorites-filter" data-category="favorites">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            Favorites <span class="favorites-badge" id="favoritesCount">0</span>
+                        </button>
+                        <button class="filter-btn" data-category="rhythm">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            Rhythm
+                        </button>
+                        <button class="filter-btn" data-category="horror">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-3.5l1.5-2.5 1.5 2.5h-3zm-2.5-4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+                            Horror
+                        </button>
+                        <button class="filter-btn" data-category="action">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h10v2h2V3c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v4h2V5zm8.41 11.59L20 12l-4.59-4.59L14 8.83 17.17 12 14 15.17l1.41 1.42zM10 15.17L6.83 12 10 8.83 8.59 7.41 4 12l4.59 4.59L10 15.17zM17 19H7v-2H5v4c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4h-2v2z"/></svg>
+                            Action
+                        </button>
+                        <button class="filter-btn" data-category="racing">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                            Racing
+                        </button>
+                        <button class="filter-btn" data-category="sports">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 2.07c2.52.41 4.67 2.05 5.74 4.29l-2.83.65-.12-.09c-.56-.47-1.33-.64-2.06-.44l-.73.18V4.07zm-2 0v4.59l-.73-.18c-.73-.19-1.5-.02-2.06.44l-.12.09-2.83-.65c1.07-2.24 3.22-3.88 5.74-4.29zM4.26 9.76l2.63.6c-.04.14-.06.28-.06.43 0 .9.56 1.67 1.35 1.98l.73.29v5.59c-2.52-1.22-4.39-3.57-4.65-6.38v-.01c.01-.5.01-1 0-1.5v-1zm7.74 10.17v-5.59l.73-.29c.79-.31 1.35-1.08 1.35-1.98 0-.15-.02-.29-.06-.43l2.63-.6v.5c0 .51-.01 1.01 0 1.51-.26 2.81-2.13 5.16-4.65 6.38zm3.35-8.72c-.17-.57-.62-1.02-1.18-1.2l-.96-.32.04-1.09c.02-.5.44-.91.94-.93l1.09-.04.32.96c.18.56.63 1.01 1.2 1.18l.96.32-.04 1.09c-.02.5-.44.91-.94.93l-1.09.04-.34-.94z"/></svg>
+                            Sports
+                        </button>
+                        <button class="filter-btn" data-category="arcade">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                            Arcade
+                        </button>
+                        <button class="filter-btn" data-category="puzzle">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+                            Puzzle
+                        </button>
+                        <button class="filter-btn" data-category="multiplayer">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            Multiplayer
+                        </button>
+                        <button class="filter-btn" data-category="fighting">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.8 2H4.2C3.54 2 3 2.54 3 3.2v1.6c0 .99.6 1.84 1.46 2.2L9 9v12h2V9l4.54-2c.86-.36 1.46-1.21 1.46-2.2V3.2c0-.66-.54-1.2-1.2-1.2zM7 6.5L5 5.5V4h2v2.5zM12 7l-2-1V4h4v2l-2 1zm7-1.5l-2 1V4h2v1.5z"/></svg>
+                            Fighting
+                        </button>
+                        <button class="filter-btn" data-category="adventure">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            Adventure
+                        </button>
+                        <button class="filter-btn" data-category="casual">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                            Casual
+                        </button>
+                    </div>
+                    <div class="filter-options">
+                        <div class="sort-dropdown">
+                            <button class="sort-btn" id="sortBtn">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg>
+                                <span>Popular</span>
+                            </button>
+                            <div class="sort-menu" id="sortMenu">
+                                <button class="sort-option" data-sort="popular"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg> Popular</button>
+                                <button class="sort-option" data-sort="alphabetical"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12.93 2h-2l-5.5 14h2.17l1.12-3h6.5l1.12 3h2.17l-5.58-14zm-3.55 9l2.5-6.67L14.4 11h-5.02zM21 17h-4v-2h4v-2l3 3.5-3 3.5v-3zm-7 1h-3v-2h3v2zm-5-4H6v2H3l3-3.5L3 9v3h3v2z"/></svg> A-Z</button>
+                                <button class="sort-option" data-sort="newest"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Newest</button>
+                                <button class="sort-option" data-sort="random"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg> Random</button>
+                            </div>
+                        </div>
+                        <div class="view-toggle" id="viewToggle">
+                            <button class="view-btn active" data-view="grid" aria-label="Grid view">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/></svg>
+                            </button>
+                            <button class="view-btn" data-view="list" aria-label="List view">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="active-filters" id="activeFilters"></div>
+            </div>
+        </section>
+
+        <!-- Games Grid Section -->
+        <section class="games-section" id="games">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="title-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                        All Games
+                        <span class="game-count" id="gameCount">(0)</span>
+                    </h2>
+                </div>
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games will be populated by JavaScript -->
+                </div>
+                <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="64" height="64"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+                    <h3>Can't find what you're looking for?</h3>
+                    <p>No worries! Request it and we'll try to add it for you.</p>
+                    <button class="btn btn-primary btn-lg" id="requestGameBtn" onclick="openRequestModal('game-request')">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Request This Game
+                    </button>
+                    <button class="btn btn-secondary" id="clearFilters" onclick="clearAllFilters()">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Player Modal -->
+        <div class="game-modal" id="gameModal">
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div class="modal-title-area">
+                        <h2 id="modalGameTitle">Game Title</h2>
+                        <span class="modal-tag" id="modalGameTag">Action</span>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-btn" id="modalFavorite" aria-label="Add to favorites" tabindex="-1">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <button class="modal-btn" id="modalFullscreen" aria-label="Fullscreen" tabindex="-1">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                        </button>
+                        <button class="modal-btn" id="modalRestart" aria-label="Restart" tabindex="-1">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        </button>
+                        <button class="modal-btn modal-close" id="modalClose" aria-label="Close" tabindex="-1">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="game-frame-container">
+                        <iframe id="gameIframe" src="about:blank" title="Game Player" allow="autoplay; fullscreen; accelerometer; gyroscope; gamepad; microphone; camera" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="touch-warning" id="touchWarning">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                        <span>This game requires a keyboard</span>
+                    </div>
+                    <div class="game-controls-hint">
+                        <span><kbd>ESC</kbd> Close</span>
+                        <span><kbd>F</kbd> Fullscreen</span>
+                        <span><kbd>R</kbd> Restart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auth Modal -->
+        <div class="auth-modal" id="authModal">
+            <div class="modal-backdrop" onclick="closeAuthModal()"></div>
+            <div class="auth-container">
+                <button class="auth-close" onclick="closeAuthModal()">×</button>
+                <div class="auth-header">
+                    <h2 id="authTitle">Welcome to Gemtra</h2>
+                    <p id="authSubtitle">Sign in to save favorites, request games, and more!</p>
+                </div>
+                <div class="auth-body">
+                    <!-- Auth Tabs -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+                        <button class="auth-tab" onclick="switchAuthTab('register')">Sign Up</button>
+                    </div>
+
+                    <!-- Email/Password Form -->
+                    <form id="authForm" onsubmit="handleEmailAuth(event)">
+                        <div class="form-group">
+                            <label for="authEmail">Email</label>
+                            <input type="email" id="authEmail" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authPassword">Password</label>
+                            <input type="password" id="authPassword" placeholder="••••••••" required minlength="6" autocomplete="current-password">
+                        </div>
+                        <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                            <label for="authConfirmPassword">Confirm Password</label>
+                            <input type="password" id="authConfirmPassword" placeholder="••••••••" minlength="6" autocomplete="new-password">
+                        </div>
+                        <button type="submit" class="auth-btn primary-btn" id="authSubmitBtn">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="auth-divider"><span>or</span></div>
+
+                    <button class="auth-btn google-btn" onclick="signInWithGoogle()">
+                        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Continue with Google
+                    </button>
+                    <button class="auth-btn anonymous-btn" onclick="signInAnonymously()">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        Continue as Guest
+                    </button>
+                </div>
+                <div class="auth-footer">
+                    <p>By signing in, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Menu Dropdown -->
+        <div class="user-menu" id="userMenu">
+            <div class="user-menu-header">
+                <div class="user-avatar" id="userMenuAvatar">G</div>
+                <div class="user-info">
+                    <span class="user-name" id="userMenuName">Guest</span>
+                    <span class="user-email" id="userMenuEmail">Not signed in</span>
+                </div>
+                <span class="admin-badge" id="adminBadge" style="display: none;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                </span>
+            </div>
+            <div class="user-menu-items">
+                <a href="#" class="menu-item" onclick="openMyRequests()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    My Requests
+                    <span class="menu-badge" id="myRequestsBadge" style="display: none;">0</span>
+                </a>
+                <div class="menu-divider"></div>
+                <a href="#" class="menu-item" onclick="openRequestModal('game-request')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2z"/></svg>
+                    Request a Game
+                </a>
+                <a href="#" class="menu-item" onclick="openRequestModal('bug-report')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8z"/></svg>
+                    Report a Bug
+                </a>
+                <a href="#" class="menu-item" onclick="openRequestModal('suggestion')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+                    Suggestion
+                </a>
+                <a href="#" class="menu-item" onclick="openRequestModal('feedback')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                    Feedback
+                </a>
+                <div class="menu-divider"></div>
+                <a href="admin.html" class="menu-item admin-only" id="adminLink" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                    Admin Panel
+                </a>
+                <a href="#" class="menu-item" id="signOutBtn" onclick="signOutUser()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Sign Out
+                </a>
+            </div>
+        </div>
+
+        <!-- Request Modal -->
+        <div class="request-modal" id="requestModal">
+            <div class="modal-backdrop" onclick="closeRequestModal()"></div>
+            <div class="request-container">
+                <button class="request-close" onclick="closeRequestModal()">×</button>
+                <div class="request-header">
+                    <h2 id="requestModalTitle">Request a Game</h2>
+                    <p id="requestModalDesc">Let us know what game you'd like us to add!</p>
+                </div>
+                <form class="request-form" id="requestForm" onsubmit="submitRequest(event)">
+                    <input type="hidden" id="requestType" value="game-request">
+                    <div class="form-group">
+                        <label for="requestTitle">Title *</label>
+                        <input type="text" id="requestTitle" placeholder="Enter a title..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestDescription">Description *</label>
+                        <textarea id="requestDescription" rows="4" placeholder="Describe what you're looking for..." required></textarea>
+                    </div>
+                    <div class="form-group" id="gameUrlGroup">
+                        <label for="requestGameUrl">Game URL (optional)</label>
+                        <input type="url" id="requestGameUrl" placeholder="https://example.com/game">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        Submit Request
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- AI Assistant Button & Chat -->
+        <button class="ai-fab" id="aiFab" onclick="toggleAIChat()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span class="ai-badge">AI</span>
+        </button>
+
+        <div class="ai-chat" id="aiChat">
+            <div class="ai-header">
+                <div class="ai-title">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    <span>Gemtra AI Assistant</span>
+                </div>
+                <button class="ai-close" onclick="toggleAIChat()">×</button>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message bot">
+                    <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg></div>
+                    <div class="ai-bubble">
+                        Hey! I'm Gemtra AI. I can help you find games, answer questions, or just chat! What are you looking for today?
+                    </div>
+                </div>
+            </div>
+            <div class="ai-suggestions">
+                <button onclick="sendAIMessage('Find me a scary game')"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-6c.78 2.34 2.72 4 5 4s4.22-1.66 5-4H7zm1-2c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1s-1 .45-1 1v2c0 .55.45 1 1 1zm8 0c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1s-1 .45-1 1v2c0 .55.45 1 1 1z"/></svg>Scary games</button>
+                <button onclick="sendAIMessage('What are the most popular games?')"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>Popular</button>
+                <button onclick="sendAIMessage('Recommend a multiplayer game')"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Multiplayer</button>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" id="aiInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendAIMessage()">
+                <button class="ai-send" onclick="sendAIMessage()" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Support Panel Backdrop -->
+        <div class="support-backdrop" id="supportBackdrop" onclick="closeSupportPanel()"></div>
+
+        <!-- Support Panel - PROMINENT -->
+        <div class="support-panel" id="supportPanel">
+            <div class="support-header">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                    Support Center
+                </h3>
+                <button class="support-close" onclick="closeSupportPanel()">×</button>
+            </div>
+            <div class="support-content">
+                <p class="support-intro">Need help? Want a game added? We're here for you!</p>
+                
+                <div class="support-options">
+                    <button class="support-option" onclick="closeSupportPanel(); openRequestModal('game-request')">
+                        <div class="support-option-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+                        <div class="support-option-text">
+                            <strong>Request a Game</strong>
+                            <span>Tell us what game you want!</span>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="arrow"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </button>
+                    
+                    <button class="support-option" onclick="closeSupportPanel(); openRequestModal('bug-report')">
+                        <div class="support-option-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8z"/></svg></div>
+                        <div class="support-option-text">
+                            <strong>Report a Bug</strong>
+                            <span>Found something broken?</span>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="arrow"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </button>
+                    
+                    <button class="support-option" onclick="closeSupportPanel(); openRequestModal('suggestion')">
+                        <div class="support-option-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+                        <div class="support-option-text">
+                            <strong>Suggestion</strong>
+                            <span>Share your ideas with us</span>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="arrow"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </button>
+                    
+                    <button class="support-option" onclick="closeSupportPanel(); openRequestModal('feedback')">
+                        <div class="support-option-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+                        <div class="support-option-text">
+                            <strong>Feedback</strong>
+                            <span>Tell us what you think</span>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="arrow"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="support-divider">
+                    <span>view your submissions</span>
+                </div>
+                
+                <button class="support-my-requests" onclick="closeSupportPanel(); openMyRequests()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    View My Requests
+                    <span class="my-requests-count" id="supportMyRequestsCount" style="display: none;">0</span>
+                </button>
+                
+                <div class="support-divider">
+                    <span>or chat with AI</span>
+                </div>
+                
+                <button class="support-ai-btn" onclick="closeSupportPanel(); toggleAIChat()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Chat with Gemtra AI
+                </button>
+                
+                <div class="support-footer">
+                    <p>Signed in users get faster responses!</p>
+                    <button class="support-signin" onclick="closeSupportPanel(); openAuthModal()" id="supportSignInBtn">Sign In</button>
+                    <div class="support-email-contact">
+                        <span>Or email us directly:</span>
+                        <a href="#" onclick="closeSupportPanel(); openContactModal('support'); return false;">gemtrahelpcenter@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Requests Panel -->
+        <div class="my-requests-backdrop" id="myRequestsBackdrop" onclick="closeMyRequests()"></div>
+        <div class="my-requests-panel" id="myRequestsPanel">
+            <div class="my-requests-header">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    My Requests
+                </h3>
+                <button class="my-requests-close" onclick="closeMyRequests()">×</button>
+            </div>
+            <div class="my-requests-content">
+                <div class="my-requests-empty" id="myRequestsEmpty">
+                    <div class="empty-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M20 6H10v6H8V4h6V0H6v6H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg></div>
+                    <h4>No requests yet</h4>
+                    <p>Submit a game request, bug report, or suggestion to see it here!</p>
+                    <button class="btn btn-primary" onclick="closeMyRequests(); openRequestModal('game-request')">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Make a Request
+                    </button>
+                </div>
+                <div class="my-requests-list" id="myRequestsList"></div>
+            </div>
+        </div>
+
+        <!-- Request Chat Panel (for individual request conversation) -->
+        <div class="request-chat-backdrop" id="requestChatBackdrop" onclick="closeRequestChat()"></div>
+        <div class="request-chat-panel" id="requestChatPanel">
+            <div class="request-chat-header">
+                <button class="back-btn" onclick="closeRequestChat(); openMyRequests()" aria-label="Back to requests">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </button>
+                <div class="request-chat-info">
+                    <h4 id="requestChatTitle">Request Title</h4>
+                    <span class="request-chat-status" id="requestChatStatus">Pending</span>
+                </div>
+                <button class="request-chat-close" onclick="closeRequestChat()">×</button>
+            </div>
+            <div class="request-chat-details" id="requestChatDetails">
+                <!-- Original request details shown here -->
+            </div>
+            <div class="request-chat-messages" id="requestChatMessages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="request-chat-input">
+                <input type="text" id="requestChatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendRequestMessage()">
+                <button onclick="sendRequestMessage()" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Categories Showcase -->
+        <section class="categories-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="title-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>
+                        Browse by Category
+                    </h2>
+                </div>
+                <div class="categories-grid">
+                    <a href="#games" class="category-card" data-category="rhythm">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
+                        <h3>Rhythm Games</h3>
+                        <p>Beat-based platformers</p>
+                        <span class="category-count">6 games</span>
+                    </a>
+                    <a href="#games" class="category-card" data-category="horror">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 2C7.03 2 3 6.03 3 11c0 2.96 1.46 5.59 3.7 7.21L6 21l3-1c.96.32 2 .5 3 .5s2.04-.18 3-.5l3 1-.7-2.79C20.54 16.59 22 13.96 22 11c0-4.97-4.03-9-10-9zM9 12c-.83 0-1.5-.67-1.5-1.5S8.17 9 9 9s1.5.67 1.5 1.5S9.83 12 9 12zm6 0c-.83 0-1.5-.67-1.5-1.5S14.17 9 15 9s1.5.67 1.5 1.5S15.83 12 15 12z"/></svg></div>
+                        <h3>Horror Games</h3>
+                        <p>Spooky and scary</p>
+                        <span class="category-count">15 games</span>
+                    </a>
+                    <a href="#games" class="category-card" data-category="action">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M7 5h10v2h2V3c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v4h2V5zm8.41 11.59L20 12l-4.59-4.59L14 8.83 17.17 12 14 15.17l1.41 1.42zM10 15.17L6.83 12 10 8.83 8.59 7.41 4 12l4.59 4.59L10 15.17zM17 19H7v-2H5v4c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4h-2v2z"/></svg></div>
+                        <h3>Action Games</h3>
+                        <p>FPS and shooters</p>
+                        <span class="category-count">4 games</span>
+                    </a>
+                    <a href="#games" class="category-card" data-category="arcade">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+                        <h3>Arcade Games</h3>
+                        <p>Classic arcade fun</p>
+                        <span class="category-count">12 games</span>
+                    </a>
+                    <a href="#games" class="category-card" data-category="racing">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
+                        <h3>Racing Games</h3>
+                        <p>Speed and stunts</p>
+                        <span class="category-count">3 games</span>
+                    </a>
+                    <a href="#games" class="category-card" data-category="adventure">
+                        <div class="category-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+                        <h3>Adventure</h3>
+                        <p>Explore & discover</p>
+                        <span class="category-count">3 games</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-content">
+                        <h2 class="section-title">
+                            <span class="title-icon">ℹ️</span>
+                            About Gemtra Games
+                        </h2>
+                        <p>
+                            Gemtra Games is your ultimate destination for free online games. 
+                            We provide a curated collection of the best unblocked games that work 
+                            anywhere - at school, work, or home.
+                        </p>
+                        <p>
+                            All games are HTML5-based, meaning no downloads or plugins required. 
+                            Just click and play instantly on any device with a modern web browser.
+                        </p>
+                        <div class="features-list">
+                            <div class="feature">
+                                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+                                <div class="feature-text">
+                                    <h4>Instant Play</h4>
+                                    <p>No downloads or installations</p>
+                                </div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
+                                <div class="feature-text">
+                                    <h4>Cross-Platform</h4>
+                                    <p>Works on all devices</p>
+                                </div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
+                                <div class="feature-text">
+                                    <h4>Safe & Secure</h4>
+                                    <p>No ads or malware</p>
+                                </div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg></div>
+                                <div class="feature-text">
+                                    <h4>100% Free</h4>
+                                    <p>No hidden costs ever</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="controls-card">
+                        <h3>Game Controls</h3>
+                        <ul class="controls-list">
+                            <li><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> - Movement</li>
+                            <li><kbd>Space</kbd> - Jump / Action</li>
+                            <li><kbd>Enter</kbd> - Confirm / Start</li>
+                            <li><kbd>Esc</kbd> - Pause / Menu</li>
+                            <li><kbd>Mouse</kbd> - Aim / Look</li>
+                            <li><kbd>Click</kbd> - Shoot / Select</li>
+                        </ul>
+                        <p class="controls-note">Controls vary by game. Check in-game instructions for specifics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter / CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>Share & Bookmark Us!</h2>
+                    <p>Share with friends, grab the QR code, or drag our bookmarklet to your toolbar!</p>
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary" onclick="openShareModal()">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                            Share & Bookmark
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <span class="logo-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                        <span>Gemtra <span class="logo-accent">Games</span></span>
+                    </a>
+                    <p>Your destination for free online games. Play anytime, anywhere.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#games">All Games</a></li>
+                        <li><a href="#featured">Featured</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#games" data-category="rhythm">Rhythm</a></li>
+                        <li><a href="#games" data-category="horror">Horror</a></li>
+                        <li><a href="#games" data-category="action">Action</a></li>
+                        <li><a href="#games" data-category="shooter">Shooter</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="dmca.html">DMCA</a></li>
+                        <li><a href="credits.html">Game Credits</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="#" onclick="openContactModal('support'); return false;"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Email Support</a></li>
+                        <li><a href="#" onclick="openSupportPanel(); return false;"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Support Center</a></li>
+                        <li><a href="#" onclick="openContactModal('dmca'); return false;"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14v-2h2v2h-2zm0-4V7h2v5h-2z"/></svg>DMCA Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gemtra Games. All games are property of their respective owners. <strong>We are a redistributor, not a creator.</strong></p>
+                <p class="footer-contact">Need help? <a href="#" onclick="openContactModal('support'); return false;">Contact Us</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="modal-backdrop" onclick="closeShareModal()"></div>
+        <div class="share-container">
+            <button class="share-close" onclick="closeShareModal()">×</button>
+            <div class="share-header">
+                <h2><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>Share Gemtra Games</h2>
+                <p>Share our site with friends or bookmark it for quick access!</p>
+            </div>
+            <div class="share-body">
+                <!-- QR Code -->
+                <div class="share-qr-section">
+                    <div class="share-qr-code" id="shareQrCode">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://tinyurl.com/gemtra&bgcolor=1a1a2e&color=ffffff" alt="QR Code for Gemtra Games" />
+                    </div>
+                    <p class="share-qr-hint">Scan to visit on mobile</p>
+                </div>
+
+                <!-- Links Section -->
+                <div class="share-links-section">
+                    <div class="share-link-item">
+                        <label><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>Short Link</label>
+                        <div class="share-link-row">
+                            <input type="text" value="https://tinyurl.com/gemtra" readonly id="shortLinkInput">
+                            <button class="share-copy-btn" onclick="copyShareLink('shortLinkInput')">Copy</button>
+                        </div>
+                    </div>
+                    <div class="share-link-item">
+                        <label><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 4px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Full Link</label>
+                        <div class="share-link-row">
+                            <input type="text" value="https://mojhehh.github.io/gemtra/" readonly id="fullLinkInput">
+                            <button class="share-copy-btn" onclick="copyShareLink('fullLinkInput')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookmarklet Section -->
+                <div class="share-bookmark-section">
+                    <h3><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="vertical-align: middle; margin-right: 6px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Quick Bookmark</h3>
+                    <p>Drag this button to your bookmarks bar:</p>
+                    <a class="bookmarklet-btn" href="javascript:(function(){window.location.href='https://mojhehh.github.io/gemtra/'})();" onclick="event.preventDefault(); showToast('Drag this to your bookmarks bar!', 'info');">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>Gemtra Games
+                    </a>
+                    <p class="bookmark-hint">Or press <kbd>Ctrl+D</kbd> / <kbd>⌘+D</kbd> to bookmark this page</p>
+                </div>
+
+                <!-- Social Share -->
+                <div class="share-social-section">
+                    <h3>Share on Social</h3>
+                    <div class="share-social-buttons">
+                        <a href="https://twitter.com/intent/tweet?text=Check%20out%20Gemtra%20Games%20-%20Free%20unblocked%20games!&url=https://tinyurl.com/gemtra" target="_blank" rel="noopener noreferrer" class="share-social-btn twitter" title="Share on X (Twitter)">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://tinyurl.com/gemtra" target="_blank" rel="noopener noreferrer" class="share-social-btn facebook" title="Share on Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="https://reddit.com/submit?url=https://tinyurl.com/gemtra&title=Gemtra%20Games%20-%20Free%20Unblocked%20Games" target="_blank" rel="noopener noreferrer" class="share-social-btn reddit" title="Share on Reddit">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+                        </a>
+                        <button class="share-social-btn native" onclick="nativeShare()" title="Share via device">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal" id="contactModal">
+        <div class="modal-backdrop" onclick="closeContactModal()"></div>
+        <div class="contact-container">
+            <button class="contact-close" onclick="closeContactModal()">×</button>
+            <div class="contact-header">
+                <h2 id="contactModalTitle"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Contact Us</h2>
+                <p id="contactModalSubtitle">Here's how to reach us</p>
+            </div>
+            <div class="contact-body" id="contactModalBody">
+                <!-- Content will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </button>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+        import { getDatabase, ref, get, set, push, update, remove, onValue, increment, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signInAnonymously as firebaseSignInAnon, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyOz26Mnf-PsPOVfowU9ETWO9MHqleOUg",
+            authDomain: "gemtra-44c37.firebaseapp.com",
+            databaseURL: "https://gemtra-44c37-default-rtdb.firebaseio.com",
+            projectId: "gemtra-44c37",
+            storageBucket: "gemtra-44c37.firebasestorage.app",
+            messagingSenderId: "248533717454",
+            appId: "1:248533717454:web:f508b12092c4748ae91b9f",
+            measurementId: "G-TPN7JWPR4P"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Admin UIDs
+        const ADMINS = {
+            'U4EuYsfFcqhq3PyEUiKKLtWuQM52': { rank: 'owner', name: 'Owner' }
+        };
+
+        // Auth mode tracking
+        let authMode = 'login'; // 'login' or 'register'
+
+        // Make Firebase available globally
+        window.firebaseDB = db;
+        window.firebaseAuth = auth;
+        window.firebaseRef = ref;
+        window.firebaseGet = get;
+        window.firebaseSet = set;
+        window.firebasePush = push;
+        window.firebaseUpdate = update;
+        window.firebaseRemove = remove;
+        window.firebaseOnValue = onValue;
+        window.firebaseIncrement = increment;
+        window.firebaseRunTransaction = runTransaction;
+        window.firebaseServerTimestamp = serverTimestamp;
+        window.firebaseAnalytics = analytics;
+        window.firebaseLogEvent = logEvent;
+        window.ADMINS = ADMINS;
+        window.firebaseReady = true;
+        
+        // Flag to track if user manually signed out
+        let userSignedOut = false;
+
+        // Auth state listener
+        onAuthStateChanged(auth, async (user) => {
+            window.currentUser = user;
+            window.dispatchEvent(new CustomEvent('authStateChanged', { detail: user }));
+            
+            // Auto sign in as guest if not logged in and user didn't manually sign out
+            if (!user && !userSignedOut) {
+                try {
+                    await firebaseSignInAnon(auth);
+                    console.log('Auto signed in as guest');
+                } catch (error) {
+                    console.error('Auto guest sign in error:', error);
+                }
+            }
+        });
+
+        // Sign in with Google
+        window.signInWithGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                closeAuthModal();
+                showToast('Signed in successfully!', 'success');
+            } catch (error) {
+                console.error('Sign in error:', error);
+                showToast('Failed to sign in', 'error');
+            }
+        };
+
+        // Sign in anonymously
+        window.signInAnonymously = async () => {
+            try {
+                await firebaseSignInAnon(auth);
+                closeAuthModal();
+                showToast('Signed in as guest!', 'success');
+            } catch (error) {
+                console.error('Anonymous sign in error:', error);
+                showToast('Failed to sign in', 'error');
+            }
+        };
+
+        // Email/Password authentication
+        window.handleEmailAuth = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const confirmPassword = document.getElementById('authConfirmPassword')?.value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                if (authMode === 'register') {
+                    // Registration
+                    if (password !== confirmPassword) {
+                        showToast('Passwords do not match', 'error');
+                        return;
+                    }
+                    if (password.length < 6) {
+                        showToast('Password must be at least 6 characters', 'error');
+                        return;
+                    }
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    // Set display name from email
+                    await updateProfile(userCredential.user, {
+                        displayName: email.split('@')[0]
+                    });
+                    closeAuthModal();
+                    showToast('Account created successfully!', 'success');
+                } else {
+                    // Login
+                    await signInWithEmailAndPassword(auth, email, password);
+                    closeAuthModal();
+                    showToast('Signed in successfully!', 'success');
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+                let message = 'Authentication failed';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        message = 'Email already registered. Try signing in.';
+                        break;
+                    case 'auth/invalid-email':
+                        message = 'Invalid email address';
+                        break;
+                    case 'auth/user-not-found':
+                        message = 'No account found. Try signing up.';
+                        break;
+                    case 'auth/wrong-password':
+                        message = 'Incorrect password';
+                        break;
+                    case 'auth/weak-password':
+                        message = 'Password is too weak';
+                        break;
+                    case 'auth/invalid-credential':
+                        message = 'Invalid email or password';
+                        break;
+                }
+                showToast(message, 'error');
+            }
+        };
+
+        // Switch auth tabs
+        window.switchAuthTab = (mode) => {
+            authMode = mode;
+            const tabs = document.querySelectorAll('.auth-tab');
+            const confirmGroup = document.getElementById('confirmPasswordGroup');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.textContent.toLowerCase().includes(mode === 'login' ? 'in' : 'up'));
+            });
+
+            if (mode === 'register') {
+                confirmGroup.style.display = 'block';
+                submitBtn.textContent = 'Create Account';
+                title.textContent = 'Create Account';
+                subtitle.textContent = 'Join Gemtra to save your favorites!';
+            } else {
+                confirmGroup.style.display = 'none';
+                submitBtn.textContent = 'Sign In';
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Sign in to continue to Gemtra!';
+            }
+        };
+
+        // Sign out
+        window.signOutUser = async () => {
+            try {
+                userSignedOut = true; // Set flag to prevent auto guest login
+                await signOut(auth);
+                closeUserMenu();
+                showToast('Signed out successfully', 'success');
+            } catch (error) {
+                console.error('Sign out error:', error);
+                userSignedOut = false;
+            }
+        };
+
+        // Dispatch event when Firebase is ready
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <!-- Fast Mode Modal -->
+    <div class="fast-mode-modal" id="fastModeModal">
+        <div class="fast-mode-backdrop" onclick="closeFastModeModal()"></div>
+        <div class="fast-mode-container">
+            <div class="fast-mode-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                    <path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.92 6-4.72 7.28L13 17v5l5-5h-1.33c2.59-1.52 4.33-4.3 4.33-7.5 0-4.8-3.57-8.78-8.2-9.45M11 2.05C6.57 2.52 3 6.3 3 10.8c0 3.2 1.74 5.98 4.33 7.5H6l5 5v-5l-2.28 2.28C5.92 18.8 4 16.01 4 12.8c0-4.08 3.05-7.44 7-7.93v2.02c-2.89.46-5.11 2.97-5.11 5.99 0 2.47 1.49 4.59 3.62 5.52L11 17V7l-2.38 2.38C7.52 10.31 7 11.5 7 12.8c0 1.68.84 3.16 2.13 4.06L11 15.13V7l-1.87 1.87C8.33 10.12 8 11.41 8 12.8c0 .93.25 1.8.69 2.56L11 13.13V2.05z"/>
+                </svg>
+            </div>
+            <h2>Performance Mode Available</h2>
+            <p>Looks like you might be on a slower device. Would you like to enable <strong>Fast Mode</strong> for better performance?</p>
+            <div class="fast-mode-features">
+                <div class="fast-mode-feature">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                    Simplified UI
+                </div>
+                <div class="fast-mode-feature">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                    No animations
+                </div>
+                <div class="fast-mode-feature">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                    Faster loading
+                </div>
+            </div>
+            <div class="fast-mode-actions">
+                <button class="fast-mode-btn fast-mode-enable" onclick="enableFastMode()">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.92 6-4.72 7.28L13 17v5l5-5h-1.33c2.59-1.52 4.33-4.3 4.33-7.5 0-4.8-3.57-8.78-8.2-9.45z"/></svg>
+                    Enable Fast Mode
+                </button>
+                <button class="fast-mode-btn fast-mode-skip" onclick="closeFastModeModal()">
+                    Keep Normal Mode
+                </button>
+            </div>
+            <label class="fast-mode-remember">
+                <input type="checkbox" id="fastModeRemember" checked>
+                <span>Remember my choice</span>
+            </label>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

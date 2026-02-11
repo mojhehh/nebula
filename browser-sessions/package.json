@@ -1,0 +1,17 @@
+{
+  "name": "nebula-browser-sessions",
+  "version": "1.0.0",
+  "description": "Nebula Browser Session Manager with Reverse Proxy for KasmVNC",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "http-proxy": "^1.18.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

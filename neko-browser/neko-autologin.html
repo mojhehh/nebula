@@ -1,0 +1,93 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>n.eko</title><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><link rel="mask-icon" href="safari-pinned-tab.svg" color="#19bd9c"><meta name="msapplication-TileColor" content="#19bd9c"><meta name="theme-color" content="#19bd9c"><style>/* weird iOS bug, if this is not set right here, video just does not start */ .video-container { width: 100%; height: 100%; }</style><script defer="defer" type="module" src="js/chunk-vendors.025e045d.js"></script><script defer="defer" type="module" src="js/app.486d1480.js"></script><link href="css/app.e49c7826.css" rel="stylesheet"><script defer="defer" src="js/chunk-vendors-legacy.58879166.js" nomodule></script><script defer="defer" src="js/app-legacy.3d12edcc.js" nomodule></script></head><body><noscript><strong>We're sorry but n.eko doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="neko"></div><p>A self hosted virtual browser (<a href="https://github.com/m1k1o/neko">m1k1o/neko</a>) that runs in docker.</p>
+<script>
+(function() {
+  var USERNAME = 'Nebula';
+  var PASSWORD = 'blockeduser99';
+  var attempts = 0;
+  var maxAttempts = 80;
+  var loggedIn = false;
+
+  function setNativeValue(el, val) {
+    var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(el, val);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    el.dispatchEvent(new Event('blur', { bubbles: true }));
+  }
+
+  function tryLogin() {
+    if (loggedIn) return;
+    attempts++;
+    if (attempts > maxAttempts) return;
+
+    // Check if already past login (video visible or no login form)
+    var video = document.querySelector('video');
+    if (video && (video.readyState > 0 || video.srcObject)) {
+      loggedIn = true;
+      return;
+    }
+
+    // Find inputs - Neko has displayname + password
+    var inputs = document.querySelectorAll('input');
+    if (inputs.length < 2) {
+      setTimeout(tryLogin, 400);
+      return;
+    }
+
+    // Find the connect/login button
+    var connectBtn = null;
+    var allBtns = document.querySelectorAll('button, [role="button"]');
+    for (var i = 0; i < allBtns.length; i++) {
+      var txt = (allBtns[i].textContent || '').trim().toLowerCase();
+      if (txt === 'connect' || txt === 'login' || txt === 'join' || txt === 'sign in') {
+        connectBtn = allBtns[i];
+        break;
+      }
+    }
+
+    // If no labelled button, try the last button in the form area
+    if (!connectBtn) {
+      var formArea = inputs[0].closest('form') || inputs[0].closest('div');
+      if (formArea) {
+        var btns = formArea.querySelectorAll('button');
+        if (btns.length > 0) connectBtn = btns[btns.length - 1];
+      }
+    }
+
+    if (!connectBtn) {
+      // Last resort: any button with an icon or submit-like appearance
+      allBtns.forEach(function(b) {
+        if (!connectBtn && b.offsetParent !== null) connectBtn = b;
+      });
+    }
+
+    if (inputs.length >= 2 && connectBtn) {
+      // Fill displayname
+      setNativeValue(inputs[0], USERNAME);
+      // Fill password
+      setNativeValue(inputs[1], PASSWORD);
+
+      // Click after Vue processes the input events
+      setTimeout(function() {
+        connectBtn.click();
+        loggedIn = true;
+      }, 500);
+    } else {
+      setTimeout(tryLogin, 400);
+    }
+  }
+
+  // Start after page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(tryLogin, 2000); });
+  } else {
+    setTimeout(tryLogin, 2000);
+  }
+
+  // Also try on load event (for slower connections)
+  window.addEventListener('load', function() {
+    if (!loggedIn) setTimeout(tryLogin, 1000);
+  });
+})();
+</script>
+</body></html>

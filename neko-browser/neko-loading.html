@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Nebula</title><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><link rel="mask-icon" href="safari-pinned-tab.svg" color="#19bd9c"><meta name="msapplication-TileColor" content="#0d0620"><meta name="theme-color" content="#0d0620"><style>/* weird iOS bug, if this is not set right here, video just does not start */ .video-container { width: 100%; height: 100%; }</style>
+<style>
+#nebula-loader {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #0d0620; z-index: 99999; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: opacity 0.5s ease;
+}
+#nebula-loader.fade-out { opacity: 0; pointer-events: none; }
+#nebula-loader .logo {
+  font-size: 42px; font-weight: 800; margin-bottom: 30px;
+  background: linear-gradient(135deg, #a78bfa, #7c3aed, #6d28d9);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+#nebula-loader .spinner {
+  width: 48px; height: 48px; border: 3px solid rgba(167,139,250,0.15);
+  border-top-color: #a78bfa; border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin-bottom: 24px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#nebula-loader .status {
+  color: #a0a0b8; font-size: 14px; text-align: center; max-width: 300px; line-height: 1.5;
+}
+#nebula-loader .step {
+  display: flex; align-items: center; gap: 8px; margin: 4px 0;
+  font-size: 13px; color: #6b6b80; transition: color 0.3s;
+}
+#nebula-loader .step.active { color: #a78bfa; }
+#nebula-loader .step.done { color: #34d399; }
+#nebula-loader .step .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #333;
+  flex-shrink: 0; transition: background 0.3s;
+}
+#nebula-loader .step.active .dot { background: #a78bfa; box-shadow: 0 0 8px #a78bfa; }
+#nebula-loader .step.done .dot { background: #34d399; }
+</style>
+<script defer="defer" type="module" src="js/chunk-vendors.025e045d.js"></script><script defer="defer" type="module" src="js/app.486d1480.js"></script><link href="css/app.e49c7826.css" rel="stylesheet"><script defer="defer" src="js/chunk-vendors-legacy.58879166.js" nomodule></script><script defer="defer" src="js/app-legacy.3d12edcc.js" nomodule></script></head><body><noscript><strong>We're sorry but n.eko doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+
+<div id="nebula-loader">
+  <div class="logo">Nebula</div>
+  <div style="font-size:12px;color:#a78bfa;margin-bottom:18px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Beta</div>
+  <div class="spinner"></div>
+  <div class="status">
+    <div class="step active" id="ns-login"><span class="dot"></span> Signing in...</div>
+    <div class="step" id="ns-connect"><span class="dot"></span> Establishing connection...</div>
+    <div class="step" id="ns-video"><span class="dot"></span> Starting video stream...</div>
+  </div>
+</div>
+
+<div id="neko"></div>
+<script>
+(function() {
+  var loader = document.getElementById('nebula-loader');
+  var sLogin = document.getElementById('ns-login');
+  var sConnect = document.getElementById('ns-connect');
+  var sVideo = document.getElementById('ns-video');
+  var removed = false;
+
+  function setStep(el) {
+    // Mark all previous as done
+    var steps = [sLogin, sConnect, sVideo];
+    var found = false;
+    for (var i = 0; i < steps.length; i++) {
+      if (steps[i] === el) {
+        found = true;
+        steps[i].className = 'step active';
+        steps[i].querySelector('.dot').style.boxShadow = '0 0 8px #a78bfa';
+      } else if (!found) {
+        steps[i].className = 'step done';
+      }
+    }
+  }
+
+  function hideLoader() {
+    if (removed) return;
+    removed = true;
+    // Mark all done
+    [sLogin, sConnect, sVideo].forEach(function(s) { s.className = 'step done'; });
+    setTimeout(function() {
+      loader.classList.add('fade-out');
+      setTimeout(function() { loader.remove(); }, 600);
+    }, 300);
+  }
+
+  // Monitor WebSocket to detect login completion
+  var origWS = window.WebSocket;
+  window.WebSocket = function(url, protocols) {
+    var ws = protocols ? new origWS(url, protocols) : new origWS(url);
+    ws.addEventListener('open', function() {
+      setStep(sConnect);
+    });
+    ws.addEventListener('message', function(e) {
+      // Neko sends session data after login
+      try {
+        var d = typeof e.data === 'string' ? JSON.parse(e.data) : null;
+        if (d && (d.event === 'system/init' || d.event === 'signal/provide')) {
+          setStep(sVideo);
+        }
+      } catch(ex) {}
+    });
+    return ws;
+  };
+  window.WebSocket.prototype = origWS.prototype;
+  window.WebSocket.CONNECTING = origWS.CONNECTING;
+  window.WebSocket.OPEN = origWS.OPEN;
+  window.WebSocket.CLOSING = origWS.CLOSING;
+  window.WebSocket.CLOSED = origWS.CLOSED;
+
+  // Monitor RTCPeerConnection to detect WebRTC connection
+  var origRTC = window.RTCPeerConnection;
+  if (origRTC) {
+    var OrigRTC = origRTC;
+    window.RTCPeerConnection = function(config, constraints) {
+      // Force relay-only: skip unreachable host/srflx candidates, use TURN only
+      config = config || {};
+      config.iceTransportPolicy = 'relay';
+      var pc = constraints ? new OrigRTC(config, constraints) : new OrigRTC(config);
+      pc.addEventListener('connectionstatechange', function() {
+        if (pc.connectionState === 'connecting') setStep(sVideo);
+        if (pc.connectionState === 'connected') hideLoader();
+      });
+      pc.addEventListener('iceconnectionstatechange', function() {
+        if (pc.iceConnectionState === 'connected' || pc.iceConnectionState === 'completed') {
+          // Give a moment for first video frame
+          setTimeout(hideLoader, 500);
+        }
+      });
+      pc.addEventListener('track', function(ev) {
+        if (ev.track && ev.track.kind === 'video') {
+          // Video track received — stream is coming
+          setTimeout(hideLoader, 1000);
+        }
+      });
+      return pc;
+    };
+    window.RTCPeerConnection.prototype = OrigRTC.prototype;
+    // Copy static methods
+    Object.keys(OrigRTC).forEach(function(k) {
+      try { window.RTCPeerConnection[k] = OrigRTC[k]; } catch(e) {}
+    });
+  }
+
+  // Also watch for <video> elements getting a stream
+  var checkVideo = setInterval(function() {
+    var vids = document.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) {
+      if (vids[i].srcObject || (vids[i].readyState >= 2)) {
+        setTimeout(hideLoader, 500);
+        clearInterval(checkVideo);
+        return;
+      }
+    }
+  }, 500);
+
+  // Safety fallback: hide after 45 seconds no matter what
+  setTimeout(function() {
+    if (!removed) hideLoader();
+  }, 45000);
+
+  // Also hide if the Neko UI shows the desktop (the login form disappears)
+  var checkLoginGone = setInterval(function() {
+    var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    if (inputs.length === 0 && document.querySelector('video')) {
+      setTimeout(hideLoader, 300);
+      clearInterval(checkLoginGone);
+    }
+  }, 1000);
+
+  // After 3 seconds, if still on login step, advance anyway
+  setTimeout(function() {
+    if (sLogin.className.indexOf('active') !== -1) {
+      setStep(sConnect);
+    }
+  }, 3000);
+})();
+</script>
+</body></html>
