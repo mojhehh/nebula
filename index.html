@@ -4,13 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nebula — Private Cloud Browser</title>
-  <meta name="description" content="Browse anonymously with your own private cloud browser. No traces, no tracking, complete privacy.">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z'/%3E%3C/svg%3E">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta name="description" content="Browse anonymously with your own private cloud browser. No traces, no tracking, complete privacy."><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg fill='%239333ea' height='32' width='32' viewBox='0 0 458.758 458.758' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z'/%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
@@ -41,10 +35,7 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    /* === COSMIC BACKGROUND === */
-    .cosmos {
+    }.cosmos {
       position: fixed;
       inset: 0;
       z-index: -1;
@@ -98,10 +89,7 @@
         linear-gradient(90deg, rgba(147,51,234,0.03) 1px, transparent 1px);
       background-size: 60px 60px;
       mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
-    }
-
-    /* === HEADER === */
-    header {
+    }header {
       position: fixed;
       top: 0;
       left: 0;
@@ -187,10 +175,7 @@
     @keyframes dot-pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.2); opacity: 0.7; }
-    }
-
-    /* === HERO SECTION === */
-    .hero {
+    }.hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -251,10 +236,7 @@
     @keyframes fade-in {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* === LAUNCH BUTTON === */
-    .launch-container {
+    }.launch-container {
       position: relative;
       animation: fade-in 1s ease-out 0.6s both;
     }
@@ -316,10 +298,7 @@
       transform: translateX(4px);
     }
     
-    .btn-text { position: relative; z-index: 1; }
-    
-    /* === LOADING OVERLAY === */
-    .loading-overlay {
+    .btn-text { position: relative; z-index: 1; }.loading-overlay {
       position: fixed;
       inset: 0;
       z-index: 1000;
@@ -343,10 +322,7 @@
     .loading-content {
       text-align: center;
       position: relative;
-    }
-    
-    /* === STUNNING LOADING ANIMATION === */
-    .loader-container {
+    }.loader-container {
       position: relative;
       width: 200px;
       height: 200px;
@@ -423,10 +399,7 @@
     @keyframes orbit-spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
-    }
-    
-    /* Particle burst effect */
-    .particles {
+    }.particles {
       position: absolute;
       inset: 0;
       pointer-events: none;
@@ -493,10 +466,7 @@
     @keyframes progress-shimmer {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
-    }
-
-    /* === FEATURES SECTION === */
-    .features {
+    }.features {
       padding: 60px 20px 80px;
       max-width: 1100px;
       margin: 0 auto;
@@ -577,10 +547,7 @@
       color: var(--muted);
       font-size: 0.95rem;
       line-height: 1.6;
-    }
-
-    /* === STATS SECTION === */
-    .stats {
+    }.stats {
       padding: 80px 20px;
       background: linear-gradient(180deg, transparent, rgba(147,51,234,0.05), transparent);
     }
@@ -608,10 +575,7 @@
     .stat-item p {
       color: var(--muted);
       font-size: 0.95rem;
-    }
-
-    /* === FOOTER === */
-    footer {
+    }footer {
       padding: 40px 20px;
       text-align: center;
       border-top: 1px solid rgba(147,51,234,0.1);
@@ -620,10 +584,7 @@
     footer p {
       color: rgba(167,139,250,0.5);
       font-size: 0.85rem;
-    }
-
-    /* === ERROR TOAST === */
-    .error-toast {
+    }.error-toast {
       position: fixed;
       bottom: 40px;
       left: 50%;
@@ -640,10 +601,7 @@
     
     .error-toast.show {
       transform: translateX(-50%) translateY(0);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
+    }@media (max-width: 768px) {
       header {
         padding: 16px 20px;
       }
@@ -667,19 +625,14 @@
   </style>
 </head>
 
-<body>
-  <!-- Cosmic Background -->
-  <div class="cosmos">
+<body><div class="cosmos">
     <div class="stars"></div>
     <div class="nebula-cloud n1"></div>
     <div class="nebula-cloud n2"></div>
     <div class="nebula-cloud n3"></div>
     <div class="nebula-cloud n4"></div>
     <div class="grid-overlay"></div>
-  </div>
-
-  <!-- Header -->
-  <header>
+  </div><header>
     <div class="logo-group">
       <svg class="logo-icon" fill="#9333ea" viewBox="0 0 458.758 458.758">
         <path d="M448.189,10.579c-11.9-11.9-30.2-13.8-54.3-5.5c-10.6,3.6-22.6,9.2-36.1,16.8c-8.1,4.6-16.8,9.8-25.8,15.8c-2.4,1.6-4.8,3.2-7.3,4.9c13.8,7,26.7,15.5,38.6,25.5c2.8-1.7,5.4-3.4,8-4.9c22.8-13.6,37.1-18.8,44.6-20.3c-2,10.1-10.7,32.8-37.9,72c-2.2,3.1-4.4,6.3-6.7,9.5c-5.1-6.9-10.8-13.6-17.1-19.8c-68.9-68.9-180.7-68.9-249.6,0s-68.9,180.7,0,249.6c6.3,6.3,12.9,12,19.8,17.1c-3.2,2.3-6.4,4.5-9.5,6.7c-39.2,27.1-61.9,35.9-72,37.9c1.2-6.1,4.9-17,13.8-33.4c3.1-5.7,6.8-12.1,11.3-19.2c-9.9-11.9-18.4-24.8-25.5-38.6c-1.7,2.4-3.3,4.9-4.9,7.3c-8.3,12.6-15.2,24.3-20.7,35c-5.1,9.8-9,18.8-11.8,26.9c-8.2,24.1-6.4,42.4,5.5,54.3s30.2,13.8,54.3,5.5c17-5.8,37.8-16.8,61.9-32.6c47.6-31.3,104.4-79,159.8-134.4s103.2-112.2,134.4-159.8c15.8-24.1,26.8-44.9,32.6-61.9C461.889,40.779,460.089,22.579,448.189,10.579z"/>
@@ -697,10 +650,7 @@
       <span class="status-dot"></span>
       <span id="statusText">Connecting...</span>
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
+  </header><section class="hero">
     <div class="hero-badge">
       <span>🚀</span>
       <span>Private Cloud Browsers</span>
@@ -725,10 +675,7 @@
       </button>
       <p style="margin-top:16px;color:var(--muted);font-size:0.85rem;opacity:0.7;">Free — no download, no signup</p>
     </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="features" id="features">
+  </section><section class="features" id="features">
     <div class="section-header">
       <span class="section-label">Features</span>
       <h2 class="section-title">Why Choose Nebula?</h2>
@@ -772,10 +719,7 @@
         <p class="feature-desc">Bypass restrictions and access content from anywhere. Your traffic appears from our servers.</p>
       </div>
     </div>
-  </section>
-
-  <!-- Stats Section -->
-  <section class="stats" id="how-it-works">
+  </section><section class="stats" id="how-it-works">
     <div class="stats-grid">
       <div class="stat-item">
         <h3 id="availableCount">-</h3>
@@ -794,15 +738,9 @@
         <p>Private & Secure</p>
       </div>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
+  </section><footer>
     <p>© 2026 Nebula — Private Cloud Browsers. All rights reserved.</p>
-  </footer>
-
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
+  </footer><div class="loading-overlay" id="loadingOverlay">
     <div class="loading-content">
       <div class="loader-container">
         <div class="particles">
@@ -826,13 +764,7 @@
         <div class="progress-fill" id="progressFill"></div>
       </div>
     </div>
-  </div>
-
-  <!-- Error Toast -->
-  <div class="error-toast" id="errorToast"></div>
-
-  <!-- Existing Session Banner (shown when user already has a browser) -->
-  <div id="existingSessionBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,rgba(147,51,234,0.95),rgba(124,58,237,0.95));backdrop-filter:blur(20px);padding:16px 24px;text-align:center;box-shadow:0 4px 30px rgba(0,0,0,0.4);animation:slideDown 0.5s ease;">
+  </div><div class="error-toast" id="errorToast"></div><div id="existingSessionBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,rgba(147,51,234,0.95),rgba(124,58,237,0.95));backdrop-filter:blur(20px);padding:16px 24px;text-align:center;box-shadow:0 4px 30px rgba(0,0,0,0.4);animation:slideDown 0.5s ease;">
     <p style="color:#fff;font-size:1rem;margin:0 0 10px;">
       <strong>You already have a browser session open.</strong>
     </p>
@@ -840,10 +772,7 @@
       <button id="goToExistingBtn" onclick="goToExistingSession()" style="padding:8px 24px;background:#fff;color:#7c3aed;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">Go to My Browser</button>
       <button id="releaseSessionBtn" onclick="releaseAndGetNew()" style="padding:8px 24px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;">End Session &amp; Get New</button>
     </div>
-  </div>
-
-  <!-- All Browsers Busy Modal -->
-  <div id="busyModal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(5,1,13,0.85);backdrop-filter:blur(10px);display:none;justify-content:center;align-items:center;">
+  </div><div id="busyModal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(5,1,13,0.85);backdrop-filter:blur(10px);display:none;justify-content:center;align-items:center;">
     <div style="background:linear-gradient(135deg,#0d0620,#1a0a3e);border:1px solid rgba(147,51,234,0.3);border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
       <div style="font-size:48px;margin-bottom:16px;">🚦</div>
       <h2 style="color:#f3e8ff;font-size:1.4rem;margin:0 0 12px;">All Browsers Are Busy</h2>
@@ -865,15 +794,10 @@
 
   <style>
     @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-  </style>
-
-  <!-- Firebase SDK -->
-  <script type="module">
+  </style><script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-
-    // Nebula Firebase (analytics + browser status)
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
     const nebulaConfig = {
       apiKey: "AIzaSyCukh2waXzCiV5nce1RCj9dD7QEwsZx-J8",
       authDomain: "nebula-60629.firebaseapp.com",
@@ -883,24 +807,15 @@
       messagingSenderId: "630056389780",
       appId: "1:630056389780:web:8d6f185c4109f2b549b881",
       measurementId: "G-WJ3N50CD1H"
-    };
-
-    // Procces Firebase (tunnel URLs) - read-only via REST
-    const PROCCES_DB = 'https://procces-3efd9-default-rtdb.firebaseio.com';
-
-    // Initialize Nebula Firebase
+    };
+    const PROCCES_DB = 'https://procces-3efd9-default-rtdb.firebaseio.com';
     const nebulaApp = initializeApp(nebulaConfig);
     const nebulaDb = getDatabase(nebulaApp);
-    const analytics = getAnalytics(nebulaApp);
-
-    // Track page view
-    logEvent(analytics, 'page_view', { page_title: 'Nebula Home' });
-
-    // === Client ID: unique per device, persists across sessions ===
+    const analytics = getAnalytics(nebulaApp);
+    logEvent(analytics, 'page_view', { page_title: 'Nebula Home' });
     function getOrCreateClientId() {
       let clientId = localStorage.getItem('nebulaClientId');
-      if (!clientId || clientId.length < 20) {
-        // Generate a crypto-quality random ID
+      if (!clientId || clientId.length < 20) {
         const arr = new Uint8Array(16);
         crypto.getRandomValues(arr);
         clientId = 'nc_' + Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
@@ -908,16 +823,12 @@
       }
       return clientId;
     }
-    const CLIENT_ID = getOrCreateClientId();
-
-    // State
+    const CLIENT_ID = getOrCreateClientId();
     let backendUrl = null;
     let serverOnline = false;
     let isLoading = false;
     let existingBrowserUrl = null;
-    let busyRetryTimer = null;
-
-    // DOM elements
+    let busyRetryTimer = null;
     const statusPill = document.getElementById('statusPill');
     const statusText = document.getElementById('statusText');
     const launchBtn = document.getElementById('launchBtn');
@@ -928,17 +839,14 @@
     const availableCount = document.getElementById('availableCount');
     const totalCount = document.getElementById('totalCount');
     const existingSessionBanner = document.getElementById('existingSessionBanner');
-    const busyModal = document.getElementById('busyModal');
-
-    // === Check if user already has a session ===
+    const busyModal = document.getElementById('busyModal');
     async function checkExistingSession() {
       if (!backendUrl) return;
       try {
         const res = await fetch(`${backendUrl}/api/check-session?clientId=${encodeURIComponent(CLIENT_ID)}`, { mode: 'cors' });
         if (!res.ok) return;
         const data = await res.json();
-        if (data.hasSession && data.browserUrl) {
-          // Server already includes ?token= in browserUrl - use as-is
+        if (data.hasSession && data.browserUrl) {
           existingBrowserUrl = data.browserUrl;
           existingSessionBanner.style.display = 'block';
           console.log('[Session] Active session found:', data.browserUrl);
@@ -949,16 +857,12 @@
       } catch (err) {
         console.warn('[Session] Check failed:', err.message);
       }
-    }
-
-    // Go to existing browser session
+    }
     window.goToExistingSession = function() {
       if (existingBrowserUrl) {
         window.location.href = existingBrowserUrl;
       }
-    };
-
-    // Release current session and get a new one
+    };
     window.releaseAndGetNew = async function() {
       if (!backendUrl) return;
       try {
@@ -969,15 +873,12 @@
         });
         existingSessionBanner.style.display = 'none';
         existingBrowserUrl = null;
-        localStorage.removeItem('nebulaSessionId');
-        // Now request a new one
+        localStorage.removeItem('nebulaSessionId');
         window.requestBrowser();
       } catch (err) {
         showError('Failed to release session. Try again.');
       }
-    };
-
-    // Get backend URL from procces Firebase (tunnel updater writes here)
+    };
     async function fetchBackendUrl() {
       try {
         const res = await fetch(`${PROCCES_DB}/backends/nebula.json`);
@@ -988,21 +889,16 @@
           serverOnline = data.status === 'online';
           console.log('[Tunnel] Backend URL:', backendUrl);
           if (serverOnline) {
-            checkBackendStatus();
-            // Check for existing session when we first get the URL
+            checkBackendStatus();
             if (wasNull) checkExistingSession();
           }
         }
       } catch (err) {
         console.warn('[Tunnel] Failed to fetch backend URL:', err.message);
       }
-    }
-
-    // Fetch immediately, then poll every 5 min
+    }
     fetchBackendUrl();
-    setInterval(fetchBackendUrl, 5 * 60 * 1000);
-
-    // Listen to real-time browser status from nebula Firebase
+    setInterval(fetchBackendUrl, 5 * 60 * 1000);
     const summaryRef = ref(nebulaDb, 'nebula/browsers/summary');
     onValue(summaryRef, (snapshot) => {
       const data = snapshot.val();
@@ -1011,9 +907,7 @@
         serverOnline = true;
         updateStatusUI(data.available, data.total);
       }
-    });
-
-    // Check backend is alive
+    });
     async function checkBackendStatus() {
       if (!backendUrl) return;
       try {
@@ -1027,15 +921,11 @@
       } catch (err) {
         console.warn('Backend check failed, using Firebase data');
       }
-    }
-
-    // Update stats display
+    }
     function updateStats(data) {
       availableCount.textContent = data.available;
       totalCount.textContent = data.total;
-    }
-
-    // Update header status
+    }
     function updateStatusUI(available, total) {
       statusPill.className = 'status-pill';
       
@@ -1044,25 +934,18 @@
         launchBtn.disabled = false;
       } else {
         statusPill.classList.add('offline');
-        statusText.textContent = 'All in use';
-        // Don't disable - let them try, we'll show the busy modal
+        statusText.textContent = 'All in use';
         launchBtn.disabled = false;
       }
-    }
-
-    // Show error
+    }
     function showError(msg) {
       errorToast.textContent = msg;
       errorToast.classList.add('show');
       setTimeout(() => errorToast.classList.remove('show'), 5000);
-    }
-
-    // === All Browsers Busy Modal ===
+    }
     function showBusyModal(data) {
       if (data.total) document.getElementById('busyTotal').textContent = data.total;
-      busyModal.style.display = 'flex';
-      
-      // Auto-retry countdown
+      busyModal.style.display = 'flex';
       let countdown = data.retryAfterSeconds || 30;
       const countdownEl = document.getElementById('busyCountdown');
       const progressEl = document.getElementById('busyProgress');
@@ -1079,8 +962,7 @@
         
         if (countdown <= 0) {
           clearInterval(busyRetryTimer);
-          document.getElementById('busyRetryText').innerHTML = '<strong>Retrying now...</strong>';
-          // Auto-retry
+          document.getElementById('busyRetryText').innerHTML = '<strong>Retrying now...</strong>';
           closeBusyModal();
           window.requestBrowser();
         }
@@ -1093,22 +975,16 @@
         clearInterval(busyRetryTimer);
         busyRetryTimer = null;
       }
-    };
-
-    // Loading animation steps
+    };
     const loadingSteps = [
       { text: 'Initializing secure connection...', progress: 15 },
       { text: 'Allocating browser instance...', progress: 35 },
       { text: 'Starting Chrome container...', progress: 55 },
       { text: 'Configuring privacy settings...', progress: 75 },
       { text: 'Almost ready...', progress: 90 },
-    ];
-
-    // === Request browser (with clientId for dedup) ===
+    ];
     window.requestBrowser = async function() {
-      if (isLoading || !backendUrl) return;
-      
-      // If we already know about an existing session, just go there directly
+      if (isLoading || !backendUrl) return;
       if (existingBrowserUrl) {
         window.location.href = existingBrowserUrl;
         return;
@@ -1149,14 +1025,11 @@
           }
           progressFill.style.width = '100%';
           
-          localStorage.setItem('nebulaSessionId', data.sessionId);
-          
-          // Server already includes ?token= in browserUrl for access control
+          localStorage.setItem('nebulaSessionId', data.sessionId);
           setTimeout(() => {
             window.location.href = data.browserUrl;
           }, 800);
-        } else {
-          // All browsers are busy
+        } else {
           loadingOverlay.classList.remove('active');
           isLoading = false;
           
@@ -1175,23 +1048,17 @@
         showError('Connection failed. Please check your internet and try again.');
         isLoading = false;
       }
-    };
-
-    // Fallback: check status via API every 15s
+    };
     setInterval(() => {
       if (backendUrl && !isLoading) {
         checkBackendStatus();
       }
-    }, 15000);
-
-    // Also re-check for existing session every 30s
+    }, 15000);
     setInterval(() => {
       if (backendUrl && !isLoading && !existingBrowserUrl) {
         checkExistingSession();
       }
-    }, 30000);
-
-    // Initial status
+    }, 30000);
     setTimeout(() => {
       if (!serverOnline) {
         statusPill.classList.remove('loading');

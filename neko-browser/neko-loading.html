@@ -69,7 +69,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
   var removed = false;
 
   function setStep(el) {
-    // Mark all previous as done
     var steps = [sLogin, sConnect, sVideo];
     var found = false;
     for (var i = 0; i < steps.length; i++) {
@@ -86,7 +85,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
   function hideLoader() {
     if (removed) return;
     removed = true;
-    // Mark all done
     [sLogin, sConnect, sVideo].forEach(function(s) { s.className = 'step done'; });
     setTimeout(function() {
       loader.classList.add('fade-out');
@@ -94,7 +92,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
     }, 300);
   }
 
-  // Monitor WebSocket to detect login completion
   var origWS = window.WebSocket;
   window.WebSocket = function(url, protocols) {
     var ws = protocols ? new origWS(url, protocols) : new origWS(url);
@@ -102,7 +99,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
       setStep(sConnect);
     });
     ws.addEventListener('message', function(e) {
-      // Neko sends session data after login
       try {
         var d = typeof e.data === 'string' ? JSON.parse(e.data) : null;
         if (d && (d.event === 'system/init' || d.event === 'signal/provide')) {
@@ -118,12 +114,10 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
   window.WebSocket.CLOSING = origWS.CLOSING;
   window.WebSocket.CLOSED = origWS.CLOSED;
 
-  // Monitor RTCPeerConnection to detect WebRTC connection
   var origRTC = window.RTCPeerConnection;
   if (origRTC) {
     var OrigRTC = origRTC;
     window.RTCPeerConnection = function(config, constraints) {
-      // Force relay-only: skip unreachable host/srflx candidates, use TURN only
       config = config || {};
       config.iceTransportPolicy = 'relay';
       var pc = constraints ? new OrigRTC(config, constraints) : new OrigRTC(config);
@@ -133,26 +127,22 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
       });
       pc.addEventListener('iceconnectionstatechange', function() {
         if (pc.iceConnectionState === 'connected' || pc.iceConnectionState === 'completed') {
-          // Give a moment for first video frame
           setTimeout(hideLoader, 500);
         }
       });
       pc.addEventListener('track', function(ev) {
         if (ev.track && ev.track.kind === 'video') {
-          // Video track received — stream is coming
           setTimeout(hideLoader, 1000);
         }
       });
       return pc;
     };
     window.RTCPeerConnection.prototype = OrigRTC.prototype;
-    // Copy static methods
     Object.keys(OrigRTC).forEach(function(k) {
       try { window.RTCPeerConnection[k] = OrigRTC[k]; } catch(e) {}
     });
   }
 
-  // Also watch for <video> elements getting a stream
   var checkVideo = setInterval(function() {
     var vids = document.querySelectorAll('video');
     for (var i = 0; i < vids.length; i++) {
@@ -164,12 +154,10 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
     }
   }, 500);
 
-  // Safety fallback: hide after 20 seconds no matter what
   setTimeout(function() {
     if (!removed) hideLoader();
   }, 20000);
 
-  // Force autoplay on iOS - tap anywhere to start video
   document.addEventListener('touchstart', function iosFix() {
     var vids = document.querySelectorAll('video');
     for (var i = 0; i < vids.length; i++) {
@@ -178,7 +166,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
     document.removeEventListener('touchstart', iosFix);
   }, { once: true });
 
-  // Also hide if the Neko UI shows the desktop (the login form disappears)
   var checkLoginGone = setInterval(function() {
     var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
     if (inputs.length === 0 && document.querySelector('video')) {
@@ -187,7 +174,6 @@ body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: man
     }
   }, 1000);
 
-  // After 3 seconds, if still on login step, advance anyway
   setTimeout(function() {
     if (sLogin.className.indexOf('active') !== -1) {
       setStep(sConnect);

@@ -1,9 +1,4 @@
-# Recreate all Neko containers WITHOUT NEKO_NAT1TO1 env var
-# This fixes the 5-minute WebRTC freeze on iPad/remote clients
-
-$image = "ghcr.io/m1k1o/neko/google-chrome:latest"
-
-# Container configs: name, HTTP port, EPR range
+$image = "ghcr.io/m1k1o/neko/google-chrome:latest"
 $containers = @(
     @{ Name="neko1";  Port=3611; EPR="59000-59049" },
     @{ Name="neko2";  Port=3612; EPR="59050-59099" },
@@ -25,22 +20,16 @@ foreach ($c in $containers) {
     $eprStart = [int]$eprParts[0]
     $eprEnd = [int]$eprParts[1]
 
-    Write-Host "`n=== Recreating $name (HTTP:$port, EPR:$epr) ===" -ForegroundColor Cyan
-
-    # Stop and remove old container
+    Write-Host "`n=== Recreating $name (HTTP:$port, EPR:$epr) ===" -ForegroundColor Cyan
     Write-Host "Stopping $name..."
     docker stop $name 2>$null
     Write-Host "Removing $name..."
-    docker rm $name 2>$null
-
-    # Build UDP port args
+    docker rm $name 2>$null
     $udpPorts = @()
     for ($p = $eprStart; $p -le $eprEnd; $p++) {
         $udpPorts += "-p"
         $udpPorts += "${p}:${p}/udp"
-    }
-
-    # Create new container WITHOUT NEKO_NAT1TO1
+    }
     Write-Host "Creating $name..."
     $args = @(
         "run", "-d",
@@ -67,9 +56,7 @@ foreach ($c in $containers) {
     } else {
         Write-Host "FAILED to create $name!" -ForegroundColor Red
         continue
-    }
-
-    # Wait for container to start
+    }
     Start-Sleep -Seconds 3
 
     Write-Host "$name done."
