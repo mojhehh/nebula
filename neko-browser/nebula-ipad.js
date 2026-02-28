@@ -1,9 +1,6 @@
 (function() {
   'use strict';
 
-  // === CONNECTING OVERLAY ===
-  // Show a visible loading screen while WebRTC negotiates so the page
-  // doesn't look frozen. Covers everything until video actually plays.
   var connectingOverlay = document.createElement('div');
   connectingOverlay.id = 'nebula-connecting';
   connectingOverlay.innerHTML =
@@ -37,7 +34,6 @@
     setTimeout(function() { connectingOverlay.remove(); }, 600);
   }
 
-  // Update status text as we progress
   setTimeout(function() {
     if (!connectingDismissed && connectStatus) connectStatus.textContent = 'Negotiating media stream...';
   }, 3000);
@@ -47,12 +43,9 @@
   setTimeout(function() {
     if (!connectingDismissed && connectStatus) connectStatus.textContent = 'Still connecting — this may take a moment on mobile...';
   }, 15000);
-  // Safety: dismiss after 60s no matter what
   setTimeout(dismissConnecting, 60000);
 
-  // === 0. AUTO-LOGIN ===
   function setInputValue(input, value) {
-    // Multiple approaches to ensure Vue/React picks up the value on Safari
     var nativeSet = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
     if (nativeSet && nativeSet.set) {
       nativeSet.set.call(input, value);
@@ -60,11 +53,9 @@
       input.value = value;
     }
     input.setAttribute('value', value);
-    // Fire every event type that frameworks might listen to
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
     input.dispatchEvent(new Event('blur', { bubbles: true }));
-    // Also try InputEvent for newer frameworks
     try { input.dispatchEvent(new InputEvent('input', { bubbles: true, data: value })); } catch(e) {}
   }
 
@@ -75,7 +66,6 @@
     loginAttempts++;
     var connectEl = document.querySelector('.connect');
     if (!connectEl) {
-      // No login form = already logged in or not loaded yet
       if (loginAttempts < maxLoginAttempts) {
         setTimeout(attemptLogin, 500);
       }
@@ -92,16 +82,13 @@
     console.log('[Nebula] Auto-login attempt ' + loginAttempts);
     if (connectStatus) connectStatus.textContent = 'Logging in... (attempt ' + loginAttempts + ')';
 
-    // Focus + set each input
     inputs[0].focus();
     setInputValue(inputs[0], 'Nebula');
     inputs[1].focus();
     setInputValue(inputs[1], 'nebula2026x');
 
-    // Click connect after a delay so Vue processes the values
     setTimeout(function() {
       btn.click();
-      // Also try dispatching pointer events for Safari
       try {
         btn.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
         btn.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
@@ -110,7 +97,6 @@
 
       console.log('[Nebula] Login button clicked');
 
-      // Check if login worked after 3 seconds — if form is still there, retry
       setTimeout(function() {
         var stillThere = document.querySelector('.connect');
         if (stillThere && loginAttempts < maxLoginAttempts) {
@@ -121,15 +107,12 @@
     }, 500);
   }
 
-  // Start auto-login after a short delay to let Neko's Vue app mount
   setTimeout(attemptLogin, 800);
 
-  // Pre-set localStorage so Neko initializes unmuted
   localStorage.setItem('muted', '0');
   localStorage.setItem('mute', '0');
   localStorage.setItem('volume', '100');
 
-  // Wait for video to actually have frames playing
   function waitForVideo(cb) {
     var settled = false;
     function done(video, overlay) {
@@ -144,27 +127,22 @@
       var overlay = document.querySelector('.overlay');
       if (!video || !overlay) return;
 
-      // Method 1: standard readyState check
       if (video.readyState >= 2 && !video.paused && video.videoWidth > 0) {
         clearInterval(check);
         done(video, overlay);
         return;
       }
 
-      // Method 2: video has srcObject with active tracks (WebRTC connected)
       if (video.srcObject) {
         var tracks = video.srcObject.getTracks();
         var hasActive = tracks.some(function(t) { return t.readyState === 'live'; });
         if (hasActive) {
-          // WebRTC stream is live, video just might not have fired playing yet
-          // Give it a moment then dismiss
           clearInterval(check);
           setTimeout(function() { done(video, overlay); }, 500);
           return;
         }
       }
 
-      // Method 3: canvas pixel check — if we can draw a non-black frame
       if (video.videoWidth > 0 && video.videoHeight > 0) {
         try {
           var c = document.createElement('canvas');
@@ -185,7 +163,6 @@
       }
     }, 300);
 
-    // Also listen for multiple video events
     var videoEvents = ['playing', 'loadeddata', 'canplay'];
     videoEvents.forEach(function(evt) {
       document.addEventListener(evt, function handler(e) {
@@ -200,16 +177,13 @@
       }, true);
     });
 
-    // Fallback: if login form disappears and overlay exists, it's connected
     var loginGoneCheck = setInterval(function() {
       if (settled) { clearInterval(loginGoneCheck); return; }
       var connectEl = document.querySelector('.connect');
       var video = document.querySelector('video');
       var overlay = document.querySelector('.overlay');
-      // Login form gone + overlay present = Neko is in session
       if (!connectEl && overlay && video) {
         clearInterval(loginGoneCheck);
-        // Give WebRTC a few seconds to start streaming
         if (connectStatus) connectStatus.textContent = 'Connected! Loading video stream...';
         setTimeout(function() {
           if (!settled) done(video, overlay);
@@ -221,7 +195,6 @@
   waitForVideo(function(video, overlay) {
     var container = overlay.parentElement || video.parentElement;
 
-    // === 0.1 FORCE AUDIO ON ===
     var audioUnlocked = false;
 
     function tryUnmuteNeko() {
@@ -259,7 +232,6 @@
     setTimeout(tryUnmuteNeko, 1000);
     setTimeout(tryUnmuteNeko, 3000);
 
-    // === 0.5 CONTROL INSTRUCTIONS TOOLTIP ===
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       var tooltip = document.createElement('div');
       tooltip.innerHTML = '\u{1F446} Tap to click<br>\u261D\uFE0F Swipe to scroll<br>\u2328\uFE0F Tap keyboard button to type';
@@ -284,7 +256,6 @@
         transition: 'opacity 0.5s'
       });
       document.body.appendChild(tooltip);
-      // Show for 8 seconds (was 5)
       setTimeout(function() {
         tooltip.style.opacity = '0';
         setTimeout(function() { tooltip.remove(); }, 600);
@@ -296,7 +267,6 @@
       }, { once: true });
     }
 
-    // === 1. SINGLE-FINGER SCROLL OVERLAY ===
     var SCROLL_THRESHOLD = 10;
     var SCROLL_MULTIPLIER = 0.25;
     var isScrolling = false;
@@ -378,7 +348,6 @@
       document.body.classList.remove('neko-scrolling');
     }, { passive: true, capture: true });
 
-    // === 2. KEYBOARD BUTTON ===
     var kbBtn = document.createElement('div');
     kbBtn.innerHTML = '\u2328\uFE0F';
     kbBtn.title = 'Toggle Keyboard';

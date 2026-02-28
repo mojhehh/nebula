@@ -53,8 +53,8 @@ foreach ($c in $containers) {
         "--cap-add=SYS_ADMIN",
         "--security-opt", "seccomp=unconfined",
         "-p", "${port}:8080",
-        "-e", "NEKO_ICELITE=false",
-        "-e", "NEKO_EPR=$epr",
+        "-e", "NEKO_WEBRTC_ICELITE=false",
+        "-e", "NEKO_WEBRTC_EPR=$epr",
         "-e", "NEKO_SERVER_BIND=:8080",
         "-e", "NEKO_PLUGINS_ENABLED=true",
         "-e", "NEKO_PLUGINS_DIR=/etc/neko/plugins/"

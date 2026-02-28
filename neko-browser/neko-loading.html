@@ -34,6 +34,17 @@
 }
 #nebula-loader .step.active .dot { background: #a78bfa; box-shadow: 0 0 8px #a78bfa; }
 #nebula-loader .step.done .dot { background: #34d399; }
+/* Hide Neko volume HUD, overlay controls, and side panels */
+.neko-overlay, .neko-controls, [class*="volume"], [class*="Volume"],
+.side-menu, .emote-menu, .emoji-menu,
+.neko-menu, .controls, .player-controls,
+[data-testid="volume"], .volume-slider, .volume-control {
+  display: none !important; opacity: 0 !important; pointer-events: none !important;
+}
+/* Fullscreen video */
+video { object-fit: contain !important; }
+/* Prevent iOS touch callout */
+body { -webkit-touch-callout: none; -webkit-user-select: none; touch-action: manipulation; }
 </style>
 <script defer="defer" type="module" src="js/chunk-vendors.025e045d.js"></script><script defer="defer" type="module" src="js/app.486d1480.js"></script><link href="css/app.e49c7826.css" rel="stylesheet"><script defer="defer" src="js/chunk-vendors-legacy.58879166.js" nomodule></script><script defer="defer" src="js/app-legacy.3d12edcc.js" nomodule></script></head><body><noscript><strong>We're sorry but n.eko doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
 
@@ -153,10 +164,19 @@
     }
   }, 500);
 
-  // Safety fallback: hide after 45 seconds no matter what
+  // Safety fallback: hide after 20 seconds no matter what
   setTimeout(function() {
     if (!removed) hideLoader();
-  }, 45000);
+  }, 20000);
+
+  // Force autoplay on iOS - tap anywhere to start video
+  document.addEventListener('touchstart', function iosFix() {
+    var vids = document.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) {
+      vids[i].play().catch(function(){});
+    }
+    document.removeEventListener('touchstart', iosFix);
+  }, { once: true });
 
   // Also hide if the Neko UI shows the desktop (the login form disappears)
   var checkLoginGone = setInterval(function() {

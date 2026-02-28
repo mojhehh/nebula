@@ -1,21 +1,3 @@
-/**
- * Nebula Browser Session Manager — Neko WebRTC Reverse Proxy
- *
- * Single server that handles:
- * - Landing page and session management
- * - Reverse proxy to 10 Neko WebRTC containers
- * - WebSocket proxying (Neko control + WebRTC signaling)
- * - Firebase state persistence (survives restarts)
- * - Two-token access control (cookie + one-time URL token)
- *
- * Routes:
- * - /                    -> Landing page
- * - /api/*               -> Session management API
- * - /browser/1/*         -> Proxy to Neko container 1 (port 3611)
- * - /browser/2/*         -> Proxy to Neko container 2 (port 3612)
- * - ... up to /browser/10/*
- */
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -23,11 +5,9 @@ const crypto = require('crypto');
 const { URL } = require('url');
 const httpProxy = require('http-proxy');
 
-// ─── Firebase Admin SDK ───────────────────────────────────────────────────────
 let db = null;
 try {
   const admin = require('firebase-admin');
-  // Look for service account in browser-sessions (shared with old proxy)
   const serviceAccountPath = path.join(__dirname, '..', 'browser-sessions', 'firebase-service-account.json');
 
   if (fs.existsSync(serviceAccountPath)) {
@@ -45,7 +25,6 @@ try {
   console.log('[Firebase] Init error:', err.message);
 }
 
-// ─── Global error handlers ────────────────────────────────────────────────────
 process.on('uncaughtException', (err) => {
   console.error('[Uncaught Exception]', err.message);
 });
@@ -53,9 +32,6 @@ process.on('unhandledRejection', (reason) => {
   console.error('[Unhandled Rejection]', reason);
 });
 
-// ─── Browser pool — Neko containers ───────────────────────────────────────────
-// Port mapping matches the Docker containers created:
-//   neko1:3611, neko2:3612, ..., neko9:3619, neko10:3630
 const BROWSERS = [
   { id: 1,  port: 3611, host: 'localhost', inUse: false, lastUsed: null, lastHeartbeat: null, userId: null, sessionId: null, clientId: null },
   { id: 2,  port: 3612, host: 'localhost', inUse: false, lastUsed: null, lastHeartbeat: null, userId: null, sessionId: null, clientId: null },
@@ -69,7 +45,6 @@ const BROWSERS = [
   { id: 10, port: 3630, host: 'localhost', inUse: false, lastUsed: null, lastHeartbeat: null, userId: null, sessionId: null, clientId: null },
 ];
 
-// ─── Proxy server ─────────────────────────────────────────────────────────────
 const proxy = httpProxy.createProxyServer({
   ws: true,
   changeOrigin: true,
@@ -82,7 +57,6 @@ proxy.on('proxyReq', (proxyReq, req) => {
   }
 });
 
-// Inject CORS headers into proxied responses so browser doesn't block them
 proxy.on('proxyRes', (proxyRes) => {
   proxyRes.headers['access-control-allow-origin'] = '*';
   proxyRes.headers['access-control-allow-methods'] = 'GET, POST, OPTIONS';
@@ -116,19 +90,16 @@ proxy.on('error', (err, req, res) => {
 proxy.on('open', () => { /* WebSocket opened to upstream */ });
 proxy.on('close', () => { /* WebSocket closed */ });
 
-// ─── Session timeouts ─────────────────────────────────────────────────────────
-const SESSION_TIMEOUT_MS = 5 * 60 * 1000;     // 5 min no heartbeat → release
-const WS_PRESENCE_TIMEOUT_MS = 2 * 60 * 1000; // 2 min no WS after disconnect → release
+const SESSION_TIMEOUT_MS = 5 * 60 * 1000;
+const WS_PRESENCE_TIMEOUT_MS = 2 * 60 * 1000;
 
-// ─── Session tracking maps ────────────────────────────────────────────────────
-const sessions = new Map();          // sessionId -> { browserId, clientId, createdAt, lastActivity }
-const clientSessions = new Map();    // clientId -> browserId
-const activeConnections = new Map(); // browserId -> { count, lastDisconnect }
+const sessions = new Map();
+const clientSessions = new Map();
+const activeConnections = new Map();
 
-// ─── Two-token access control ─────────────────────────────────────────────────
-const browserTokens = new Map();     // browserId -> cookieToken
-const tokenToBrowser = new Map();    // cookieToken -> browserId
-const urlTokens = new Map();         // urlToken -> { browserId, cookieToken, createdAt }
+const browserTokens = new Map();
+const tokenToBrowser = new Map();
+const urlTokens = new Map();
 
 function generateSecureToken() {
   return crypto.randomBytes(32).toString('hex');
@@ -169,8 +140,6 @@ function cleanupUrlTokens() {
     if (now - entry.createdAt > 5 * 60 * 1000) urlTokens.delete(token);
   }
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function generateSessionId() {
   return 'sess_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
@@ -218,8 +187,6 @@ function getBrowserFromCookie(req) {
   if (id >= 1 && id <= BROWSERS.length) return getBrowserById(id);
   return null;
 }
-
-// ─── Firebase state persistence ───────────────────────────────────────────────
 
 async function syncBrowserToFirebase(browser) {
   if (!db) return;
@@ -306,8 +273,6 @@ async function updateBrowserSummary() {
   }
 }
 
-// ─── Release a browser slot ───────────────────────────────────────────────────
-
 function doReleaseBrowser(browser, reason) {
   if (!browser || !browser.inUse) return;
 
@@ -333,8 +298,6 @@ function doReleaseBrowser(browser, reason) {
   activeConnections.delete(browser.id);
   syncBrowserToFirebase(browser);
 }
-
-// ─── Session cleanup (runs every 30s) ─────────────────────────────────────────
 
 function cleanupSessions() {
   const now = Date.now();
@@ -362,8 +325,6 @@ function cleanupSessions() {
 setInterval(cleanupSessions, 30 * 1000);
 setInterval(cleanupUrlTokens, 60 * 1000);
 
-// ─── WebSocket connection tracking ───────────────────────────────────────────
-
 function trackWsConnect(browserId) {
   const conn = activeConnections.get(browserId) || { count: 0, lastDisconnect: null };
   conn.count++;
@@ -384,10 +345,7 @@ function trackWsDisconnect(browserId) {
   }
 }
 
-// ─── Assign / status helpers ──────────────────────────────────────────────────
-
 function assignBrowser(sessionId, clientId) {
-  // Check if client already has a browser
   const existing = findBrowserByClientId(clientId);
   if (existing) {
     console.log(`[Assign] Client ${clientId} already has browser ${existing.id}, returning existing`);
@@ -445,8 +403,6 @@ function getStatus() {
   };
 }
 
-// ─── Static file serving ──────────────────────────────────────────────────────
-
 function serveFile(res, filePath, contentType) {
   fs.readFile(filePath, (err, data) => {
     if (err) {
@@ -464,8 +420,6 @@ function serveFile(res, filePath, contentType) {
   });
 }
 
-// ─── HTTP Server ──────────────────────────────────────────────────────────────
-
 const server = http.createServer({ keepAlive: true }, (req, res) => {
   if (req.socket && !req.socket._nebulaNoDelay) {
     req.socket.setNoDelay(true);
@@ -474,13 +428,11 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
 
   const url = new URL(req.url, `http://${req.headers.host}`);
 
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
-  // ── Browser proxy routes: /browser/N/* ────────────────────────────────────
   const browserRoute = parseBrowserPath(url.pathname);
   if (browserRoute) {
     const browser = getBrowserById(browserRoute.browserId);
@@ -490,7 +442,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
       return;
     }
 
-    // Access control — cookie or one-time URL token
     const cookies = parseCookies(req);
     let hasAccess = validateBrowserAccess(req, browser.id);
 
@@ -525,12 +476,10 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
       return;
     }
 
-    // Set tracking cookie
     if (!res.getHeader('Set-Cookie')) {
       res.setHeader('Set-Cookie', [`nebula_browser=${browser.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`]);
     }
 
-    // Strip /browser/N prefix and ?token= before proxying to Neko
     const cleanSearch = new URLSearchParams(url.searchParams);
     cleanSearch.delete('token');
     const cleanQueryString = cleanSearch.toString();
@@ -549,20 +498,17 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
     return;
   }
 
-  // ── Landing page ──────────────────────────────────────────────────────────
   if (url.pathname === '/' || url.pathname === '/index.html') {
     serveFile(res, path.join(__dirname, 'index.html'), 'text/html');
     return;
   }
 
-  // ── API: Status ───────────────────────────────────────────────────────────
   if (url.pathname === '/api/status') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(getStatus()));
     return;
   }
 
-  // ── API: Check existing session ───────────────────────────────────────────
   if (url.pathname === '/api/check-session') {
     const clientId = url.searchParams.get('clientId');
     if (!clientId) {
@@ -576,7 +522,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
       const lastHb = browser.lastHeartbeat || browser.lastUsed || 0;
       const age = Date.now() - lastHb;
       if (age < SESSION_TIMEOUT_MS) {
-        // Tunnel uses HTTPS, so always build URLs with https
         const protocol = req.headers['x-forwarded-proto'] || 'https';
         const host = req.headers['x-forwarded-host'] || req.headers.host;
         let cookieToken = browserTokens.get(browser.id);
@@ -603,7 +548,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
     return;
   }
 
-  // ── API: Request browser ──────────────────────────────────────────────────
   if (url.pathname === '/api/request-browser' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -639,7 +583,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
         }
 
         const { browser, existing, cookieToken, urlToken } = result;
-        // Tunnel uses HTTPS
         const protocol = req.headers['x-forwarded-proto'] || 'https';
         const host = req.headers['x-forwarded-host'] || req.headers.host;
         const absoluteBrowserUrl = `${protocol}://${host}/browser/${browser.id}/?token=${urlToken}&usr=Nebula&pwd=blockeduser99`;
@@ -663,7 +606,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
     return;
   }
 
-  // ── API: Heartbeat ────────────────────────────────────────────────────────
   if (url.pathname === '/api/heartbeat' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -701,7 +643,6 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
     return;
   }
 
-  // ── API: Release ──────────────────────────────────────────────────────────
   if (url.pathname === '/api/release' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -728,13 +669,9 @@ const server = http.createServer({ keepAlive: true }, (req, res) => {
     return;
   }
 
-  // ── 404 ─────────────────────────────────────────────────────────────────
   res.writeHead(404, { 'Content-Type': 'text/plain' });
   res.end('Not Found');
 });
-
-// ─── WebSocket upgrade handling ───────────────────────────────────────────────
-// Neko uses WebSocket for control signaling (ws://host:port/ws)
 
 server.on('upgrade', (req, socket, head) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -760,7 +697,6 @@ server.on('upgrade', (req, socket, head) => {
     return;
   }
 
-  // Access control for WebSocket
   if (!validateBrowserAccess(req, browser.id)) {
     console.log(`[WS Access Denied] Browser ${browser.id} - no valid session token`);
     socket.write('HTTP/1.1 403 Forbidden\r\n\r\nAccess denied.');
@@ -776,7 +712,6 @@ server.on('upgrade', (req, socket, head) => {
     trackWsDisconnect(browser.id);
   });
 
-  // Rewrite URL to strip /browser/N prefix
   req.url = targetPath;
 
   const target = `http://${browser.host}:${browser.port}`;
@@ -784,15 +719,12 @@ server.on('upgrade', (req, socket, head) => {
 
   trackWsConnect(browser.id);
 
-  // WebSocket keep-alive: send ping frames every 30s to prevent
-  // Cloudflare tunnel from killing idle connections (100s timeout)
   const pingInterval = setInterval(() => {
     if (socket.destroyed || socket.writableEnded) {
       clearInterval(pingInterval);
       return;
     }
     try {
-      // WebSocket ping frame: 0x89 = fin+ping opcode, 0x00 = no payload
       socket.write(Buffer.from([0x89, 0x00]));
     } catch (e) {
       clearInterval(pingInterval);
@@ -809,35 +741,9 @@ server.on('upgrade', (req, socket, head) => {
   });
 });
 
-// ─── Start server ─────────────────────────────────────────────────────────────
-
 const PORT = process.env.PORT || 3600;
 server.listen(PORT, () => {
-  console.log(`
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   🌌 Nebula Browser Session Manager — Neko WebRTC Proxy      ║
-║                                                              ║
-║   Server running on http://localhost:${PORT}                   ║
-║                                                              ║
-║   Available browsers: ${BROWSERS.length}                                        ║
-║   Session timeout: ${SESSION_TIMEOUT_MS / 60000} minutes                               ║
-║                                                              ║
-║   Routes:                                                    ║
-║   • /                    - Landing page                      ║
-║   • /api/status          - Browser availability              ║
-║   • /api/request-browser - Get a browser slot                ║
-║   • /api/check-session   - Check existing session            ║
-║   • /api/heartbeat       - Keep session alive                ║
-║   • /api/release         - Release session                   ║
-║   • /browser/1/*         - Proxy to neko1 (port 3611)        ║
-║   • /browser/2/*         - Proxy to neko2 (port 3612)        ║
-║   • ... up to /browser/10/* (port 3630)                      ║
-║                                                              ║
-║   ONE TUNNEL to port ${PORT} handles everything!               ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-  `);
+  console.log(`Nebula running on http://localhost:${PORT} — ${BROWSERS.length} browsers, timeout: ${SESSION_TIMEOUT_MS / 60000}min`);
 
   restoreStateFromFirebase().then(() => {
     updateBrowserSummary();
